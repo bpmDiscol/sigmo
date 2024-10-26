@@ -1,0 +1,30 @@
+.main {
+  height: 100dvh;
+  background-color: #fff;
+ 
+}
+.header {
+  background: linear-gradient(
+    100deg,
+    rgba(255, 255, 255, 0) 80%,
+    rgba(151, 227, 228, 1) 100%
+  );
+  padding: 16px;
+  height: 48px;
+}
+
+.sider {
+  /* background-color: #e6e6e6; */
+  background: linear-gradient(
+    250deg,
+    rgba(255, 255, 255, 1) 40%,
+    rgb(230, 230, 230) 100%
+  );
+  height: calc (100dvh - 48px);
+  border-right: 3px solid rgb(216, 216, 216);
+}
+.content{
+  background-color: #fff;
+  padding: 0 24px 24px 48px;
+  overflow-y: auto;
+}

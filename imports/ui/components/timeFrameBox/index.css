@@ -1,0 +1,15 @@
+.box-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 1px solid rgb(68, 0, 255);
+  background-color: aquamarine;
+  height: 15rem;
+  width: 13rem;
+  border-radius: 10px;
+  box-shadow: 1rem 1rem 20px #808080;
+  margin-left: 2rem;
+  padding: 8px;
+  padding-bottom: 16px;
+  background: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(47,177,179,1) 100%);
+}
