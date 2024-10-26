@@ -76,7 +76,6 @@ export default function Assignments() {
     }));
   }
 
-  
   async function getIncidences() {
     const inc = await Meteor.callAsync("record.incidences", state?.id, [
       "DESCRIPCION_TIPO_PRODUCTO",
@@ -285,7 +284,18 @@ export default function Assignments() {
   }
 
   function getManagers() {
-    Meteor.call("getManagerList", (err, resp) => setManagers(resp));
+    // Meteor.call("getManagerList", (err, resp) => setManagers(resp));
+
+    const managers = globals?.members
+      ? globals?.members
+          .filter((member) => member.position === "manager")
+          .map((m) => ({
+            label: m.member,
+            value: m.member,
+            key: m.id,
+          }))
+      : [];
+    setManagers(managers);
   }
 
   //#region Temporal table

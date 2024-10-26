@@ -8,7 +8,6 @@ import { Meteor } from "meteor/meteor";
 import moment from "moment";
 
 export default function TimeFrameList({ timeFrames, setReload, project, canCreate }) {
-  console.log("🚀 ~ TimeFrameList ~ canCreate:", canCreate)
   const { globals } = useContext(GlobalContext);
   const [openModal, setOpenModal] = useState(false);
   const [form] = Form.useForm();
