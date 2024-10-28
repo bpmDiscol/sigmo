@@ -91,17 +91,15 @@ WebApp.rawConnectHandlers.use((req, res, next) => {
   next();
 });
 
+
 WebApp.connectHandlers.use("/upload", (req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 
-  if (req.method === "OPTIONS") {
-    res.writeHead(200);
-    return res.end();
-  }
 
-  if (req.method === "POST") {
+
+  if (req.method === "OPTIONS") {
     console.warn("receiving upload...");
     const busboy = Busboy({
       headers: req.headers,

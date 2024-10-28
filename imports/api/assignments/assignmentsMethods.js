@@ -26,10 +26,16 @@ Meteor.methods({
     );
 
     if (thisAssignment)
-      reportsCollection.insertAsync({
-        _id: thisAssignment._id,
-        status: "reassigned",
-      });
+      await reportsCollection.updateOne(
+        { _id: thisAssignment._id }, // Filtro por _id
+        {
+          $setOnInsert: {
+            _id: thisAssignment._id,
+            status: "reassigned",
+          },
+        },
+        { upsert: true }
+      );
 
     return assignmentsCollection.insertAsync(data);
   },
@@ -410,7 +416,7 @@ Meteor.methods({
     });
     return organizedData;
   },
-  "assignment.localities": async function (timeFrame, project) { 
+  "assignment.localities": async function (timeFrame, project) {
     return await assignmentsCollection
       .rawCollection()
       .aggregate([
