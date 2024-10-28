@@ -7,18 +7,17 @@ import isAccesible from "../../api/utils/isAccesible";
 
 export default function ProjectsConfiguration() {
   const { globals } = useContext(GlobalContext);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   useEffect(() => {
-    async function getTeamAccess
-    () {
+    async function getTeamAccess() {
       const access = await isAccesible(
-        "createProject",
+        "accessProjects",
         globals?.membership,
         globals?.userRole
       );
       if (!access) navigate("/timeline");
     }
-    getTeamAccess();
+    if (globals?.membership) getTeamAccess();
   }, [globals?.membership, globals?.userRole]);
 
   return (

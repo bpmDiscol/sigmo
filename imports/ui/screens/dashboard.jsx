@@ -8,7 +8,7 @@ export default function Dashboard() {
     <Result
     status="info"
     title="En desarrollo"
-    subTitle="Esta sección tidavia no ha sido terminada"
+    subTitle="Esta sección todavia no ha sido terminada"
     extra={<Button onClick={()=> navigate("/timeFrame")} type="primary">Ir a Periodos</Button>}
   />
   )

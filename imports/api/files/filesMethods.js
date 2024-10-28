@@ -11,7 +11,6 @@ import path from "node:path";
 
 const Busboy = busboy;
 
-
 const tempUploadDir = path.join("/app/uploads/temp");
 if (!fs.existsSync(tempUploadDir)) {
   fs.mkdirSync(tempUploadDir, { recursive: true });
@@ -82,18 +81,26 @@ const convertBase64ToFile = function (image, type) {
 };
 
 WebApp.rawConnectHandlers.use((req, res, next) => {
-  res.setHeader('Content-Length', '50000000');  // 50MB
+  res.setHeader("Content-Length", "50000000"); // 50MB
   next();
 });
 WebApp.rawConnectHandlers.use((req, res, next) => {
-  if (req.url.includes('.jpg') || req.url.includes('.png')) {
-    res.setHeader('Content-Encoding', 'identity');
+  if (req.url.includes(".jpg") || req.url.includes(".png")) {
+    res.setHeader("Content-Encoding", "identity");
   }
   next();
 });
 
-
 WebApp.connectHandlers.use("/upload", (req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+
+  if (req.method === "OPTIONS") {
+    res.writeHead(200);
+    return res.end();
+  }
+
   if (req.method === "POST") {
     console.warn("receiving upload...");
     const busboy = Busboy({
@@ -128,10 +135,7 @@ WebApp.connectHandlers.use("/upload", (req, res, next) => {
     busboy.on("finish", () => {
       console.log("finished");
       const tempFilePath = path.join(tempUploadDir, fileName);
-      const uploadDir = path.join(
-        "/app/uploads/reportImage/",
-        fileData.predio,
-      );
+      const uploadDir = path.join("/app/uploads/reportImage/", fileData.predio);
       if (!fs.existsSync(uploadDir)) {
         fs.mkdirSync(uploadDir, { recursive: true });
       }
@@ -145,13 +149,11 @@ WebApp.connectHandlers.use("/upload", (req, res, next) => {
               message: "Error al mover el archivo",
             })
           );
-        }else{
+        } else {
           res.writeHead(200);
           res.end(JSON.stringify({ success: true, fileName }));
         }
       });
-
-    
     });
 
     req.pipe(busboy);
