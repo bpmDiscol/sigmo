@@ -26,7 +26,7 @@ Meteor.methods({
     );
 
     if (thisAssignment)
-      await reportsCollection.updateOne(
+      reportsCollection.update(
         { _id: thisAssignment._id }, // Filtro por _id
         {
           $setOnInsert: {
