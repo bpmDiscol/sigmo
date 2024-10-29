@@ -93,62 +93,74 @@ WebApp.rawConnectHandlers.use((req, res, next) => {
 
 WebApp.connectHandlers.use("/upload", (req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  console.log("Acceso", req.method);
+  if (req.method === "OPTIONS") {
+    res.writeHead(200);
+    return res.end();
+  }
 
-  console.warn("receiving upload...");
-  const busboy = Busboy({
-    headers: req.headers,
-    highWaterMark: 2 * 1024 * 1024,
-  });
-
-  let fileType = "";
-  let fileName = "";
-  const fileData = {};
-
-  busboy.on("file", (name, file, info) => {
-    fileName = info.filename;
-    fileType = info.mimeType;
-    file.pipe(fs.createWriteStream(path.join(tempUploadDir, info.filename)));
-  });
-
-  busboy.on("field", (name, value) => {
-    fileData[name] = value;
-  });
-  busboy.on("error", (err) => {
-    console.warn("Error al cargar archivo:", err);
-    res.writeHead(500, { "Content-Type": "application/json" });
-    return res.end(
-      JSON.stringify({
-        success: false,
-        message: "Error al mover el archivo",
-      })
-    );
-  });
-
-  busboy.on("finish", () => {
-    console.log("finished");
-    const tempFilePath = path.join(tempUploadDir, fileName);
-    const uploadDir = path.join("/app/uploads/reportImage/", fileData.predio);
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir, { recursive: true });
-    }
-    fs.rename(tempFilePath, path.join(uploadDir, fileName), (err) => {
-      if (err) {
-        console.warn("Error al mover el archivo:", err);
-        res.writeHead(500, { "Content-Type": "application/json" });
-        return res.end(
-          JSON.stringify({
-            success: false,
-            message: "Error al mover el archivo",
-          })
-        );
-      } else {
-        res.writeHead(200);
-        res.end(JSON.stringify({ success: true, fileName }));
-      }
+  if (req.method === "POST") {
+    console.warn("receiving upload...");
+    const busboy = Busboy({
+      headers: req.headers,
+      highWaterMark: 2 * 1024 * 1024,
     });
-  });
 
-  req.pipe(busboy);
+    let fileType = "";
+    let fileName = "";
+    const fileData = {};
+
+    busboy.on("file", (name, file, info) => {
+      fileName = info.filename;
+      fileType = info.mimeType;
+      file.pipe(fs.createWriteStream(path.join(tempUploadDir, info.filename)));
+    });
+
+    busboy.on("field", (name, value) => {
+      fileData[name] = value;
+    });
+    busboy.on("error", (err) => {
+      console.warn("Error al cargar archivo:", err);
+      res.writeHead(500, { "Content-Type": "application/json" });
+      return res.end(
+        JSON.stringify({
+          success: false,
+          message: "Error al mover el archivo",
+        })
+      );
+    });
+
+    busboy.on("finish", () => {
+      console.log("finished");
+      const tempFilePath = path.join(tempUploadDir, fileName);
+      const uploadDir = path.join("/app/uploads/reportImage/", fileData.predio);
+      if (!fs.existsSync(uploadDir)) {
+        fs.mkdirSync(uploadDir, { recursive: true });
+      }
+      fs.rename(tempFilePath, path.join(uploadDir, fileName), (err) => {
+        if (err) {
+          console.warn("Error al mover el archivo:", err);
+          res.writeHead(500, { "Content-Type": "application/json" });
+          return res.end(
+            JSON.stringify({
+              success: false,
+              message: "Error al mover el archivo",
+            })
+          );
+        } else {
+          res.writeHead(200);
+          res.end(JSON.stringify({ success: true, fileName }));
+        }
+      });
+    });
+
+    req.pipe(busboy);
+  } else {
+    res.writeHead(405);
+    res.end(
+      JSON.stringify({ success: false, message: "Método no permitido." })
+    );
+  }
 });
