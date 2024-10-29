@@ -6,7 +6,7 @@ Meteor.methods({
     return recordsCollection.insertAsync(data);
   },
   "record.update": function (id, data) {
-    return recordsCollection.update(id, data);
+    return recordsCollection.updateAsync(id, data);
   },
   "record.insert": async function (data) {
     const preExists = await recordsCollection.findOneAsync({

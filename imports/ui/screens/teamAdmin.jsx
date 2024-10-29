@@ -32,7 +32,7 @@ export default function TeamAdmin() {
         globals?.membership,
         globals?.userRole
       );
-      if (!access) navigate(-1);
+      if (!access) navigate("/dashboard");
     }
     getTeamAccess();
   }, [globals?.membership, globals?.userRole]);

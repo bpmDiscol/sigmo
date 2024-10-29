@@ -6,7 +6,7 @@ Meteor.methods({
     return timeFrameCollection.insertAsync(data);
   },
   "timeFrame.update": function (id, data) {
-    return timeFrameCollection.update(id, data);
+    return timeFrameCollection.updateAsync(id, data);
   },
   "timeFrame.read": async function (project, page, pageSize, filters, sort) {
     page = parseInt(page, 10) || 1;

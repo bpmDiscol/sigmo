@@ -20,7 +20,7 @@ export default function TimeFrame({ project }) {
         globals?.membership,
         globals?.userRole
       );
-      if (!access) navigate(-1);
+      if (!access) navigate("/dashboard");
     }
     async function getCreateAccess() {
       const access = await isAccesible(

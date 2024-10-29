@@ -82,19 +82,15 @@ const convertBase64ToFile = function (image, type) {
 
 WebApp.rawConnectHandlers.use((req, res, next) => {
   res.setHeader("Content-Length", "50000000"); // 50MB
-  next();
-});
-WebApp.rawConnectHandlers.use((req, res, next) => {
-  if (req.url.includes(".jpg") || req.url.includes(".png")) {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  if (req.url.includes(".jpg")) {
     res.setHeader("Content-Encoding", "identity");
   }
   next();
 });
 
 WebApp.connectHandlers.use("/upload", (req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
   console.log("Acceso", req.method);
   if (req.method === "OPTIONS") {
     res.writeHead(200);
