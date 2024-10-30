@@ -1,0 +1,401 @@
+{
+  "title": "example",
+  "version": 1,
+  "project": "gases",
+  "icons": [
+    {
+      "icon": "alpha-b-circle-outline",
+      "label": "Brilla Surtigas"
+    },
+    {
+      "icon": "fire",
+      "label": "Gas"
+    }
+  ],
+  "translate": {
+    "_id": "id",
+    "NUMERO_DE_LA_ORDEN": "numero_de_orden",
+    "NOMBRE_CLIENTE": "nombre_usuario",
+    "ELEMENTO_MEDICION": "medidor",
+    "PRODUCTO": "producto",
+    "CONTRATO": "contrato",
+    "DESCRIPCION_TIPO_PRODUCTO": "tipo_servicio",
+    "DESCRIPCION_CATEGORIA": "categoria",
+    "DESCRIPCION_SUBCATEGORIA": "subcategoria",
+    "NUMERO_REFINANCIACIONES_ULTIMO_ANO": "refinanciaciones_anno",
+    "ESTADO_FINANCIERO": "estado_financiero",
+    "ULTIMA_LECTURA_TOMADA": "ultima_lectura",
+    "DESCRIPCION_BARRIO": "barrio",
+    "DESCRIPCION_CICLO": "ciclo",
+    "IDENTIFICACION": "identificacion",
+    "DIRECCION_PREDIO": "direccion_predio",
+    "DIAS_DEUDA_ACTUAL": "dias_deuda",
+    "DEUDA_TOTAL_ASIGNADA": "deuda_total_asignada",
+    "CORRIENTE_VENCIDA_ASIGNADA": "saldo_vencido",
+    "DIAS_DEUDA_ASIGNACION": "dias_deuda_asignacion",
+    "SALDO_NO_VENCIDO": "saldo_no_vencido",
+    "REFINANCIACIONES_PRODUCTO": "refinanciaciones",
+    "EDAD_MORA_ACTUAL": "edad_mora",
+    "INDICADOR": "indicador",
+    "TOTAL_DEUDA_CORRIENTE": "total_deuda_corriente",
+    "INTERESES": "intereses",
+    "OBSERVACION": "observacion"
+  },
+  "translateKeys": {
+    "numero_de_orden": "Número de la Orden",
+    "nombre_usuario": "Nombre del Cliente",
+    "medidor": "Elemento de Medición",
+    "producto": "Producto",
+    "contrato": "Contrato",
+    "tipo_servicio": "Descripción del Tipo de Producto",
+    "categoria": "Descripción de la Categoría",
+    "subcategoria": "Descripción de la Subcategoría",
+    "refinanciaciones_anno": "Número de Refinanciaciones en el Último Año",
+    "estado_financiero": "Estado Financiero",
+    "ultima_lectura": "Última Lectura Tomada",
+    "barrio": "Descripción del Barrio",
+    "ciclo": "Descripción del Ciclo",
+    "identificacion": "Identificación",
+    "direccion_predio": "Dirección del Predio",
+    "dias_deuda": "Días de Deuda Actual",
+    "deuda_total_asignada": "Deuda Total Asignada",
+    "saldo_vencido": "Corriente Vencida Asignada",
+    "saldo_no_vencido": "Corriente No Vencida Asignada",
+    "dias_deuda_asignacion": "Días de Deuda en la Asignación",
+    "refinanciaciones": "Refinanciaciones del Producto",
+    "edad_mora": "Edad de Mora Actual",
+    "indicador": "Indicador",
+    "total_deuda_corriente": "Total de Deuda Corriente",
+    "intereses": "Intereses",
+    "observacion": "Observación"
+  },
+  "form": [
+    {
+      "element": "Dropdown",
+      "name": "tipoDeVivienda",
+      "field": "tipoDeVivienda",
+      "label": "Tipo de vivienda",
+      "options": [
+        { "label": "Residencial", "value": "residencial" },
+        { "label": "Comercial", "value": "comercial" },
+        { "label": "Residencial y comercial", "value": "residencial_comercial" }
+      ],
+      "extDepends": {
+        "service": ["Gas", "Brilla Surtigas"]
+      }
+    },
+    {
+      "element": "Dropdown",
+      "name": "resultadoDeGestion",
+      "field": "resultadoDeGestion",
+      "label": "Resultado de gestion",
+      "options": [
+        { "label": "Efectiva", "value": "efectiva" },
+        { "label": "No Efectiva", "value": "no_efectiva" }
+      ],
+      "extDepends": {
+        "service": ["Gas", "Brilla Surtigas"]
+      },
+      "dependsOn": {
+        "tipoDeVivienda": ["residencial", "comercial", "residencial_comercial"]
+      }
+    },
+    {
+      "element": "Dropdown",
+      "name": "gestion",
+      "field": "gestion_brilla",
+      "label": "Gestión",
+      "options": [
+        { "label": "Inmueble solo", "value": "inmuebleSolo" },
+        { "label": "Inmueble desocupado", "value": "inmuebleDesocupado" },
+        { "label": "Inmueble demolido", "value": "inmuebleDemolido" },
+        {
+          "label": "Inmueble en construccion",
+          "value": "inmuebleConstruccion"
+        },
+        { "label": "Dirección errada", "value": "direccionErrada" },
+        {
+          "label": "No se permite ingreso a domicilio/Obstaculo (edificios-conjunto cerrado)",
+          "value": "noPermite_Obstaculo"
+        },
+        {
+          "label": "Arrendatario no asume la deuda",
+          "value": "arrendatarioNoAsumeDeuda"
+        },
+        {
+          "label": "Zona de calamidad (inundaciones / orden Público)",
+          "value": "zonaCalamidad"
+        },
+        {
+          "label": "Situación económica critica insolvente/ Bajos ingresos",
+          "value": "economiaCritica"
+        },
+        { "label": "Compromiso de pago", "value": "compromisoPago" },
+        { "label": "Cliente no asume la deuda", "value": "noAsumeDeuda" },
+        { "label": "Titular fallecido", "value": "titularFallecido" },
+        {
+          "label": "Informa no usó cupo (Posible Fraude)",
+          "value": "posibleFraude"
+        },
+        {
+          "label": "Pendiente  Recibir Ingresos para pagar",
+          "value": "pendienteIngresos"
+        },
+        { "label": "Usuario en reclamo", "value": "usuarioReclamo" },
+        {
+          "label": "Presto cupo Brilla y responsable del pago es otra persona",
+          "value": "otroResponsable"
+        },
+        { "label": "Refinanciado", "value": "refinanciado" },
+        {
+          "label": "Pago del valor vencido/total facturado",
+          "value": "pagoVencido_totalFacturado"
+        },
+        { "label": "Realiza abono/pago parcial", "value": "pagoParcial" },
+        { "label": "Pago total Deuda", "value": "pagoTotalDeuda" },
+        {
+          "label": "Menor de edad / adulto mayor en casa ",
+          "value": "menor_AdultoMayor"
+        }
+      ],
+      "extDepends": {
+        "service": ["Brilla Surtigas"]
+      },
+      "dependsOn": {
+        "resultadoDeGestion": ["no_efectiva"]
+      }
+    },
+    {
+      "element": "Dropdown",
+      "name": "gestion",
+      "field": "gestion_gas",
+      "label": "Gestión",
+      "options": [
+        { "label": "Inmueble solo", "value": "inmuebleSolo" },
+        { "label": "Inmueble desocupado", "value": "inmuebleDesocupado" },
+        { "label": "Inmueble demolido", "value": "inmuebleDemolido" },
+        {
+          "label": "Inmueble en construccion",
+          "value": "inmuebleConstruccion"
+        },
+        { "label": "Dirección errada", "value": "direccionErrada" },
+        {
+          "label": "No se permite ingreso a domicilio/Obstaculo (edificios-conjunto cerrado)",
+          "value": "noPermite_Obstaculo"
+        },
+        {
+          "label": "Arrendatario no asume la deuda",
+          "value": "arrendatarioNoAsumeDeuda"
+        },
+        {
+          "label": "Zona de calamidad (inundaciones / orden Público)",
+          "value": "zonaCalamidad"
+        },
+        {
+          "label": "Situación económica critica insolvente/ Bajos ingresos",
+          "value": "economiaCritica"
+        },
+        { "label": "Compromiso de pago", "value": "compromisoPago" },
+        { "label": "Cliente no asume la deuda", "value": "noAsumeDeuda" },
+        {
+          "label": "Pendiente  Recibir Ingresos para pagar",
+          "value": "pendienteIngresos"
+        },
+        { "label": "Usuario en reclamo", "value": "usuarioReclamo" },
+        { "label": "Refinanciado", "value": "refinanciado" },
+        {
+          "label": "Pago del valor vencido/total facturado",
+          "value": "pagoVencido_totalFacturado"
+        },
+        { "label": "Realiza abono/pago parcial", "value": "pagoParcial" },
+        { "label": "Pago total Deuda", "value": "pagoTotalDeuda" },
+        {
+          "label": "Menor de edad / adulto mayor en casa ",
+          "value": "menor_AdultoMayor"
+        }
+      ],
+      "extDepends": {
+        "service": ["Gas"]
+      },
+      "dependsOn": {
+        "resultadoDeGestion": ["no_efectiva"]
+      }
+    },
+    {
+      "element": "Dropdown",
+      "name": "gestion",
+      "field": "gestion_especial",
+      "label": "Gestión",
+      "options": [
+        { "label": "Inmueble solo", "value": "inmuebleSolo" },
+        { "label": "Inmueble desocupado", "value": "inmuebleDesocupado" },
+        {
+          "label": "Inmueble en construccion",
+          "value": "inmuebleConstruccion"
+        },
+        { "label": "Dirección errada", "value": "direccionErrada" },
+
+        {
+          "label": "No se permite ingreso a domicilio/Obstaculo (edificios-conjunto cerrado)",
+          "value": "noPermite_Obstaculo"
+        },
+        {
+          "label": "Zona de calamidad (inundaciones / orden Público)",
+          "value": "zonaCalamidad"
+        },
+        {
+          "label": "Situación económica critica insolvente/ Bajos ingresos",
+          "value": "economiaCritica"
+        },
+        { "label": "Cuota Inicial o Mensual Alta", "value": "cuotaAlta" },
+        { "label": "Compromiso de pago", "value": "compromisoPago" },
+        { "label": "Cliente no asume la deuda", "value": "noAsumeDeuda" },
+        { "label": "Titular fallecido", "value": "titularFallecido" },
+        {
+          "label": "Informa no usó cupo (Posible Fraude)",
+          "value": "posibleFraude"
+        },
+        {
+          "label": "Pendiente  Recibir Ingresos para pagar",
+          "value": "pendienteIngresos"
+        },
+        { "label": "Usuario en reclamo", "value": "usuarioReclamo" },
+        {
+          "label": "Presto cupo Brilla y responsable del pago es otra persona",
+          "value": "otroResponsable"
+        },
+        { "label": "Refinanciado", "value": "refinanciado" },
+        {
+          "label": "Pago del valor vencido/total facturado",
+          "value": "pagoVencido_totalFacturado"
+        },
+        { "label": "Realiza abono/pago parcial", "value": "pagoParcial" },
+        { "label": "Pago total Deuda", "value": "pagoTotalDeuda" },
+        {
+          "label": "Menor de edad / adulto mayor en casa ",
+          "value": "menor_AdultoMayor"
+        },
+        { "label": "Suscriptor no asume la deuda", "value": "noAsumeDeuda" },
+        { "label": "Sin empleo", "value": "sinEmpleo" },
+        {
+          "label": "Trabajo Informal - sin ingresos fijos. ",
+          "value": "trabajoInformal"
+        }
+      ],
+      "extDepends": {
+        "service": ["Brilla Surtigas"],
+        "plan": ["especial"]
+      },
+      "dependsOn": {
+        "resultadoDeGestion": ["no_efectiva"]
+      }
+    },
+    {
+      "element": "Dropdown",
+      "name": "contacto",
+      "field": "contacto_1",
+      "label": "Contacto",
+      "options": [
+        { "label": "Si contacto", "value": "si_contacto" },
+        { "label": "Inquilino", "value": "inquilino" },
+        { "label": "Familiar", "value": "familiar" },
+        { "label": "Vecino", "value": "vecino" },
+        { "label": "Sin contacto", "value": "no_contacto" }
+      ],
+      "excludeDependsOn": {
+        "gestion": ["direccionErrada"]
+      },
+      "dependsOn": {
+        "tipoDeVivienda": ["residencial", "comercial", "residencial_comercial"]
+      },
+      "extDepends": {
+        "service": ["Brilla Surtigas", "Gas"]
+      }
+    },
+    {
+      "element": "Dropdown",
+      "name": "contacto",
+      "field": "contacto_2",
+      "label": "Contacto",
+      "options": [{ "label": "Sin contacto", "value": "no_contacto" }],
+      "dependsOn": {
+        "gestion": ["direccionErrada"],
+        "tipoDeVivienda": ["residencial", "comercial", "residencial_comercial"]
+      },
+      "extDepends": {
+        "service": ["Brilla Surtigas", "Gas"]
+      }
+    },
+    {
+      "element": "TextInput",
+      "name": "nombreContacto",
+      "field": "nombreContacto",
+      "label": "Nombre de contacto",
+      "dependsOn": {
+        "contacto": ["si_contacto", "inquilino", "familiar", "vecino"]
+      },
+
+      "extDepends": {
+        "service": ["Brilla Surtigas", "Gas"]
+      }
+    },
+    {
+      "element": "TextInput",
+      "name": "telefonoContacto",
+      "field": "telefonoContacto",
+      "label": "Teléfono de contacto",
+      "dependsOn": {
+        "contacto": ["si_contacto", "inquilino", "familiar", "vecino"]
+      },
+      "extDepends": {
+        "service": ["Brilla Surtigas", "Gas"]
+      },
+      "props": {
+        "keyboardType": "phone-pad"
+      }
+    },
+    {
+      "element": "Dropdown",
+      "name": "estado",
+      "field": "estado",
+      "label": "Estado",
+      "options": [
+        { "label": "Consumiendo", "value": "consumiendo" },
+        { "label": "Suspendido", "value": "suspendido" },
+        { "label": "No se pudo verificar", "value": "noVerificable" },
+        { "label": "Sin medidor", "value": "sinMedidor" },
+        { "label": "Medidor prepago", "value": "medidorPrepago" },
+        { "label": "Posible fraude", "value": "posibleFraude" }
+      ],
+      "extDepends": {
+        "service": ["Gas"]
+      }
+    },
+    {
+      "element": "Dropdown",
+      "name": "sustituto",
+      "field": "sustituto",
+      "label": "¿Qué sustituto usa?",
+      "options": [
+        { "label": "Pipeta", "value": "pipeta" },
+        { "label": "Leña", "value": "leña" },
+        { "label": "Estufa eléctrica", "value": "estufa_electrica" }
+      ],
+      "extDepends": {
+        "service": ["Gas"]
+      },
+      "dependsOn": {
+        "estado": ["suspendido", "sinMedidor"]
+      }
+    },
+    {
+      "element": "TextInput",
+      "name": "observacion",
+      "field": "observacion",
+      "label": "Observación",
+      "props": {
+        "style": { "marginBottom": 16 }
+      }
+    }
+  ]
+}

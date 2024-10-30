@@ -3,17 +3,28 @@ import { reportsCollection } from "./reportsCollection";
 
 Meteor.methods({
   "report.create": function (data) {
-    try {
-      return reportsCollection.insertAsync({ ...data, createdAt: Date.now() });
-    } catch {
-      console.warn(Date.now(), "Intento de crear nuevamente un registro", data);
-    }
+    reportsCollection.updateAsync(
+      { _id: data._id },
+      {
+        $setOnInsert: { ...data, createdAt: Date.now() },
+      },
+      { upsert: true }
+    );
+    // try {
+    //   return reportsCollection.insertAsync({ ...data, createdAt: Date.now() });
+    // } catch {
+    //   console.warn(Date.now(), "Intento de crear nuevamente un registro", data);
+    // }
   },
   "report.update": function (id, data) {
-    return reportsCollection.updateAsync(id, {
-      ...data,
-      updatedAt: Date.now(),
-    });
+    return reportsCollection.updateAsync(
+      id,
+      {
+        ...data,
+        updatedAt: Date.now(),
+      },
+      { upsert: false }
+    );
   },
   "report.read": async function (filters) {
     let filter = {};

@@ -40,30 +40,10 @@ Meteor.methods({
     } catch (e) {}
     if (link) return link;
   },
-  "report.uploadPhoto": async function (fileData, reportId) {
-    check(fileData, {
-      name: String,
-      type: String,
-      base64: String,
-    });
-    const buffer = Buffer.from(fileData.base64, "base64");
-    const file = convertBase64ToFile(fileData.base64, fileData.type);
-
-    reportImageCollection.write(
-      file,
-      {
-        fileName: fileData.name,
-        type: fileData.type,
-      },
-      (error, fileRef) => {
-        if (error) {
-          throw new Meteor.Error("upload-failed", "Error al subir la imagen");
-        }
-        return fileRef;
-      }
-    );
-
-    return "saved";
+  "formGenerator.getUpdate": async function (version) {
+    const forms = await Assets.getTextAsync("forms.json");
+    const jsonForms = JSON.parse(forms);
+    if (jsonForms.version > version) return forms;
   },
 });
 

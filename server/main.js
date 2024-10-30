@@ -22,7 +22,7 @@ Meteor.startup(async () => {
 });
 
 Meteor.methods({
-  "getTextAssets": async function (route){
-    return Assets.getTextAsync(route);
-  }
-})
+  getTextAssets: async function (route) {
+    return await Assets.getTextAsync(route);
+  },
+});
