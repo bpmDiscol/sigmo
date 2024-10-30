@@ -116,7 +116,7 @@ export default function ManagerResultsTable({ data }) {
     },
     {
       title: "Reasignaciones",
-      dataIndex: "reAssignments",
+      dataIndex: "reassignedCount",
       width: "9rem",
     },
     {
@@ -146,7 +146,7 @@ export default function ManagerResultsTable({ data }) {
 
   return (
     <>
-      <Button onClick={exportResultsToExcel}>Exportar a excel</Button>
+      <Button type="primary" onClick={exportResultsToExcel}>Exportar a Excel</Button>
       <Table
         size="small"
         columns={columns}

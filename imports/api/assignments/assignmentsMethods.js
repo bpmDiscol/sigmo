@@ -494,6 +494,58 @@ Meteor.methods({
       ])
       .toArray();
   },
+  "assignment.reassignmentsCount": async function (timeFrame, project) {
+    const result = await assignmentsCollection
+      .rawCollection()
+      .aggregate([
+        {
+          $lookup: {
+            from: "records",
+            localField: "recordId",
+            foreignField: "_id",
+            as: "recordData",
+          },
+        },
+        { $unwind: "$recordData" },
+        {
+          $match: {
+            "recordData.timeFrame": timeFrame,
+            "recordData.project": project,
+          },
+        },
+        {
+          $group: {
+            _id: { manager: "$manager", recordId: "$recordId" },
+            count: { $sum: 1 }, // Cuenta cuántas veces se asigna el mismo recordId al mismo manager
+          },
+        },
+        {
+          $group: {
+            _id: "$_id.manager",
+            reAssignmentsCount: {
+              $sum: {
+                $cond: [
+                  { $gt: ["$count", 1] },
+                  { $subtract: ["$count", 1] },
+                  0,
+                ],
+              }, // Solo cuenta reasignaciones adicionales
+            },
+          },
+        },
+        {
+          $project: {
+            manager: "$_id",
+            reAssignmentsCount: 1,
+            _id: 0,
+          },
+        },
+      ])
+      .toArray();
+
+    return result;
+  },
+
   "assignment.gestiones": async function (timeFrame, project) {
     return await assignmentsCollection
       .rawCollection()
@@ -648,6 +700,11 @@ function reorganizeData(data) {
       date: `${result._id.dia}/${result._id.month}/${result._id.year}`,
       resolvedCount: result.resolvedCount,
       totalPendingDebt: result.totalPendingDebt,
+    });
+    managerMap[manager].resultsByDay.sort((a, b) => {
+      const dateA = new Date(a.date.split("/").reverse().join("-"));
+      const dateB = new Date(b.date.split("/").reverse().join("-"));
+      return dateA - dateB;
     });
   });
 

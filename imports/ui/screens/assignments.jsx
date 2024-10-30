@@ -8,9 +8,7 @@ import { Button, Flex, Input, Select, Space, Table, Typography } from "antd";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { GlobalContext } from "../context/globalsContext";
-import formatCurrency from "../../api/utils/formatCurrency";
 import BatchAssign from "../../api/utils/batchAssign";
-import moment from "moment";
 
 export default function Assignments() {
   const navigate = useNavigate();
@@ -233,11 +231,17 @@ export default function Assignments() {
   //#endregion
 
   function getData(page, pageSize, search, sort = voidSorter) {
+    const locality = Meteor.user({ profile: 1 })?.profile?.locality;
     Meteor.call(
       "record.read",
       page,
       pageSize,
-      { ...search, timeFrame: state?.id, project: globals.project?._id },
+      {
+        ...search,
+        timeFrame: state?.id,
+        project: globals.project?._id,
+        locality,
+      },
       sort,
       [
         "_id",

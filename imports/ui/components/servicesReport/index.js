@@ -39,8 +39,10 @@ const columns = [
 const ServicesReport = (timeFrame) => {
   const [data, setData] = useState([]);
   const { globals } = useContext(GlobalContext);
+  const [diccionario, setDiccionario] = useState([]);
 
   useEffect(() => {
+    fillDicctionary();
     Meteor.call(
       "assignment.gestiones",
       timeFrame.id,
@@ -50,6 +52,15 @@ const ServicesReport = (timeFrame) => {
       }
     );
   }, []);
+
+  async function fillDicctionary() {
+    const file = await Meteor.callAsync("getTextAssets", "diccionario.json");
+    setDiccionario(JSON.parse(file));
+  }
+
+  function translate(name) {
+    return diccionario.find((entry) => entry.value == name)?.label;
+  }
 
   const totalAssignments = data.reduce(
     (sum, item) => sum + item.totalAssignments,
@@ -70,7 +81,7 @@ const ServicesReport = (timeFrame) => {
 
   const tableData = data.map((item, index) => ({
     key: index,
-    gestion: item._id || "Efectiva",
+    gestion: translate(item._id) || "Efectiva",
     totalAssignments: item.totalAssignments,
     assignmentPercentage: `${item.assignmentPercentage.toFixed(2)}%`,
     totalPendingDebt: formatCurrency(item.totalPendingDebt),
@@ -139,7 +150,7 @@ const ServicesReport = (timeFrame) => {
 
   return (
     <>
-      <Button onClick={() => exportGestionToExcel(tableData)}>
+      <Button type="primary" onClick={() => exportGestionToExcel(tableData)}>
         Exportar a Excel
       </Button>
       <Table

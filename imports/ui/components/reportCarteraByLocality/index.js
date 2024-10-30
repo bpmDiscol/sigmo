@@ -99,6 +99,7 @@ const LocalityTable = (id) => {
       title: "Localidades",
       dataIndex: "localidad",
       key: "localidad",
+      render: (text) => text.toUpperCase()
     },
     {
       title: "Cartera Entregada para Gestión",
@@ -218,7 +219,7 @@ const LocalityTable = (id) => {
 
   return (
     <>
-      <Button onClick={() => exportCarteraToExcel(dataSource)}>
+      <Button type="primary" onClick={() => exportCarteraToExcel(dataSource)}>
         Exportar a Excel
       </Button>
       <Table

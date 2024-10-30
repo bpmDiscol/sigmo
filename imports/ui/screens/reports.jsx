@@ -12,7 +12,6 @@ export default function Reports() {
   const { state } = useLocation();
   const { globals } = useContext(GlobalContext);
   const [data, setData] = useState([]);
-
   useEffect(() => {
     Meteor.call(
       "assignment.managersResults",
@@ -20,7 +19,23 @@ export default function Reports() {
       globals?.project?._id,
       (err, resp) => {
         const filteredData = resp.filter((item) => item.manager !== "Unknown");
-        setData(filteredData);
+        // setData(filteredData);
+        Meteor.call(
+          "assignment.reassignmentsCount",
+          state.id,
+          globals?.project?._id,
+          (err, resp) => {
+            if (!err) {
+              const totals = filteredData.map((data) => {
+                const reassignedCount =
+                  resp.find((r) => r.manager === data.manager)
+                    .reAssignmentsCount || 0;
+                return { ...data, reassignedCount };
+              });
+              setData(totals)
+            }
+          }
+        );
       }
     );
   }, [globals]);
