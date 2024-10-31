@@ -15,7 +15,7 @@ export default function Assignments() {
   const { globals } = useContext(GlobalContext);
   const { state } = useLocation();
   const [reload, setReload] = useState(0);
-
+  const [currentProject, setCurrentProject] = useState({});
   const searchInput = useRef(null);
 
   const [records, setRecords] = useState([]);
@@ -30,13 +30,26 @@ export default function Assignments() {
 
   const [incidences, setIncidences] = useState();
   const voidSorter = { sortField: null, sortOrder: 1 };
+    //#region load JSON
+
+    useEffect(() => {
+      async function getProjectData() {
+        const proyectosStr = await Meteor.callAsync("getTextAssets", "proyectos.json");
+        const projects_ = JSON.parse(proyectosStr);
+        const currentProject_ = projects_[globals?.project.name];
+        setCurrentProject(currentProject_);
+      }
+      if (globals?.project) getProjectData();
+    }, [globals?.project]);
+  
+    //#endregion
 
   useEffect(() => {
-    if (!state) navigate("/timeframe");
+    if (!state) navigate("/detour");
     getData();
     getManagers();
     getIncidences();
-  }, [state, globals, reload]);
+  }, [state, globals, reload, currentProject]);
 
   useEffect(() => {
     getAssignedManagers();
@@ -82,6 +95,8 @@ export default function Assignments() {
   }
 
   //#region Search engine
+
+
 
   const handleSearch = (
     selectedKeys,
@@ -230,7 +245,7 @@ export default function Assignments() {
   }
   //#endregion
 
-  function getData(page, pageSize, search, sort = voidSorter) {
+  async function getData(page, pageSize, search, sort = voidSorter) {
     const locality = Meteor.user({ profile: 1 })?.profile?.locality;
     Meteor.call(
       "record.read",
@@ -243,33 +258,7 @@ export default function Assignments() {
         locality,
       },
       sort,
-      [
-        "_id",
-        "PRODUCTO",
-        "CONTRATO",
-        "CLIENTE",
-        "DESCRIPCION_TIPO_PRODUCTO",
-        "NUMERO_DE_LA_ORDEN",
-        "DESCRIPCION_CATEGORIA",
-        "DESCRIPCION_SUBCATEGORIA",
-        "NUMERO_REFINANCIACIONES_ULTIMO_ANO",
-        "ESTADO_FINANCIERO",
-        "ULTIMA_LECTURA_TOMADA",
-        "ELEMENTO_MEDICION",
-        "DESCRIPCION_BARRIO",
-        "DESCRIPCION_CICLO",
-        "IDENTIFICACION",
-        "NOMBRE_CLIENTE",
-        "DIRECCION_PREDIO",
-        "DIAS_DEUDA_ASIGNACION",
-        "CORRIENTE_VENCIDA_ASIGNADA",
-        "REFINANCIACIONES_PRODUCTO",
-        "EDAD_MORA_ACTUAL",
-        "TOTAL_DEUDA_CORRIENTE",
-        "INDICADOR",
-        "DEUDA_TOTAL_ASIGNADA",
-        "COMENTARIO",
-      ],
+      currentProject?.search,
       (err, res) => {
         if (err) return console.error(err);
 
@@ -302,190 +291,192 @@ export default function Assignments() {
     setManagers(managers);
   }
 
-  //#region Temporal table
-  const columns = [
-    {
-      title: "Gestor",
-      dataIndex: "_id",
-      render: (id) => (
-        <Select
-          onChange={(value) => newAssignment(id, value)}
-          allowClear
-          value={assignedManagers[id]}
-          options={managers}
-          style={{ width: "14rem" }}
-        />
-      ),
-      width: "16rem",
-    },
-    {
-      title: "Número de la orden",
-      dataIndex: "NUMERO_DE_LA_ORDEN",
-      width: "8rem",
-      ...getColumnSearchProps("CONTRATO"),
-    },
-    {
-      title: "Contrato",
-      dataIndex: "CONTRATO",
-      width: "8rem",
-      ...getColumnSearchProps("CONTRATO"),
-    },
-    {
-      title: "Cliente",
-      dataIndex: "CLIENTE",
-      width: "8rem",
-      ...getColumnSearchProps("CLIENTE"),
-    },
-    {
-      title: "Tipo Producto",
-      dataIndex: "DESCRIPCION_TIPO_PRODUCTO",
-      width: "8rem",
-      ...getColumnSearchProps("DESCRIPCION_TIPO_PRODUCTO"),
-    },
-    {
-      title: "Categoría",
-      dataIndex: "DESCRIPCION_CATEGORIA",
-      width: 180,
-      ...getColumnSearchProps("DESCRIPCION_CATEGORIA"),
-    },
-    {
-      title: "Estrato",
-      dataIndex: "DESCRIPCION_SUBCATEGORIA",
-      width: 180,
-      ...getColumnSearchProps("DESCRIPCION_SUBCATEGORIA"),
-    },
-    {
-      title: "Refinanciaciones/año",
-      dataIndex: "NUMERO_REFINANCIACIONES_ULTIMO_ANO",
-      width: 180,
-      ...getColumnSearchProps("NUMERO_REFINANCIACIONES_ULTIMO_ANO"),
-    },
-    {
-      title: "Estado financiero",
-      dataIndex: "ESTADO_FINANCIERO",
-      width: 180,
-      ...getColumnSearchProps("ESTADO_FINANCIERO"),
-    },
-    {
-      title: "Lectura",
-      dataIndex: "ULTIMA_LECTURA_TOMADA",
-      width: 180,
-      ...getColumnSearchProps("ULTIMA_LECTURA_TOMADA"),
-    },
-    {
-      title: "Medidor",
-      dataIndex: "ELEMENTO_MEDICION",
-      width: 180,
-      ...getColumnSearchProps("ELEMENTO_MEDICION"),
-    },
-    {
-      title: "Barrio",
-      dataIndex: "DESCRIPCION_BARRIO",
-      width: 180,
-      ...getColumnSearchProps("DESCRIPCION_BARRIO"),
-    },
-    {
-      title: "Ciclo",
-      dataIndex: "DESCRIPCION_CICLO",
-      width: 180,
-      ...getColumnSearchProps("DESCRIPCION_CICLO"),
-    },
-    {
-      title: "Identificación",
-      dataIndex: "IDENTIFICACION",
-      width: 180,
-      ...getColumnSearchProps("IDENTIFICACION"),
-    },
-    {
-      title: "Titular del servicio",
-      dataIndex: "NOMBRE_CLIENTE",
-      width: 180,
-      ...getColumnSearchProps("NOMBRE_CLIENTE"),
-    },
-    {
-      title: "Dirección",
-      dataIndex: "DIRECCION_PREDIO",
-      width: 180,
-      ...getColumnSearchProps("DIRECCION_PREDIO"),
-    },
-    {
-      title: "Días deuda",
-      dataIndex: "DIAS_DEUDA_ASIGNACION",
-      width: 180,
-      ...getColumnSearchProps("DIAS_DEUDA_ASIGNACION"),
-    },
-    {
-      title: "Saldo vencido",
-      dataIndex: "CORRIENTE_VENCIDA_ASIGNADA",
-      width: 180,
-      ...getColumnSearchProps("CORRIENTE_VENCIDA_ASIGNADA"),
-    },
-    {
-      title: "Refi. Histórico",
-      dataIndex: "REFINANCIACIONES_PRODUCTO",
-      width: 180,
-      ...getColumnSearchProps("REFINANCIACIONES_PRODUCTO"),
-    },
-    {
-      title: "Edad mora actual",
-      dataIndex: "EDAD_MORA_ACTUAL",
-      width: 180,
-      ...getColumnSearchProps("EDAD_MORA_ACTUAL"),
-    },
-    {
-      title: "Total deuda corriente",
-      dataIndex: "TOTAL_DEUDA_CORRIENTE",
-      width: 180,
-      ...getColumnSearchProps("TOTAL_DEUDA_CORRIENTE"),
-    },
-    {
-      title: "Indicador",
-      dataIndex: "INDICADOR",
-      width: 180,
-      ...getColumnSearchProps("INDICADOR"),
-    },
-    {
-      title: "Deuda total asignada",
-      dataIndex: "DEUDA_TOTAL_ASIGNADA",
-      width: 180,
-      ...getColumnSearchProps("DEUDA_TOTAL_ASIGNADA"),
-    },
-    {
-      title: "Comentario",
-      dataIndex: "COMENTARIO",
-      width: 180,
-      ...getColumnSearchProps("COMENTARIO"),
-    },
-  ];
+  // //#region Temporal table
+  // const columns = [
+  //   {
+  //     title: "Gestor",
+  //     dataIndex: "_id",
+  //     render: (id) => (
+  //       <Select
+  //         onChange={(value) => newAssignment(id, value)}
+  //         allowClear
+  //         value={assignedManagers[id]}
+  //         options={managers}
+  //         style={{ width: "14rem" }}
+  //       />
+  //     ),
+  //     width: "16rem",
+  //   },
+  //   {
+  //     title: "Número de la orden",
+  //     dataIndex: "NUMERO_DE_LA_ORDEN",
+  //     width: "8rem",
+  //     ...getColumnSearchProps("CONTRATO"),
+  //   },
+  //   {
+  //     title: "Contrato",
+  //     dataIndex: "CONTRATO",
+  //     width: "8rem",
+  //     ...getColumnSearchProps("CONTRATO"),
+  //   },
+  //   {
+  //     title: "Cliente",
+  //     dataIndex: "CLIENTE",
+  //     width: "8rem",
+  //     ...getColumnSearchProps("CLIENTE"),
+  //   },
+  //   {
+  //     title: "Tipo Producto",
+  //     dataIndex: "DESCRIPCION_TIPO_PRODUCTO",
+  //     width: "8rem",
+  //     ...getColumnSearchProps("DESCRIPCION_TIPO_PRODUCTO"),
+  //   },
+  //   {
+  //     title: "Categoría",
+  //     dataIndex: "DESCRIPCION_CATEGORIA",
+  //     width: 180,
+  //     ...getColumnSearchProps("DESCRIPCION_CATEGORIA"),
+  //   },
+  //   {
+  //     title: "Estrato",
+  //     dataIndex: "DESCRIPCION_SUBCATEGORIA",
+  //     width: 180,
+  //     ...getColumnSearchProps("DESCRIPCION_SUBCATEGORIA"),
+  //   },
+  //   {
+  //     title: "Refinanciaciones/año",
+  //     dataIndex: "NUMERO_REFINANCIACIONES_ULTIMO_ANO",
+  //     width: 180,
+  //     ...getColumnSearchProps("NUMERO_REFINANCIACIONES_ULTIMO_ANO"),
+  //   },
+  //   {
+  //     title: "Estado financiero",
+  //     dataIndex: "ESTADO_FINANCIERO",
+  //     width: 180,
+  //     ...getColumnSearchProps("ESTADO_FINANCIERO"),
+  //   },
+  //   {
+  //     title: "Lectura",
+  //     dataIndex: "ULTIMA_LECTURA_TOMADA",
+  //     width: 180,
+  //     ...getColumnSearchProps("ULTIMA_LECTURA_TOMADA"),
+  //   },
+  //   {
+  //     title: "Medidor",
+  //     dataIndex: "ELEMENTO_MEDICION",
+  //     width: 180,
+  //     ...getColumnSearchProps("ELEMENTO_MEDICION"),
+  //   },
+  //   {
+  //     title: "Barrio",
+  //     dataIndex: "DESCRIPCION_BARRIO",
+  //     width: 180,
+  //     ...getColumnSearchProps("DESCRIPCION_BARRIO"),
+  //   },
+  //   {
+  //     title: "Ciclo",
+  //     dataIndex: "DESCRIPCION_CICLO",
+  //     width: 180,
+  //     ...getColumnSearchProps("DESCRIPCION_CICLO"),
+  //   },
+  //   {
+  //     title: "Identificación",
+  //     dataIndex: "IDENTIFICACION",
+  //     width: 180,
+  //     ...getColumnSearchProps("IDENTIFICACION"),
+  //   },
+  //   {
+  //     title: "Titular del servicio",
+  //     dataIndex: "NOMBRE_CLIENTE",
+  //     width: 180,
+  //     ...getColumnSearchProps("NOMBRE_CLIENTE"),
+  //   },
+  //   {
+  //     title: "Dirección",
+  //     dataIndex: "DIRECCION_PREDIO",
+  //     width: 180,
+  //     ...getColumnSearchProps("DIRECCION_PREDIO"),
+  //   },
+  //   {
+  //     title: "Días deuda",
+  //     dataIndex: "DIAS_DEUDA_ASIGNACION",
+  //     width: 180,
+  //     ...getColumnSearchProps("DIAS_DEUDA_ASIGNACION"),
+  //   },
+  //   {
+  //     title: "Saldo vencido",
+  //     dataIndex: "CORRIENTE_VENCIDA_ASIGNADA",
+  //     width: 180,
+  //     ...getColumnSearchProps("CORRIENTE_VENCIDA_ASIGNADA"),
+  //   },
+  //   {
+  //     title: "Refi. Histórico",
+  //     dataIndex: "REFINANCIACIONES_PRODUCTO",
+  //     width: 180,
+  //     ...getColumnSearchProps("REFINANCIACIONES_PRODUCTO"),
+  //   },
+  //   {
+  //     title: "Edad mora actual",
+  //     dataIndex: "EDAD_MORA_ACTUAL",
+  //     width: 180,
+  //     ...getColumnSearchProps("EDAD_MORA_ACTUAL"),
+  //   },
+  //   {
+  //     title: "Total deuda corriente",
+  //     dataIndex: "TOTAL_DEUDA_CORRIENTE",
+  //     width: 180,
+  //     ...getColumnSearchProps("TOTAL_DEUDA_CORRIENTE"),
+  //   },
+  //   {
+  //     title: "Indicador",
+  //     dataIndex: "INDICADOR",
+  //     width: 180,
+  //     ...getColumnSearchProps("INDICADOR"),
+  //   },
+  //   {
+  //     title: "Deuda total asignada",
+  //     dataIndex: "DEUDA_TOTAL_ASIGNADA",
+  //     width: 180,
+  //     ...getColumnSearchProps("DEUDA_TOTAL_ASIGNADA"),
+  //   },
+  //   {
+  //     title: "Comentario",
+  //     dataIndex: "COMENTARIO",
+  //     width: 180,
+  //     ...getColumnSearchProps("COMENTARIO"),
+  //   },
+  // ];
 
   //#endregion
 
+  const columns = currentProject?.fields?.map((field) => {
+    if (field.type === "select") {
+      return {
+        title: field.title,
+        dataIndex: field.dataIndex,
+        render: (id) => (
+          <Select
+            onChange={(value) => newAssignment(id, value)}
+            allowClear
+            value={assignedManagers[id]}
+            options={managers}
+            style={{ width: "14rem" }}
+          />
+        ),
+        width: "16rem",
+      };
+    } else {
+      return {
+        title: field.title,
+        dataIndex: field.dataIndex,
+        width: "8rem",
+        ...getColumnSearchProps(field.dataIndex),
+      };
+    }
+  });
+  
   return (
     <>
-      {/* <Row>
-        <Col span={8}></Col>
-        <Col span={8}></Col>
-        <Col span={8}>
-          <Flex
-            id="managersList"
-            style={{ border: "2px solid gray", padding: "8px", width: "100%" }}
-          >
-            <List
-              dataSource={managers}
-              style={{ width: "100%" }}
-              renderItem={(item) => (
-                <List.Item>
-                  <List.Item.Meta
-                    title={item.label}
-                    avatar={<Avatar size="large" icon={<UserOutlined />} />}
-                    description="asignaciones: XXX"
-                  />
-                </List.Item>
-              )}
-            />
-          </Flex>
-        </Col>
-      </Row> */}
       <Typography.Title>Asignaciones</Typography.Title>
       <Table
         size="small"

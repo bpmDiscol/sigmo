@@ -58,6 +58,7 @@ export default function MySider() {
                   label: "Dashboard",
                   key: "dashboard",
                   icon: <DashboardOutlined />,
+                  disabled: true,
                 },
                 {
                   label: "Periodos",
@@ -68,6 +69,7 @@ export default function MySider() {
                   label: "Linea de tiempo",
                   key: "timeline",
                   icon: <FieldTimeOutlined />,
+                  disabled: true,
                 },
               ],
             },

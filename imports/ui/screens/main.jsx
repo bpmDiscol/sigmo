@@ -14,6 +14,7 @@ import Reports from "./reports";
 import ProjectsConfiguration from "./projectsConfiguration";
 import { GlobalContext } from "../context/globalsContext";
 import TeamAdmin from "./teamAdmin";
+import Detour from "../components/detour";
 
 const { Header, Content, Sider } = Layout;
 
@@ -37,6 +38,8 @@ export default function Main() {
             <Route path="/reports" element={<Reports />} />
             <Route path="/team" element={<TeamAdmin />} />
             <Route path="/users" element={<AdminUsers />} />
+            <Route path="/detour" element={<Detour />} />
+            <Route path="*" element={<Detour isAuthorized />} />
             <Route
               path="/timeframe"
               element={<TimeFrame project={globals?.project?._id} />}
