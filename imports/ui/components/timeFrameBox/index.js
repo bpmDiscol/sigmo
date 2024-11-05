@@ -15,6 +15,7 @@ export default function FrameCard({ frameData, project }) {
   const locality = Meteor.user().profile.locality;
 
   function loadFile(file_, id) {
+    setFile({ status: "analizing", length: 0 });
     processExcel(file_, setFile);
     setFile({ ...file, currentFrame: id });
     return false;
@@ -61,7 +62,9 @@ export default function FrameCard({ frameData, project }) {
             loading={file?.status !== "wait"}
             style={{ width: "11.9rem" }}
           >
-            Cargar archivo
+            {file?.status == "analizing"
+              ? "Analizando archivo"
+              : "Cargar archivo"}
             {file?.status !== "wait" ? ` ${percent.toFixed(1)} % ` : ""}
           </Button>
         </Upload>

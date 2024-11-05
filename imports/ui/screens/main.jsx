@@ -38,8 +38,8 @@ export default function Main() {
             <Route path="/reports" element={<Reports />} />
             <Route path="/team" element={<TeamAdmin />} />
             <Route path="/users" element={<AdminUsers />} />
-            <Route path="/detour" element={<Detour />} />
-            <Route path="*" element={<Detour isAuthorized />} />
+            <Route path="/" element={<Detour isAuthorized />} />
+            <Route path="*" element={<Detour />} />
             <Route
               path="/timeframe"
               element={<TimeFrame project={globals?.project?._id} />}

@@ -1,0 +1,87 @@
+[
+  {
+    "title": "Gestor",
+    "dataIndex": "manager",
+    "width": "15rem"
+  },
+  {
+    "title": "Producto",
+    "dataIndex": "PRODUCTO",
+    "width": "15rem"
+  },
+  {
+    "title": "Contrato",
+    "dataIndex": "CONTRATO",
+    "width": "15rem"
+  },
+  {
+    "title": "Cliente",
+    "dataIndex": "CLIENTE",
+    "width": "15rem"
+  },
+  {
+    "title": "Descripción Tipo Producto",
+    "dataIndex": "DESCRIPCION_TIPO_PRODUCTO",
+    "width": "15rem"
+  },
+  {
+    "title": "Descripción Localidad",
+    "dataIndex": "DESCRIPCION_LOCALIDAD",
+    "width": "15rem"
+  },
+  {
+    "title": "Descripción Barrio",
+    "dataIndex": "DESCRIPCION_BARRIO",
+    "width": "15rem"
+  },
+  {
+    "title": "Descripción Ciclo",
+    "dataIndex": "DESCRIPCION_CICLO",
+    "width": "15rem"
+  },
+  {
+    "title": "Tipo Cliente",
+    "dataIndex": "TIPO_CLIENTE",
+    "width": "15rem"
+  },
+  {
+    "title": "Identificación",
+    "dataIndex": "IDENTIFICACION",
+    "width": "15rem"
+  },
+  {
+    "title": "Nombre Cliente",
+    "dataIndex": "NOMBRE_CLIENTE",
+    "width": "15rem"
+  },
+  {
+    "title": "Dirección Predio",
+    "dataIndex": "DIRECCION_PREDIO",
+    "width": "15rem"
+  },
+  {
+    "title": "Fecha Asignación",
+    "dataIndex": "assignmentDate",
+    "type": "date"
+  },
+  {
+    "title": "Teléfono Sugerido",
+    "dataIndex": "TELEFONO",
+    "width": "15rem"
+  },
+  {
+    "title": "Email",
+    "dataIndex": "EMAIL",
+    "width": "15rem"
+  },
+  {
+    "title": "Causal de No Pago",
+    "dataIndex": "CAUSAL_DE_NO_PAGO",
+    "width": "15rem"
+  },
+  {
+    "title": "Resultado de Gestión",
+    "dataIndex": "RESULTADO_DE_GESTION",
+    "width": "15rem"
+  }
+]

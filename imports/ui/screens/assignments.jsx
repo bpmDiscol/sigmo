@@ -45,7 +45,7 @@ export default function Assignments() {
     //#endregion
 
   useEffect(() => {
-    if (!state) navigate("/detour");
+    if (!state) navigate("/");
     getData();
     getManagers();
     getIncidences();

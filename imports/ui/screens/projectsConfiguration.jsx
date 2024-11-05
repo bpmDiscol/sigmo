@@ -15,7 +15,7 @@ export default function ProjectsConfiguration() {
         globals?.membership,
         globals?.userRole
       );
-      if (!access) navigate("/detour");
+      if (!access) navigate("/");
     }
     if (globals?.membership) getTeamAccess();
   }, [globals?.membership, globals?.userRole]);

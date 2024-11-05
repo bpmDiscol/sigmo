@@ -16,6 +16,8 @@ export default function AssignmentReport({ id, timeFrame }) {
     percent: 0,
   });
 
+  const [columns, setColumns] = useState([]);
+
   useEffect(() => {
     fetchAssignments(1, pagination.pageSize);
   }, []);
@@ -91,95 +93,112 @@ export default function AssignmentReport({ id, timeFrame }) {
     }
   }
 
-  const columns = [
-    {
-      title: "Gestor",
-      dataIndex: "manager",
-      width: "15rem",
-    },
-    {
-      title: "Producto",
-      dataIndex: "PRODUCTO",
-      width: "15rem",
-    },
-    {
-      title: "Contrato",
-      dataIndex: "CONTRATO",
-      width: "15rem",
-    },
-    {
-      title: "Cliente",
-      dataIndex: "CLIENTE",
-      width: "15rem",
-    },
-    {
-      title: "Descripción Tipo Producto",
-      dataIndex: "DESCRIPCION_TIPO_PRODUCTO",
-      width: "15rem",
-    },
-    {
-      title: "Descripción Localidad",
-      dataIndex: "DESCRIPCION_LOCALIDAD",
-      width: "15rem",
-    },
-    {
-      title: "Descripción Barrio",
-      dataIndex: "DESCRIPCION_BARRIO",
-      width: "15rem",
-    },
-    {
-      title: "Descripción Ciclo",
-      dataIndex: "DESCRIPCION_CICLO",
-      width: "15rem",
-    },
-    {
-      title: "Tipo Cliente",
-      dataIndex: "TIPO_CLIENTE",
-      width: "15rem",
-    },
-    {
-      title: "Identificación",
-      dataIndex: "IDENTIFICACION",
-      width: "15rem",
-    },
-    {
-      title: "Nombre Cliente",
-      dataIndex: "NOMBRE_CLIENTE",
-      width: "15rem",
-    },
-    {
-      title: "Dirección Predio",
-      dataIndex: "DIRECCION_PREDIO",
-      width: "15rem",
-    },
-    {
-      title: "Fecha Asignación",
-      dataIndex: "assignmentDate",
-      key: "assignmentDate",
-      render: (date) => moment(date).format("DD/MM/YYYY"),
-    },
-    {
-      title: "Teléfono Sugerido",
-      dataIndex: "TELEFONO",
-      width: "15rem",
-    },
-    {
-      title: "Email",
-      dataIndex: "EMAIL",
-      width: "15rem",
-    },
-    {
-      title: "Causal de No Pago",
-      dataIndex: "CAUSAL_DE_NO_PAGO",
-      width: "15rem",
-    },
-    {
-      title: "Resultado de Gestión",
-      dataIndex: "RESULTADO_DE_GESTION",
-      width: "15rem",
-    },
-    // Agrega más columnas aquí según sea necesario
-  ];
+  useEffect(() => {
+    async function getColumns() {
+      const columnsStr = await Meteor.callAsync(
+        "getTextAssets",
+        "reporteAsignaciones.json"
+      );
+      const parsedColumns = JSON.parse(columnsStr);
+      const reconstructeds = parsedColumns.map((column) => {
+        if (column.type === "date")
+          column.render = (date) => moment(date).format("DD/MM/YYYY");
+        return column;
+      });
+      setColumns(reconstructeds);
+    }
+
+    getColumns();
+  }, []);
+
+  // const columns = [
+  //   {
+  //     title: "Gestor",
+  //     dataIndex: "manager",
+  //     width: "15rem",
+  //   },
+  //   {
+  //     title: "Producto",
+  //     dataIndex: "PRODUCTO",
+  //     width: "15rem",
+  //   },
+  //   {
+  //     title: "Contrato",
+  //     dataIndex: "CONTRATO",
+  //     width: "15rem",
+  //   },
+  //   {
+  //     title: "Cliente",
+  //     dataIndex: "CLIENTE",
+  //     width: "15rem",
+  //   },
+  //   {
+  //     title: "Descripción Tipo Producto",
+  //     dataIndex: "DESCRIPCION_TIPO_PRODUCTO",
+  //     width: "15rem",
+  //   },
+  //   {
+  //     title: "Descripción Localidad",
+  //     dataIndex: "DESCRIPCION_LOCALIDAD",
+  //     width: "15rem",
+  //   },
+  //   {
+  //     title: "Descripción Barrio",
+  //     dataIndex: "DESCRIPCION_BARRIO",
+  //     width: "15rem",
+  //   },
+  //   {
+  //     title: "Descripción Ciclo",
+  //     dataIndex: "DESCRIPCION_CICLO",
+  //     width: "15rem",
+  //   },
+  //   {
+  //     title: "Tipo Cliente",
+  //     dataIndex: "TIPO_CLIENTE",
+  //     width: "15rem",
+  //   },
+  //   {
+  //     title: "Identificación",
+  //     dataIndex: "IDENTIFICACION",
+  //     width: "15rem",
+  //   },
+  //   {
+  //     title: "Nombre Cliente",
+  //     dataIndex: "NOMBRE_CLIENTE",
+  //     width: "15rem",
+  //   },
+  //   {
+  //     title: "Dirección Predio",
+  //     dataIndex: "DIRECCION_PREDIO",
+  //     width: "15rem",
+  //   },
+  //   {
+  //     title: "Fecha Asignación",
+  //     dataIndex: "assignmentDate",
+  //     key: "assignmentDate",
+  //     render: (date) => moment(date).format("DD/MM/YYYY"),
+  //   },
+  //   {
+  //     title: "Teléfono Sugerido",
+  //     dataIndex: "TELEFONO",
+  //     width: "15rem",
+  //   },
+  //   {
+  //     title: "Email",
+  //     dataIndex: "EMAIL",
+  //     width: "15rem",
+  //   },
+  //   {
+  //     title: "Causal de No Pago",
+  //     dataIndex: "CAUSAL_DE_NO_PAGO",
+  //     width: "15rem",
+  //   },
+  //   {
+  //     title: "Resultado de Gestión",
+  //     dataIndex: "RESULTADO_DE_GESTION",
+  //     width: "15rem",
+  //   },
+  // ];
 
   return (
     <Table

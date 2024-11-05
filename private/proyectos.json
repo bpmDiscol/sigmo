@@ -1,5 +1,161 @@
 {
-  "new age": {
+  "Cienaga": {
+    "search": [
+      "_id",
+      "PRODUCTO",
+      "CONTRATO",
+      "CLIENTE",
+      "DESCRIPCION_TIPO_PRODUCTO",
+      "NUMERO_DE_LA_ORDEN",
+      "DESCRIPCION_CATEGORIA",
+      "DESCRIPCION_SUBCATEGORIA",
+      "NUMERO_REFINANCIACIONES_ULTIMO_ANO",
+      "ESTADO_FINANCIERO",
+      "ULTIMA_LECTURA_TOMADA",
+      "ELEMENTO_MEDICION",
+      "DESCRIPCION_BARRIO",
+      "DESCRIPCION_CICLO",
+      "IDENTIFICACION",
+      "NOMBRE_CLIENTE",
+      "DIRECCION_PREDIO",
+      "DIAS_DEUDA_ASIGNACION",
+      "CORRIENTE_VENCIDA_ASIGNADA",
+      "REFINANCIACIONES_PRODUCTO",
+      "EDAD_MORA_ACTUAL",
+      "TOTAL_DEUDA_CORRIENTE",
+      "INDICADOR",
+      "DEUDA_TOTAL_ASIGNADA",
+      "COMENTARIO"
+    ],
+    "fields": [
+      {
+        "title": "Gestor",
+        "dataIndex": "_id",
+        "type": "select"
+      },
+      {
+        "title": "Producto",
+        "dataIndex": "PRODUCTO",
+        "type": "text"
+      },
+      {
+        "title": "Contrato",
+        "dataIndex": "CONTRATO",
+        "type": "text"
+      },
+      {
+        "title": "Cliente",
+        "dataIndex": "CLIENTE",
+        "type": "text"
+      },
+      {
+        "title": "Descripción Tipo Producto",
+        "dataIndex": "DESCRIPCION_TIPO_PRODUCTO",
+        "type": "text"
+      },
+      {
+        "title": "Número de la Orden",
+        "dataIndex": "NUMERO_DE_LA_ORDEN",
+        "type": "text"
+      },
+      {
+        "title": "Descripción Categoría",
+        "dataIndex": "DESCRIPCION_CATEGORIA",
+        "type": "text"
+      },
+      {
+        "title": "Descripción Subcategoría",
+        "dataIndex": "DESCRIPCION_SUBCATEGORIA",
+        "type": "text"
+      },
+      {
+        "title": "Número de Refinanciaciones Último Año",
+        "dataIndex": "NUMERO_REFINANCIACIONES_ULTIMO_ANO",
+        "type": "text"
+      },
+      {
+        "title": "Estado Financiero",
+        "dataIndex": "ESTADO_FINANCIERO",
+        "type": "text"
+      },
+      {
+        "title": "Última Lectura Tomada",
+        "dataIndex": "ULTIMA_LECTURA_TOMADA",
+        "type": "text"
+      },
+      {
+        "title": "Elemento de Medición",
+        "dataIndex": "ELEMENTO_MEDICION",
+        "type": "text"
+      },
+      {
+        "title": "Descripción Barrio",
+        "dataIndex": "DESCRIPCION_BARRIO",
+        "type": "text"
+      },
+      {
+        "title": "Descripción Ciclo",
+        "dataIndex": "DESCRIPCION_CICLO",
+        "type": "text"
+      },
+      {
+        "title": "Identificación",
+        "dataIndex": "IDENTIFICACION",
+        "type": "text"
+      },
+      {
+        "title": "Nombre del Cliente",
+        "dataIndex": "NOMBRE_CLIENTE",
+        "type": "text"
+      },
+      {
+        "title": "Dirección del Predio",
+        "dataIndex": "DIRECCION_PREDIO",
+        "type": "text"
+      },
+      {
+        "title": "Días de Deuda Asignación",
+        "dataIndex": "DIAS_DEUDA_ASIGNACION",
+        "type": "text"
+      },
+      {
+        "title": "Deuda Corriente Vencida Asignada",
+        "dataIndex": "CORRIENTE_VENCIDA_ASIGNADA",
+        "type": "text"
+      },
+      {
+        "title": "Refinanciaciones Producto",
+        "dataIndex": "REFINANCIACIONES_PRODUCTO",
+        "type": "text"
+      },
+      {
+        "title": "Edad Mora Actual",
+        "dataIndex": "EDAD_MORA_ACTUAL",
+        "type": "text"
+      },
+      {
+        "title": "Total Deuda Corriente",
+        "dataIndex": "TOTAL_DEUDA_CORRIENTE",
+        "type": "text"
+      },
+      {
+        "title": "Indicador",
+        "dataIndex": "INDICADOR",
+        "type": "text"
+      },
+      {
+        "title": "Deuda Total Asignada",
+        "dataIndex": "DEUDA_TOTAL_ASIGNADA",
+        "type": "text"
+      },
+      {
+        "title": "Comentario",
+        "dataIndex": "COMENTARIO",
+        "type": "text"
+      }
+    ]
+  },
+  "boom": {
     "search": [
       "_id",
       "PRODUCTO",

@@ -1,11 +1,15 @@
 {
-  "title": "example",
-  "version": 1,
-  "project": "gases",
+  "title": "SIGMo",
+  "version": 6,
+  "maps": false,
   "icons": [
     {
       "icon": "alpha-b-circle-outline",
       "label": "Brilla Surtigas"
+    },
+    {
+      "icon": "alpha-p-circle-outline",
+      "label": "Servicios Financieros"
     },
     {
       "icon": "fire",
@@ -16,8 +20,10 @@
     "_id": "id",
     "NUMERO_DE_LA_ORDEN": "numero_de_orden",
     "NOMBRE_CLIENTE": "nombre_usuario",
+    "NOMBRE": "nombre_usuario",
     "ELEMENTO_MEDICION": "medidor",
     "PRODUCTO": "producto",
+    "PRED_NUMERO": "Cliente",
     "CONTRATO": "contrato",
     "DESCRIPCION_TIPO_PRODUCTO": "tipo_servicio",
     "DESCRIPCION_CATEGORIA": "categoria",
@@ -29,15 +35,23 @@
     "DESCRIPCION_CICLO": "ciclo",
     "IDENTIFICACION": "identificacion",
     "DIRECCION_PREDIO": "direccion_predio",
+    "DIRECCION": "direccion_predio",
     "DIAS_DEUDA_ACTUAL": "dias_deuda",
     "DEUDA_TOTAL_ASIGNADA": "deuda_total_asignada",
+    "FACT_VALORTOTAL": "deuda_total_asignada",
     "CORRIENTE_VENCIDA_ASIGNADA": "saldo_vencido",
+    "FACT_CARTERA": "saldo_vencido",
+    "FACT_VRCORRIENTE": "saldo_no_vencido",
     "DIAS_DEUDA_ASIGNACION": "dias_deuda_asignacion",
+    "FACT_EDADFACTURA": "dias_deuda_asignacion",
     "SALDO_NO_VENCIDO": "saldo_no_vencido",
     "REFINANCIACIONES_PRODUCTO": "refinanciaciones",
+    "FINANCIACIONES": "refinanciaciones",
     "EDAD_MORA_ACTUAL": "edad_mora",
+    "EDAD": "edad_mora",
     "INDICADOR": "indicador",
     "TOTAL_DEUDA_CORRIENTE": "total_deuda_corriente",
+    "PAGO": "total_deuda_corriente",
     "INTERESES": "intereses",
     "OBSERVACION": "observacion"
   },
@@ -46,6 +60,7 @@
     "nombre_usuario": "Nombre del Cliente",
     "medidor": "Elemento de Medición",
     "producto": "Producto",
+    "cliente": "Cliente",
     "contrato": "Contrato",
     "tipo_servicio": "Descripción del Tipo de Producto",
     "categoria": "Descripción de la Categoría",
@@ -73,7 +88,7 @@
     {
       "element": "Dropdown",
       "name": "tipoDeVivienda",
-      "field": "tipoDeVivienda",
+      "field": "tipoDeVivienda_1",
       "label": "Tipo de vivienda",
       "options": [
         { "label": "Residencial", "value": "residencial" },
@@ -81,7 +96,45 @@
         { "label": "Residencial y comercial", "value": "residencial_comercial" }
       ],
       "extDepends": {
-        "service": ["Gas", "Brilla Surtigas"]
+        "service": ["Gas", "Brilla Surtigas", "Servicios Financieros"]
+      }
+    },
+    {
+      "element": "Dropdown",
+      "name": "tipoDeVivienda",
+      "field": "tipoDeVivienda_2",
+      "label": "Tipo de vivienda",
+      "options": [
+        { "label": "Residencial", "value": "residencial" },
+        { "label": "Comercial", "value": "comercial" },
+        { "label": "Residencial de interes social", "value": "interesSocial" }
+      ],
+      "extDepends": {
+        "service": ["Gcartera", "Mantenimiento_N"]
+      }
+    },
+    {
+      "element": "Dropdown",
+      "name": "tipoComercio",
+      "field": "tipoComercio",
+      "label": "Tipo de comercio",
+      "options": [
+        { "label": "Restaurante", "value": "restaurante" },
+        { "label": "Comidas rápidas", "value": "comidas_rapidas" },
+        { "label": "Ferretería", "value": "ferreteria" },
+        { "label": "Supermercado", "value": "supermercado" },
+        { "label": "Drogueria", "value": "drogueria" },
+        { "label": "Hospital", "value": "hospital" },
+        { "label": "Bancario", "value": "bancario" },
+        { "label": "Estado", "value": "estado" },
+        { "label": "Frutería", "value": "fruteria" },
+        { "label": "otros", "value": "otros" }
+      ],
+      "extDepends": {
+        "service": ["Gcartera", "Mantenimiento_N"]
+      },
+      "dependsOn": {
+        "tipoDeVivienda": ["comercial"]
       }
     },
     {
@@ -94,10 +147,21 @@
         { "label": "No Efectiva", "value": "no_efectiva" }
       ],
       "extDepends": {
-        "service": ["Gas", "Brilla Surtigas"]
+        "service": [
+          "Gas",
+          "Brilla Surtigas",
+          "Servicios Financieros",
+          "Gcartera",
+          "Mantenimiento_N"
+        ]
       },
       "dependsOn": {
-        "tipoDeVivienda": ["residencial", "comercial", "residencial_comercial"]
+        "tipoDeVivienda": [
+          "residencial",
+          "comercial",
+          "residencial_comercial",
+          "interesSocial"
+        ]
       }
     },
     {
@@ -146,20 +210,13 @@
           "label": "Presto cupo Brilla y responsable del pago es otra persona",
           "value": "otroResponsable"
         },
-        { "label": "Refinanciado", "value": "refinanciado" },
-        {
-          "label": "Pago del valor vencido/total facturado",
-          "value": "pagoVencido_totalFacturado"
-        },
-        { "label": "Realiza abono/pago parcial", "value": "pagoParcial" },
-        { "label": "Pago total Deuda", "value": "pagoTotalDeuda" },
         {
           "label": "Menor de edad / adulto mayor en casa ",
           "value": "menor_AdultoMayor"
         }
       ],
       "extDepends": {
-        "service": ["Brilla Surtigas"]
+        "service": ["Brilla Surtigas", "Servicios Financieros"]
       },
       "dependsOn": {
         "resultadoDeGestion": ["no_efectiva"]
@@ -202,20 +259,13 @@
           "value": "pendienteIngresos"
         },
         { "label": "Usuario en reclamo", "value": "usuarioReclamo" },
-        { "label": "Refinanciado", "value": "refinanciado" },
-        {
-          "label": "Pago del valor vencido/total facturado",
-          "value": "pagoVencido_totalFacturado"
-        },
-        { "label": "Realiza abono/pago parcial", "value": "pagoParcial" },
-        { "label": "Pago total Deuda", "value": "pagoTotalDeuda" },
         {
           "label": "Menor de edad / adulto mayor en casa ",
           "value": "menor_AdultoMayor"
         }
       ],
       "extDepends": {
-        "service": ["Gas"]
+        "service": ["Gas", "Gcartera", "Mantenimiento_N"]
       },
       "dependsOn": {
         "resultadoDeGestion": ["no_efectiva"]
@@ -264,13 +314,6 @@
           "label": "Presto cupo Brilla y responsable del pago es otra persona",
           "value": "otroResponsable"
         },
-        { "label": "Refinanciado", "value": "refinanciado" },
-        {
-          "label": "Pago del valor vencido/total facturado",
-          "value": "pagoVencido_totalFacturado"
-        },
-        { "label": "Realiza abono/pago parcial", "value": "pagoParcial" },
-        { "label": "Pago total Deuda", "value": "pagoTotalDeuda" },
         {
           "label": "Menor de edad / adulto mayor en casa ",
           "value": "menor_AdultoMayor"
@@ -283,11 +326,80 @@
         }
       ],
       "extDepends": {
-        "service": ["Brilla Surtigas"],
+        "service": ["Brilla Surtigas", "Servicios Financieros"],
         "plan": ["especial"]
       },
       "dependsOn": {
         "resultadoDeGestion": ["no_efectiva"]
+      }
+    },
+    {
+      "element": "Dropdown",
+      "name": "gestion",
+      "field": "gestion_efectiva",
+      "label": "Gestión",
+      "options": [
+        { "label": "Refinanciado", "value": "refinanciado" },
+        {
+          "label": "Pago del valor vencido/total facturado",
+          "value": "pagoVencido_totalFacturado"
+        },
+        { "label": "Realiza abono/pago parcial ", "value": "pagoParcial" },
+        { "label": "Pago total Deuda", "value": "pagoTotalDeuda" }
+      ],
+      "extDepends": {
+        "service": [
+          "Brilla Surtigas",
+          "Servicios Financieros",
+          "Gas",
+          "Gcartera",
+          "Mantenimiento_N"
+        ]
+      },
+      "dependsOn": {
+        "resultadoDeGestion": ["efectiva"]
+      }
+    },
+    {
+      "element": "TextInput",
+      "name": "recibo",
+      "field": "recibo",
+      "label": "Recibo",
+      "dependsOn": {
+        "resultadoDeGestion": ["efectiva"]
+      },
+      "extDepends": {
+        "service": [
+          "Brilla Surtigas",
+          "Gas",
+          "Servicios Financieros",
+          "Gcartera",
+          "Mantenimiento_N"
+        ]
+      },
+      "props": {
+        "keyboardType": "phone-pad"
+      }
+    },
+    {
+      "element": "TextInput",
+      "name": "valorRecibo",
+      "field": "valorRecibo",
+      "label": "Valor del recibo",
+      "dependsOn": {
+        "resultadoDeGestion": ["efectiva"]
+      },
+      "extDepends": {
+        "service": [
+          "Brilla Surtigas",
+          "Gas",
+          "Servicios Financieros",
+          "Gcartera",
+          "Mantenimiento_N"
+        ]
+      },
+      "props": {
+        "keyboardType": "phone-pad"
       }
     },
     {
@@ -298,18 +410,19 @@
       "options": [
         { "label": "Si contacto", "value": "si_contacto" },
         { "label": "Inquilino", "value": "inquilino" },
-        { "label": "Familiar", "value": "familiar" },
-        { "label": "Vecino", "value": "vecino" },
-        { "label": "Sin contacto", "value": "no_contacto" }
+        { "label": "Familiar", "value": "familiar" }
       ],
-      "excludeDependsOn": {
-        "gestion": ["direccionErrada"]
-      },
       "dependsOn": {
-        "tipoDeVivienda": ["residencial", "comercial", "residencial_comercial"]
+        "resultadoDeGestion": ["efectiva"]
       },
       "extDepends": {
-        "service": ["Brilla Surtigas", "Gas"]
+        "service": [
+          "Brilla Surtigas",
+          "Gas",
+          "Servicios Financieros",
+          "Gcartera",
+          "Mantenimiento_N"
+        ]
       }
     },
     {
@@ -317,13 +430,61 @@
       "name": "contacto",
       "field": "contacto_2",
       "label": "Contacto",
+      "options": [
+        { "label": "Si contacto", "value": "si_contacto" },
+        { "label": "Inquilino", "value": "inquilino" },
+        { "label": "Familiar", "value": "familiar" },
+        { "label": "Vecino", "value": "vecino" },
+        { "label": "Sin contacto", "value": "no_contacto" }
+      ],
+      "dependsOn": {
+        "resultadoDeGestion": ["no_efectiva"]
+      },
+      "excludeDependsOn": {
+        "gestion": [
+          "direccionErrada",
+          "inmuebleSolo",
+          "inmuebleDesocupado",
+          "inmuebleConstruccion",
+          "noPermite_Obstaculo",
+          "menor_AdultoMayor"
+        ]
+      },
+      "extDepends": {
+        "service": [
+          "Brilla Surtigas",
+          "Gas",
+          "Servicios Financieros",
+          "Gcartera",
+          "Mantenimiento_N"
+        ]
+      }
+    },
+    {
+      "element": "Dropdown",
+      "name": "contacto",
+      "field": "contacto_3",
+      "label": "Contacto",
       "options": [{ "label": "Sin contacto", "value": "no_contacto" }],
       "dependsOn": {
-        "gestion": ["direccionErrada"],
+        "gestion": [
+          "direccionErrada",
+          "inmuebleSolo",
+          "inmuebleDesocupado",
+          "inmuebleConstruccion",
+          "noPermite_Obstaculo",
+          "menor_AdultoMayor"
+        ],
         "tipoDeVivienda": ["residencial", "comercial", "residencial_comercial"]
       },
       "extDepends": {
-        "service": ["Brilla Surtigas", "Gas"]
+        "service": [
+          "Brilla Surtigas",
+          "Gas",
+          "Servicios Financieros",
+          "Gcartera",
+          "Mantenimiento_N"
+        ]
       }
     },
     {
@@ -332,11 +493,17 @@
       "field": "nombreContacto",
       "label": "Nombre de contacto",
       "dependsOn": {
-        "contacto": ["si_contacto", "inquilino", "familiar", "vecino"]
+        "contacto": ["si_contacto", "inquilino", "familiar"]
       },
 
       "extDepends": {
-        "service": ["Brilla Surtigas", "Gas"]
+        "service": [
+          "Brilla Surtigas",
+          "Gas",
+          "Servicios Financieros",
+          "Gcartera",
+          "Mantenimiento_N"
+        ]
       }
     },
     {
@@ -345,10 +512,16 @@
       "field": "telefonoContacto",
       "label": "Teléfono de contacto",
       "dependsOn": {
-        "contacto": ["si_contacto", "inquilino", "familiar", "vecino"]
+        "contacto": ["si_contacto", "inquilino", "familiar"]
       },
       "extDepends": {
-        "service": ["Brilla Surtigas", "Gas"]
+        "service": [
+          "Brilla Surtigas",
+          "Gas",
+          "Servicios Financieros",
+          "Gcartera",
+          "Mantenimiento_N"
+        ]
       },
       "props": {
         "keyboardType": "phone-pad"
@@ -368,7 +541,20 @@
         { "label": "Posible fraude", "value": "posibleFraude" }
       ],
       "extDepends": {
-        "service": ["Gas"]
+        "service": ["Gas", "Gcartera", "Mantenimiento_N"]
+      },
+      "dependsOn": {
+        "resultadoDeGestion": ["no_efectiva"]
+      },
+      "excludeDependsOn": {
+        "gestion": [
+          "direccionErrada",
+          "inmuebleSolo",
+          "inmuebleDesocupado",
+          "inmuebleConstruccion",
+          "noPermite_Obstaculo",
+          "menor_AdultoMayor"
+        ]
       }
     },
     {
@@ -385,7 +571,23 @@
         "service": ["Gas"]
       },
       "dependsOn": {
-        "estado": ["suspendido", "sinMedidor"]
+        "estado": ["suspendido", "sinMedidor"],
+        "contacto": ["si_contacto", "inquilino", "familiar"]
+      }
+    },
+    {
+      "element": "TextInput",
+      "name": "lecturaMedidor",
+      "field": "lecturaMedidor",
+      "label": "lectura del medidor",
+      "extDepends": {
+        "service": ["Gas", "Gcartera", "Mantenimiento_N"]
+      },
+      "dependsOn": {
+        "estado": ["consumiendo", "posibleFraude"]
+      },
+      "props": {
+        "keyboardType": "phone-pad"
       }
     },
     {
@@ -395,6 +597,102 @@
       "label": "Observación",
       "props": {
         "style": { "marginBottom": 16 }
+      }
+    },
+    {
+      "element": "Dropdown",
+      "name": "tipoHabitante",
+      "field": "tipoHabitante",
+      "label": "Tipo de habitante",
+      "options": [
+        { "label": "Propietario", "value": "propietario" },
+        { "label": "Inquilino", "value": "inquilino" },
+        { "label": "Otro", "value": "otro" }
+      ],
+      "extDepends": {
+        "service": ["Gcartera", "Mantenimiento_N"]
+      }
+    },
+    {
+      "element": "Dropdown",
+      "name": "clasePredio",
+      "field": "clasePredio",
+      "label": "Clase de predio",
+      "options": [
+        { "label": "Casa", "value": "casa" },
+        { "label": "Edificio", "value": "edificio" },
+        { "label": "Conjunto", "value": "conjunto" },
+        { "label": "Finca", "value": "finca" },
+        { "label": "Lote", "value": "lote" },
+        { "label": "Otro", "value": "otro" }
+      ],
+      "extDepends": {
+        "service": ["Gcartera", "Mantenimiento_N"]
+      },
+      "dependsOn": {
+        "tipoHabitante": ["propietario", "inquilino", "otro"]
+      }
+    },
+    {
+      "element": "Dropdown",
+      "name": "estadoServicio",
+      "field": "estadoServicio",
+      "label": "Estado del servicio",
+      "options": [
+        { "label": "Bueno", "value": "bueno" },
+        { "label": "Deficiente", "value": "deficiente" },
+        { "label": "Ausente", "value": "ausente" }
+      ],
+      "extDepends": {
+        "service": ["Gcartera", "Mantenimiento_N"]
+      },
+      "dependsOn": {
+        "clasePredio": ["casa", "edificio", "conjunto", "finca", "lote", "otro"]
+      }
+    },
+    {
+      "element": "TextInput",
+      "name": "cuotaInicialOfrece",
+      "field": "cuotaInicialOfrece",
+      "label": "Cuota inicial ofrece",
+      "extDepends": {
+        "service": ["Gcartera", "Mantenimiento_N"]
+      },
+      "dependsOn": {
+        "estadoServicio": ["bueno", "deficiente", "ausente"]
+      },
+      "props": {
+        "keyboardType": "phone-pad"
+      }
+    },
+    {
+      "element": "TextInput",
+      "name": "cuotaMensual",
+      "field": "cuotaMensual",
+      "label": "Cuota mensual",
+      "extDepends": {
+        "service": ["Gcartera", "Mantenimiento_N"]
+      },
+      "dependsOn": {
+        "estadoServicio": ["bueno", "deficiente", "ausente"]
+      },
+      "props": {
+        "keyboardType": "phone-pad"
+      }
+    },
+    {
+      "element": "TextInput",
+      "name": "numeroPersonas",
+      "field": "numeroPersonas",
+      "label": "Número de personas que viven",
+      "extDepends": {
+        "service": ["Gcartera", "Mantenimiento_N"]
+      },
+      "dependsOn": {
+        "estadoServicio": ["bueno", "deficiente", "ausente"]
+      },
+      "props": {
+        "keyboardType": "phone-pad"
       }
     }
   ]
