@@ -35,8 +35,7 @@ const columns = [
   },
 ];
 
-// Componente de la tabla
-const ServicesReport = (timeFrame) => {
+export default function ServicesReport({id, locality}) {
   const [data, setData] = useState([]);
   const { globals } = useContext(GlobalContext);
   const [diccionario, setDiccionario] = useState([]);
@@ -45,13 +44,14 @@ const ServicesReport = (timeFrame) => {
     fillDicctionary();
     Meteor.call(
       "assignment.gestiones",
-      timeFrame.id,
+      id,
       globals?.project?._id,
+      locality,
       (err, resp) => {
         setData(resp);
       }
     );
-  }, []);
+  }, [locality]);
 
   async function fillDicctionary() {
     const file = await Meteor.callAsync("getTextAssets", "diccionario.json");
@@ -179,6 +179,4 @@ const ServicesReport = (timeFrame) => {
       />
     </>
   );
-};
-
-export default ServicesReport;
+}

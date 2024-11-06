@@ -39,7 +39,12 @@ export default function TeamAdmin() {
 
   useEffect(() => {
     if (globals?.members) {
-      setCurrentMembers(globals.members);
+      // const members = globals.members.sort((a, b) => {
+      //   if (a.member.toLowerCase() < b.member.toLowerCase()) return -1;
+      //   if (a.member.toLowerCase() > b.member.toLowerCase()) return 1;
+      //   return 0;
+      // });
+      setCurrentMembers(globals?.members);
     }
   }, [globals?.members]);
 

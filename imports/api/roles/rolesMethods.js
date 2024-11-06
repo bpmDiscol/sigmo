@@ -3,13 +3,13 @@ import { Accounts } from "meteor/accounts-base";
 import { check } from "meteor/check";
 
 Meteor.methods({
-  getManagerList() {
-    const users = Meteor.users.find({ "profile.role": "manager" });
-    return users.map((user) => ({
-      label: user.username,
-      value: user.username,
-      key: user._id,
-    }));
+  async getUsersByLocality(locality) {
+    const users = await Meteor.users
+      .find({
+        "profile.locality": locality,
+      })
+      .fetchAsync();
+    return users.map((user) => user.username);
   },
   getUsersByRole(role) {
     check(role, String);

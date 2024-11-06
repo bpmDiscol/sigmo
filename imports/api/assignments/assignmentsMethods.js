@@ -289,7 +289,7 @@ Meteor.methods({
   "assignment.readByRecordId": async function (recordId) {
     return await assignmentsCollection.findOneAsync({ recordId });
   },
-  "assignment.managersResults": async function (timeFrame, project) {
+  "assignment.managersResults": async function (timeFrame, project, locality) {
     const result = await assignmentsCollection
       .rawCollection()
       .aggregate([
@@ -306,6 +306,7 @@ Meteor.methods({
           $match: {
             "recordData.timeFrame": timeFrame,
             "recordData.project": project,
+            "recordData.locality": locality,
           },
         },
         {
@@ -546,7 +547,7 @@ Meteor.methods({
     return result;
   },
 
-  "assignment.gestiones": async function (timeFrame, project) {
+  "assignment.gestiones": async function (timeFrame, project, locality) {
     return await assignmentsCollection
       .rawCollection()
       .aggregate([
@@ -563,6 +564,7 @@ Meteor.methods({
           $match: {
             "recordData.timeFrame": timeFrame,
             "recordData.project": project,
+            "recordData.locality": locality,
           },
         },
         {
@@ -629,7 +631,80 @@ Meteor.methods({
           },
         },
         {
-          $sort: { _id: 1 }, // Ordenar por tipo de gestión
+          $sort: { _id: 1 },
+        },
+      ])
+      .toArray();
+  },
+  "assignments.reportAll": async function (
+    timeFrame,
+    locality,
+    page,
+    pageSize,
+  ) {
+    const outputFieldsStr = await Assets.getTextAsync("assignmentOutput.json");
+    const outputFields = JSON.parse(outputFieldsStr);
+    const recordFields = outputFields.fields || [];
+    const recordProject = {};
+    recordFields.forEach((field) => (recordProject[field] = 1));
+
+    return await assignmentsCollection
+      .rawCollection()
+      .aggregate([
+        {
+          $lookup: {
+            from: "records",
+            localField: "recordId",
+            foreignField: "_id",
+            as: "recordData",
+            pipeline: [{ $project: recordProject }],
+          },
+        },
+        { $unwind: "$recordData" },
+        {
+          $match: {
+            "recordData.timeFrame": timeFrame,
+            "recordData.locality": locality,
+          },
+        },
+        {
+          $addFields: {
+            "recordData.CONTRATO_NUMERIC": {
+              $cond: {
+                if: { $gt: [{ $type: "$recordData.CONTRATO" }, "missing"] },
+                then: { $toInt: "$recordData.CONTRATO" },
+                else: null,
+              },
+            },
+          },
+        },
+        {
+          $sort: { "recordData.CONTRATO_NUMERIC": 1 },
+        },
+        {
+          $lookup: {
+            from: "reports",
+            localField: "_id",
+            foreignField: "_id",
+            as: "reportData",
+          },
+        },
+        {
+          $addFields: {
+            report: { $arrayElemAt: ["$reportData", 0] },
+          },
+        },
+        {
+          $facet: {
+            metadata: [{ $count: "totalCount" }],
+            data: [{ $skip: (page - 1) * pageSize }, { $limit: pageSize }],
+          },
+        },
+        {
+          $project: {
+            data: 1,
+            totalCount: { $arrayElemAt: ["$metadata.totalCount", 0] },
+          },
         },
       ])
       .toArray();
@@ -639,7 +714,6 @@ Meteor.methods({
 function reorganizeData(data) {
   const managerMap = {};
 
-  // Recorrer assignments para agregar los totales por manager
   data.assignments.forEach((assignment) => {
     const manager = assignment._id.manager || "Unknown"; // Usa "Unknown" si no hay manager
     if (!managerMap[manager]) {
@@ -660,14 +734,12 @@ function reorganizeData(data) {
     managerMap[manager].reAssignments = assignment.reAssignments;
     managerMap[manager].totalAssignedDebt = assignment.assignedDebt;
 
-    // Calcular asignaciones pendientes (totalAssignments - completedAssignments)
     managerMap[manager].pendingAssignments =
       assignment.total -
       assignment.completedAssignments -
       assignment.reAssignments;
   });
 
-  // Recorrer totalIncome para agregar la deuda pendiente total por manager
   data.totalIncome.forEach((income) => {
     const manager = income._id.manager || "Unknown";
     if (!managerMap[manager]) {
@@ -683,7 +755,6 @@ function reorganizeData(data) {
     managerMap[manager].totalPendingDebt = income.totalPendingDebt;
   });
 
-  // Recorrer resultsByDay para agregar los resultados por día por manager
   data.resultsByDay.forEach((result) => {
     const manager = result._id.manager || "Unknown";
     if (!managerMap[manager]) {
@@ -708,6 +779,5 @@ function reorganizeData(data) {
     });
   });
 
-  // Convertir el mapa en un array
   return Object.values(managerMap);
 }

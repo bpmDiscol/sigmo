@@ -3,12 +3,13 @@ import moment from "moment";
 import React, { useEffect, useState } from "react";
 import XLSX from "xlsx";
 
-export default function AssignmentReport({ id, timeFrame }) {
+export default function AssignmentReport({ id, timeFrame, projectName, locality }) {
   const voidSorter = { sortField: null, sortOrder: 1 };
   const [assignments, setAssignments] = useState([]);
   const [pagination, setPagination] = useState({
     current: 1,
     total: 0,
+    pageSize: 10,
   });
 
   const [downloadReport, setDownloadReport] = useState({
@@ -18,34 +19,51 @@ export default function AssignmentReport({ id, timeFrame }) {
 
   const [columns, setColumns] = useState([]);
 
-  useEffect(() => {
-    fetchAssignments(1, pagination.pageSize);
-  }, []);
-
-  function fetchAssignments(current, pageSize) {
-    Meteor.call(
-      "assignment.reportRecents",
-      id,
+  async function getAssignments(current, pageSize) {
+    const assignments = await Meteor.callAsync(
+      "assignments.reportAll",
       timeFrame,
+      locality,
       current,
-      pageSize,
-      {},
-      voidSorter,
-      (err, res) => {
-        const data = res.data;
-        const newAssignments = data.map((data) => ({
-          ...data.record,
-          ...data.report,
-          manager: data.manager,
-          assignmentDate: data.date,
-        }));
-        setAssignments(newAssignments);
-      }
+      pageSize
     );
+    const newAssignments = assignments[0].data.map((data) => ({
+      ...data.recordData,
+      ...data.report,
+      causal_de_pago:
+        data.report?.resultadoDeGestion === "efectiva"
+          ? data.report.gestion
+          : null,
+      causal_de_no_pago:
+        data.report?.resultadoDeGestion === "no_efectiva"
+          ? data.report.gestion
+          : null,
+      manager: data.manager,
+      projectName,
+      assignmentDate: data.date,
+      reportDate: data.report?.createdAt,
+      status:
+        data.report?.status === "done"
+          ? "Terminado"
+          : data.report?.status === "reassigned"
+          ? "Desasignada"
+          : "en proceso",
+    }));
+    setAssignments(newAssignments);
+    setPagination((prev) => ({
+      ...prev,
+      current,
+      total: assignments[0].totalCount,
+    }));
+    return { newAssignments, totalCount: assignments[0].totalCount };
   }
 
+  useEffect(() => {
+    getAssignments(1, pagination.pageSize);
+  }, [locality]);
+
   function handleTableChange(pagination) {
-    fetchAssignments(pagination.current, pagination.pageSize);
+    getAssignments(pagination.current, pagination.pageSize);
     setPagination(pagination);
   }
 
@@ -56,36 +74,31 @@ export default function AssignmentReport({ id, timeFrame }) {
     let total = 10000000;
     try {
       while (total / pageSize >= page) {
-        const partData = await Meteor.callAsync(
-          "assignment.reportRecents",
-          id,
-          timeFrame,
-          page,
-          pageSize,
-          {},
-          voidSorter
-        ).catch((e) => {
-          console.error(e);
-          throw new TypeError("Error durante la descarga");
-        });
-        if (partData.total) total = partData.total;
-        const data = partData.data.map((data) => ({
-          ...data.record,
-          ...data.report,
-          manager: data.manager,
-          fecha_asignacion: moment(data.date).format("DD/MM/YYYY"),
-        }));
-
-        allData.push(data);
+        const data = await getAssignments(page, pageSize);
+        if (data.totalCount) total = data.totalCount;
+        allData.push(data.newAssignments);
         setDownloadReport({ percent: page / total, loading: true });
+
         page++;
       }
-      //   const { mappedData, formattedHeaders } = mapOutput(allData);
 
-      const ws = XLSX.utils.json_to_sheet(allData[0]);
+      const formattedData = allData[0].map((item) => {
+        const formattedItem = {};
+        columns.forEach((col) => {
+          if (col.type === "date") {
+            const date = item[col.dataIndex]
+              ? moment(item[col.dataIndex]).format("DD/MM/YYYY, h:mm:ss a")
+              : "Sin terminar";
+            formattedItem[col.title] = date;
+          } else formattedItem[col.title] = item[col.dataIndex] || "";
+        });
+        return formattedItem;
+      });
+
+      const ws = XLSX.utils.json_to_sheet(formattedData);
       const wb = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(wb, ws, "Report");
-      XLSX.writeFile(wb, `Reporte-${Date.now()}.xlsx`);
+      XLSX.writeFile(wb, `Gestiones asignadas-${Date.now()}.xlsx`);
     } catch (error) {
       message.error(error.message);
     } finally {
@@ -100,9 +113,13 @@ export default function AssignmentReport({ id, timeFrame }) {
         "reporteAsignaciones.json"
       );
       const parsedColumns = JSON.parse(columnsStr);
-      const reconstructeds = parsedColumns.map((column) => {
+      const thisProjectColumns = parsedColumns[id] || [];
+      const reconstructeds = thisProjectColumns.map((column) => {
         if (column.type === "date")
-          column.render = (date) => moment(date).format("DD/MM/YYYY");
+          column.render = (date) =>
+            date
+              ? moment(date).format("DD/MM/YYYY, h:mm:ss a")
+              : "Sin terminar";
         return column;
       });
       setColumns(reconstructeds);
@@ -110,95 +127,6 @@ export default function AssignmentReport({ id, timeFrame }) {
 
     getColumns();
   }, []);
-
-  // const columns = [
-  //   {
-  //     title: "Gestor",
-  //     dataIndex: "manager",
-  //     width: "15rem",
-  //   },
-  //   {
-  //     title: "Producto",
-  //     dataIndex: "PRODUCTO",
-  //     width: "15rem",
-  //   },
-  //   {
-  //     title: "Contrato",
-  //     dataIndex: "CONTRATO",
-  //     width: "15rem",
-  //   },
-  //   {
-  //     title: "Cliente",
-  //     dataIndex: "CLIENTE",
-  //     width: "15rem",
-  //   },
-  //   {
-  //     title: "Descripción Tipo Producto",
-  //     dataIndex: "DESCRIPCION_TIPO_PRODUCTO",
-  //     width: "15rem",
-  //   },
-  //   {
-  //     title: "Descripción Localidad",
-  //     dataIndex: "DESCRIPCION_LOCALIDAD",
-  //     width: "15rem",
-  //   },
-  //   {
-  //     title: "Descripción Barrio",
-  //     dataIndex: "DESCRIPCION_BARRIO",
-  //     width: "15rem",
-  //   },
-  //   {
-  //     title: "Descripción Ciclo",
-  //     dataIndex: "DESCRIPCION_CICLO",
-  //     width: "15rem",
-  //   },
-  //   {
-  //     title: "Tipo Cliente",
-  //     dataIndex: "TIPO_CLIENTE",
-  //     width: "15rem",
-  //   },
-  //   {
-  //     title: "Identificación",
-  //     dataIndex: "IDENTIFICACION",
-  //     width: "15rem",
-  //   },
-  //   {
-  //     title: "Nombre Cliente",
-  //     dataIndex: "NOMBRE_CLIENTE",
-  //     width: "15rem",
-  //   },
-  //   {
-  //     title: "Dirección Predio",
-  //     dataIndex: "DIRECCION_PREDIO",
-  //     width: "15rem",
-  //   },
-  //   {
-  //     title: "Fecha Asignación",
-  //     dataIndex: "assignmentDate",
-  //     key: "assignmentDate",
-  //     render: (date) => moment(date).format("DD/MM/YYYY"),
-  //   },
-  //   {
-  //     title: "Teléfono Sugerido",
-  //     dataIndex: "TELEFONO",
-  //     width: "15rem",
-  //   },
-  //   {
-  //     title: "Email",
-  //     dataIndex: "EMAIL",
-  //     width: "15rem",
-  //   },
-  //   {
-  //     title: "Causal de No Pago",
-  //     dataIndex: "CAUSAL_DE_NO_PAGO",
-  //     width: "15rem",
-  //   },
-  //   {
-  //     title: "Resultado de Gestión",
-  //     dataIndex: "RESULTADO_DE_GESTION",
-  //     width: "15rem",
-  //   },
-  // ];
 
   return (
     <Table

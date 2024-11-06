@@ -12,6 +12,8 @@ import BatchAssign from "../../api/utils/batchAssign";
 
 export default function Assignments() {
   const navigate = useNavigate();
+  const locality = Meteor.user({ profile: 1 })?.profile?.locality;
+
   const { globals } = useContext(GlobalContext);
   const { state } = useLocation();
   const [reload, setReload] = useState(0);
@@ -29,20 +31,23 @@ export default function Assignments() {
   });
 
   const [incidences, setIncidences] = useState();
-  const voidSorter = { sortField: null, sortOrder: 1 };
-    //#region load JSON
+  const voidSorter = { sortField: "NUMERO_DE_LA_ORDEN", sortOrder: 1 };
+  //#region load JSON
 
-    useEffect(() => {
-      async function getProjectData() {
-        const proyectosStr = await Meteor.callAsync("getTextAssets", "proyectos.json");
-        const projects_ = JSON.parse(proyectosStr);
-        const currentProject_ = projects_[globals?.project.name];
-        setCurrentProject(currentProject_);
-      }
-      if (globals?.project) getProjectData();
-    }, [globals?.project]);
-  
-    //#endregion
+  useEffect(() => {
+    async function getProjectData() {
+      const proyectosStr = await Meteor.callAsync(
+        "getTextAssets",
+        "proyectos.json"
+      );
+      const projects_ = JSON.parse(proyectosStr);
+      const currentProject_ = projects_[globals?.project.name];
+      setCurrentProject(currentProject_);
+    }
+    if (globals?.project) getProjectData();
+  }, [globals?.project]);
+
+  //#endregion
 
   useEffect(() => {
     if (!state) navigate("/");
@@ -95,8 +100,6 @@ export default function Assignments() {
   }
 
   //#region Search engine
-
-
 
   const handleSearch = (
     selectedKeys,
@@ -246,7 +249,6 @@ export default function Assignments() {
   //#endregion
 
   async function getData(page, pageSize, search, sort = voidSorter) {
-    const locality = Meteor.user({ profile: 1 })?.profile?.locality;
     Meteor.call(
       "record.read",
       page,
@@ -277,177 +279,22 @@ export default function Assignments() {
   }
 
   function getManagers() {
-    // Meteor.call("getManagerList", (err, resp) => setManagers(resp));
-
-    const managers = globals?.members
-      ? globals?.members
-          .filter((member) => member.position === "manager")
-          .map((m) => ({
-            label: m.member,
-            value: m.member,
-            key: m.id,
-          }))
-      : [];
-    setManagers(managers);
+    Meteor.call("getUsersByLocality", locality, (err, resp) => {
+      const managers = globals?.members
+        ? globals?.members
+            .filter(
+              (member) =>
+                (member.position === "manager") & resp.includes(member.member)
+            )
+            .map((m) => ({
+              label: m.member,
+              value: m.member,
+              key: m.id,
+            }))
+        : [];
+      setManagers(managers);
+    });
   }
-
-  // //#region Temporal table
-  // const columns = [
-  //   {
-  //     title: "Gestor",
-  //     dataIndex: "_id",
-  //     render: (id) => (
-  //       <Select
-  //         onChange={(value) => newAssignment(id, value)}
-  //         allowClear
-  //         value={assignedManagers[id]}
-  //         options={managers}
-  //         style={{ width: "14rem" }}
-  //       />
-  //     ),
-  //     width: "16rem",
-  //   },
-  //   {
-  //     title: "Número de la orden",
-  //     dataIndex: "NUMERO_DE_LA_ORDEN",
-  //     width: "8rem",
-  //     ...getColumnSearchProps("CONTRATO"),
-  //   },
-  //   {
-  //     title: "Contrato",
-  //     dataIndex: "CONTRATO",
-  //     width: "8rem",
-  //     ...getColumnSearchProps("CONTRATO"),
-  //   },
-  //   {
-  //     title: "Cliente",
-  //     dataIndex: "CLIENTE",
-  //     width: "8rem",
-  //     ...getColumnSearchProps("CLIENTE"),
-  //   },
-  //   {
-  //     title: "Tipo Producto",
-  //     dataIndex: "DESCRIPCION_TIPO_PRODUCTO",
-  //     width: "8rem",
-  //     ...getColumnSearchProps("DESCRIPCION_TIPO_PRODUCTO"),
-  //   },
-  //   {
-  //     title: "Categoría",
-  //     dataIndex: "DESCRIPCION_CATEGORIA",
-  //     width: 180,
-  //     ...getColumnSearchProps("DESCRIPCION_CATEGORIA"),
-  //   },
-  //   {
-  //     title: "Estrato",
-  //     dataIndex: "DESCRIPCION_SUBCATEGORIA",
-  //     width: 180,
-  //     ...getColumnSearchProps("DESCRIPCION_SUBCATEGORIA"),
-  //   },
-  //   {
-  //     title: "Refinanciaciones/año",
-  //     dataIndex: "NUMERO_REFINANCIACIONES_ULTIMO_ANO",
-  //     width: 180,
-  //     ...getColumnSearchProps("NUMERO_REFINANCIACIONES_ULTIMO_ANO"),
-  //   },
-  //   {
-  //     title: "Estado financiero",
-  //     dataIndex: "ESTADO_FINANCIERO",
-  //     width: 180,
-  //     ...getColumnSearchProps("ESTADO_FINANCIERO"),
-  //   },
-  //   {
-  //     title: "Lectura",
-  //     dataIndex: "ULTIMA_LECTURA_TOMADA",
-  //     width: 180,
-  //     ...getColumnSearchProps("ULTIMA_LECTURA_TOMADA"),
-  //   },
-  //   {
-  //     title: "Medidor",
-  //     dataIndex: "ELEMENTO_MEDICION",
-  //     width: 180,
-  //     ...getColumnSearchProps("ELEMENTO_MEDICION"),
-  //   },
-  //   {
-  //     title: "Barrio",
-  //     dataIndex: "DESCRIPCION_BARRIO",
-  //     width: 180,
-  //     ...getColumnSearchProps("DESCRIPCION_BARRIO"),
-  //   },
-  //   {
-  //     title: "Ciclo",
-  //     dataIndex: "DESCRIPCION_CICLO",
-  //     width: 180,
-  //     ...getColumnSearchProps("DESCRIPCION_CICLO"),
-  //   },
-  //   {
-  //     title: "Identificación",
-  //     dataIndex: "IDENTIFICACION",
-  //     width: 180,
-  //     ...getColumnSearchProps("IDENTIFICACION"),
-  //   },
-  //   {
-  //     title: "Titular del servicio",
-  //     dataIndex: "NOMBRE_CLIENTE",
-  //     width: 180,
-  //     ...getColumnSearchProps("NOMBRE_CLIENTE"),
-  //   },
-  //   {
-  //     title: "Dirección",
-  //     dataIndex: "DIRECCION_PREDIO",
-  //     width: 180,
-  //     ...getColumnSearchProps("DIRECCION_PREDIO"),
-  //   },
-  //   {
-  //     title: "Días deuda",
-  //     dataIndex: "DIAS_DEUDA_ASIGNACION",
-  //     width: 180,
-  //     ...getColumnSearchProps("DIAS_DEUDA_ASIGNACION"),
-  //   },
-  //   {
-  //     title: "Saldo vencido",
-  //     dataIndex: "CORRIENTE_VENCIDA_ASIGNADA",
-  //     width: 180,
-  //     ...getColumnSearchProps("CORRIENTE_VENCIDA_ASIGNADA"),
-  //   },
-  //   {
-  //     title: "Refi. Histórico",
-  //     dataIndex: "REFINANCIACIONES_PRODUCTO",
-  //     width: 180,
-  //     ...getColumnSearchProps("REFINANCIACIONES_PRODUCTO"),
-  //   },
-  //   {
-  //     title: "Edad mora actual",
-  //     dataIndex: "EDAD_MORA_ACTUAL",
-  //     width: 180,
-  //     ...getColumnSearchProps("EDAD_MORA_ACTUAL"),
-  //   },
-  //   {
-  //     title: "Total deuda corriente",
-  //     dataIndex: "TOTAL_DEUDA_CORRIENTE",
-  //     width: 180,
-  //     ...getColumnSearchProps("TOTAL_DEUDA_CORRIENTE"),
-  //   },
-  //   {
-  //     title: "Indicador",
-  //     dataIndex: "INDICADOR",
-  //     width: 180,
-  //     ...getColumnSearchProps("INDICADOR"),
-  //   },
-  //   {
-  //     title: "Deuda total asignada",
-  //     dataIndex: "DEUDA_TOTAL_ASIGNADA",
-  //     width: 180,
-  //     ...getColumnSearchProps("DEUDA_TOTAL_ASIGNADA"),
-  //   },
-  //   {
-  //     title: "Comentario",
-  //     dataIndex: "COMENTARIO",
-  //     width: 180,
-  //     ...getColumnSearchProps("COMENTARIO"),
-  //   },
-  // ];
-
-  //#endregion
 
   const columns = currentProject?.fields?.map((field) => {
     if (field.type === "select") {
@@ -474,7 +321,7 @@ export default function Assignments() {
       };
     }
   });
-  
+
   return (
     <>
       <Typography.Title>Asignaciones</Typography.Title>
@@ -483,7 +330,7 @@ export default function Assignments() {
         dataSource={records}
         columns={columns}
         rowKey={(data) => data._id}
-        scroll={{ y: 55 * 5, x: "max-content" }}
+        scroll={{ y: 55 * 10, x: "max-content" }}
         pagination={{
           ...pagination,
           showTotal: (total) => (

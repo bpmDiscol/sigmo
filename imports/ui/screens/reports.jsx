@@ -1,4 +1,4 @@
-import { Typography, Tabs } from "antd";
+import { Typography, Tabs, Flex, Select } from "antd";
 import React, { useContext, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { Meteor } from "meteor/meteor";
@@ -12,11 +12,21 @@ export default function Reports() {
   const { state } = useLocation();
   const { globals } = useContext(GlobalContext);
   const [data, setData] = useState([]);
+  const myLocality = Meteor.user().profile.locality;
+  const [localities, setLocalities] = useState([]);
+  const [currentLocality, setCurrentLocality] = useState(myLocality);
+  useEffect(() => {
+    Meteor.call("getTextAssets", "localities.json", (err, file) => {
+      if (!err) setLocalities(JSON.parse(file));
+    });
+  }, []);
+
   useEffect(() => {
     Meteor.call(
       "assignment.managersResults",
       state.id,
       globals?.project?._id,
+      currentLocality,
       (err, resp) => {
         const filteredData = resp.filter((item) => item.manager !== "Unknown");
         // setData(filteredData);
@@ -32,17 +42,30 @@ export default function Reports() {
                     .reAssignmentsCount || 0;
                 return { ...data, reassignedCount };
               });
-              setData(totals)
+              setData(totals);
             }
           }
         );
       }
     );
-  }, [globals]);
+  }, [globals, currentLocality]);
 
   return (
     <>
-      <Typography.Title>Reportes</Typography.Title>
+      <Flex align="center" justify="space-between">
+        <Typography.Title>Reportes</Typography.Title>
+        <Select
+          placeholder="Selecciona una localidad"
+          defaultValue={myLocality}
+          onChange={setCurrentLocality}
+        >
+          {localities.map((locality) => (
+            <Select.Option key={locality} value={locality}>
+              {locality.toUpperCase()}
+            </Select.Option>
+          ))}
+        </Select>
+      </Flex>
       <Tabs defaultActiveKey="1">
         <Tabs.TabPane tab="Comportamiento de ingreso" key="1">
           <ManagerResultsTable data={data} />
@@ -51,10 +74,15 @@ export default function Reports() {
           <LocalityTable id={state.id} />
         </Tabs.TabPane>
         <Tabs.TabPane tab="Cartera por gestión/causales" key="3">
-          <ServicesReport id={state.id} />
+          <ServicesReport id={state.id} locality={currentLocality} />
         </Tabs.TabPane>
         <Tabs.TabPane tab="Gestiones asignadas" key="4">
-          <AssignmentReport id={globals?.project?._id} timeFrame={state.id} />
+          <AssignmentReport
+            id={globals?.project?._id}
+            projectName={globals?.project?.name}
+            timeFrame={state.id}
+            locality={currentLocality}
+          />
         </Tabs.TabPane>
       </Tabs>
     </>
