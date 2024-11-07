@@ -81,7 +81,7 @@ export default function AssignmentReport({
     const allData = [];
     let total = 10000000;
     try {
-      while (total / pageSize >= page) {
+      while (total / pageSize > page-1) {
         const data = await getAssignments(page, pageSize, true);
         if (data.totalCount) total = data.totalCount;
         allData.push(data.newAssignments);
