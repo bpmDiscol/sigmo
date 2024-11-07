@@ -3,7 +3,12 @@ import moment from "moment";
 import React, { useEffect, useState } from "react";
 import XLSX from "xlsx";
 
-export default function AssignmentReport({ id, timeFrame, projectName, locality }) {
+export default function AssignmentReport({
+  id,
+  timeFrame,
+  projectName,
+  locality,
+}) {
   const voidSorter = { sortField: null, sortOrder: 1 };
   const [assignments, setAssignments] = useState([]);
   const [pagination, setPagination] = useState({
@@ -19,7 +24,7 @@ export default function AssignmentReport({ id, timeFrame, projectName, locality 
 
   const [columns, setColumns] = useState([]);
 
-  async function getAssignments(current, pageSize) {
+  async function getAssignments(current, pageSize, excel = false) {
     const assignments = await Meteor.callAsync(
       "assignments.reportAll",
       timeFrame,
@@ -49,13 +54,16 @@ export default function AssignmentReport({ id, timeFrame, projectName, locality 
           ? "Desasignada"
           : "en proceso",
     }));
-    setAssignments(newAssignments);
-    setPagination((prev) => ({
-      ...prev,
-      current,
-      total: assignments[0].totalCount,
-    }));
-    return { newAssignments, totalCount: assignments[0].totalCount };
+    if (!excel) {
+      setAssignments(newAssignments);
+      setPagination((prev) => ({
+        ...prev,
+        current,
+        total: assignments[0].totalCount,
+      }));
+    }
+
+    if (excel) return { newAssignments, totalCount: assignments[0].totalCount };
   }
 
   useEffect(() => {
@@ -74,7 +82,7 @@ export default function AssignmentReport({ id, timeFrame, projectName, locality 
     let total = 10000000;
     try {
       while (total / pageSize >= page) {
-        const data = await getAssignments(page, pageSize);
+        const data = await getAssignments(page, pageSize, true);
         if (data.totalCount) total = data.totalCount;
         allData.push(data.newAssignments);
         setDownloadReport({ percent: page / total, loading: true });
