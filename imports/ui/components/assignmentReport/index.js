@@ -89,8 +89,7 @@ export default function AssignmentReport({
 
         page++;
       }
-
-      const formattedData = allData[0].map((item) => {
+      const formattedData = allData.flat(1).map((item) => {
         const formattedItem = {};
         columns.forEach((col) => {
           if (col.type === "date") {
