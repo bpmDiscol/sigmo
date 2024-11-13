@@ -1,5 +1,5 @@
 import { Typography, Tabs, Flex, Select } from "antd";
-import React, { useContext, useEffect, useState } from "react";
+import React, { Children, useContext, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { Meteor } from "meteor/meteor";
 import ServicesReport from "../components/servicesReport";
@@ -50,6 +50,36 @@ export default function Reports() {
     );
   }, [globals, currentLocality]);
 
+  const items = [
+    {
+      label: "Comportamiento de ingreso",
+      key: 1,
+      children: <ManagerResultsTable data={data} />,
+    },
+    {
+      label: "Cartera por localidad",
+      key: 2,
+      children: <LocalityTable id={state.id} />,
+    },
+    {
+      label: "Cartera por gestión/causales",
+      key: 3,
+      children: <ServicesReport id={state.id} locality={currentLocality} />,
+    },
+    {
+      label: "Gestiones asignadas",
+      key: 4,
+      children: (
+        <AssignmentReport
+          id={globals?.project?._id}
+          projectName={globals?.project?.name}
+          timeFrame={state.id}
+          locality={currentLocality}
+        />
+      ),
+    },
+  ];
+
   return (
     <>
       <Flex align="center" justify="space-between">
@@ -66,25 +96,7 @@ export default function Reports() {
           ))}
         </Select>
       </Flex>
-      <Tabs defaultActiveKey="1">
-        <Tabs.TabPane tab="Comportamiento de ingreso" key="1">
-          <ManagerResultsTable data={data} />
-        </Tabs.TabPane>
-        <Tabs.TabPane tab="Cartera por localidad" key="2">
-          <LocalityTable id={state.id} />
-        </Tabs.TabPane>
-        <Tabs.TabPane tab="Cartera por gestión/causales" key="3">
-          <ServicesReport id={state.id} locality={currentLocality} />
-        </Tabs.TabPane>
-        <Tabs.TabPane tab="Gestiones asignadas" key="4">
-          <AssignmentReport
-            id={globals?.project?._id}
-            projectName={globals?.project?.name}
-            timeFrame={state.id}
-            locality={currentLocality}
-          />
-        </Tabs.TabPane>
-      </Tabs>
+      <Tabs defaultActiveKey="1" items={items} />
     </>
   );
 }

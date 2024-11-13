@@ -27,7 +27,7 @@ Meteor.methods({
 
     if (thisAssignment)
       await reportsCollection.updateAsync(
-        { _id: thisAssignment._id }, // Filtro por _id
+        { _id: thisAssignment._id },
         {
           $setOnInsert: {
             _id: thisAssignment._id,
@@ -37,7 +37,10 @@ Meteor.methods({
         { upsert: true }
       );
 
-    return assignmentsCollection.insertAsync(data);
+    return assignmentsCollection.insertAsync(data, (err, id) => {
+      if (err) throw new Error("error al asignar");
+      return id;
+    });
   },
   "assignment.createByOrderId": async function (
     NUMERO_DE_LA_ORDEN,
@@ -45,16 +48,29 @@ Meteor.methods({
     manager,
     date
   ) {
-    const record = await recordsCollection.findOneAsync({
-      NUMERO_DE_LA_ORDEN,
-      timeFrame,
-    });
-    if (record)
-      Meteor.callAsync("assignment.create", {
+    const data = { NUMERO_DE_LA_ORDEN, timeFrame, manager, error: false };
+    const record = await recordsCollection.findOneAsync(
+      {
+        NUMERO_DE_LA_ORDEN,
+        timeFrame,
+      },
+      { _id: 1 }
+    );
+    if (record) {
+      const id = await Meteor.callAsync("assignment.create", {
         recordId: record._id,
         manager,
         date,
+      }).catch((err) => {
+        console.log(err);
+        data.error = true;
       });
+      if (!id) {
+        console.warn(id);
+        data.error = true;
+      }
+      return data;
+    }
   },
   "assignment.update": function (id, data) {
     return assignmentsCollection.updateAsync(id, data);
@@ -120,8 +136,7 @@ Meteor.methods({
         if (key === "recordId") {
           filter[key] = { $in: Array.isArray(value) ? value : [value] };
         } else if (key === "manager") {
-          // Filtra por el manager asignado específico
-          filter[key] = { $eq: value }; // Asegúrate de que 'manager' sea el valor pasado
+          filter[key] = { $eq: value };
         } else {
           filter[key] = { $regex: value, $options: "i" };
         }
@@ -137,25 +152,22 @@ Meteor.methods({
           $match: filter,
         },
         {
-          // Ordena por recordId y por fecha (date) de manera descendente
           $sort: { recordId: 1, date: -1 },
         },
         {
-          // Agrupa por recordId y selecciona el más reciente por cada recordId
           $group: {
             _id: "$recordId",
-            mostRecentRecord: { $first: "$$ROOT" }, // Selecciona el más reciente
+            mostRecentRecord: { $first: "$$ROOT" },
           },
         },
         {
-          // Filtro adicional: Asegura que el registro más reciente pertenezca al manager específico
           $match: { "mostRecentRecord.manager": filters.manager },
         },
         {
-          $replaceRoot: { newRoot: "$mostRecentRecord" }, // Desanida el documento seleccionado
+          $replaceRoot: { newRoot: "$mostRecentRecord" },
         },
         {
-          $sort: { [sortField]: sortOrder }, // Ordena según el campo de sort recibido
+          $sort: { [sortField]: sortOrder },
         },
         {
           $facet: {
@@ -218,7 +230,6 @@ Meteor.methods({
             as: "reportData",
           },
         },
-        // { $unwind: "$reportData" },
         {
           $lookup: {
             from: "records",
@@ -228,25 +239,20 @@ Meteor.methods({
           },
         },
         {
-          // Ordena por recordId y por fecha (date) de manera descendente
           $sort: { recordId: 1, date: -1 },
         },
         {
-          // Agrupa por recordId y selecciona el más reciente por cada recordId
           $group: {
             _id: "$recordId",
-            mostRecentRecord: { $first: "$$ROOT" }, // Selecciona el más reciente
+            mostRecentRecord: { $first: "$$ROOT" },
           },
         },
-        // {
-        //   // Filtro adicional: Asegura que el registro más reciente pertenezca al manager específico
-        //   $match: { "mostRecentRecord.manager": { $in: filters.manager } },
-        // },
+
         {
-          $replaceRoot: { newRoot: "$mostRecentRecord" }, // Desanida el documento seleccionado
+          $replaceRoot: { newRoot: "$mostRecentRecord" },
         },
         {
-          $sort: { [sortField]: sortOrder }, // Ordena según el campo de sort recibido
+          $sort: { [sortField]: sortOrder },
         },
         {
           $addFields: {
@@ -318,7 +324,6 @@ Meteor.methods({
           },
         },
         {
-          // Convertir la fecha de asignación de milisegundos a una fecha legible
           $addFields: {
             assignmentDate: { $toDate: "$date" },
             deuda_pendiente: { $toDouble: "$recordData.DEUDA_TOTAL_ASIGNADA" },
@@ -530,7 +535,7 @@ Meteor.methods({
                   { $subtract: ["$count", 1] },
                   0,
                 ],
-              }, // Solo cuenta reasignaciones adicionales
+              },
             },
           },
         },
@@ -595,18 +600,17 @@ Meteor.methods({
             _id: null,
             totalAssignmentsGlobal: { $sum: "$totalAssignments" }, // Total de asignaciones
             totalPendingDebtGlobal: { $sum: "$totalPendingDebt" }, // Total de deuda pendiente
-            data: { $push: "$$ROOT" }, // Guardar el detalle para cada tipo de gestión
+            data: { $push: "$$ROOT" },
           },
         },
         { $unwind: "$data" },
         {
           $project: {
-            _id: "$data._id", // Tipo de gestión
+            _id: "$data._id",
             totalAssignments: "$data.totalAssignments",
             totalPendingDebt: "$data.totalPendingDebt",
             assignmentPercentage: {
               $multiply: [
-                // Porcentaje de asignaciones
                 {
                   $divide: [
                     "$data.totalAssignments",
@@ -618,7 +622,6 @@ Meteor.methods({
             },
             debtPercentage: {
               $multiply: [
-                // Porcentaje de deuda pendiente
                 {
                   $divide: [
                     "$data.totalPendingDebt",
@@ -640,7 +643,7 @@ Meteor.methods({
     timeFrame,
     locality,
     page,
-    pageSize,
+    pageSize
   ) {
     const outputFieldsStr = await Assets.getTextAsync("assignmentOutput.json");
     const outputFields = JSON.parse(outputFieldsStr);
@@ -715,7 +718,7 @@ function reorganizeData(data) {
   const managerMap = {};
 
   data.assignments.forEach((assignment) => {
-    const manager = assignment._id.manager || "Unknown"; // Usa "Unknown" si no hay manager
+    const manager = assignment._id.manager || "Unknown";
     if (!managerMap[manager]) {
       managerMap[manager] = {
         manager: manager,

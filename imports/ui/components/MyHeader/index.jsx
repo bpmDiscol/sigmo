@@ -34,10 +34,8 @@ export default function MyHeader() {
       setAddProject(!access);
     }
     getTeamAccess();
-    getAddProjectAccess()
+    getAddProjectAccess();
   }, [globals?.membership, globals?.userRole]);
-
-
 
   const myProjects = useTracker(() => {
     const user = Meteor.user({});
@@ -151,12 +149,25 @@ export default function MyHeader() {
       <Flex justify="center" align="center" gap={32}>
         <img src="/logo-sigmo.png" style={{ height: "48px" }} />
         <Flex align="center" gap={16}>
-          <Dropdown menu={{ items: projects }} trigger={["click"]}>
+          <Dropdown
+            menu={{
+              items: projects,
+              style: { maxHeight: "80dvh", overflow: "auto" },
+            }}
+            trigger={["click"]}
+          >
             <Button type="link">
               Proyecto <DownOutlined />
             </Button>
           </Dropdown>
-          <Dropdown menu={{ items: persons }} trigger={["click"]}>
+          <Dropdown
+            autoAdjustOverflow
+            menu={{
+              items: persons,
+              style: { maxHeight: "80dvh", overflow: "auto" },
+            }}
+            trigger={["click"]}
+          >
             <Button type="link">
               Equipo <DownOutlined />
             </Button>

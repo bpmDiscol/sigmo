@@ -1,10 +1,6 @@
 import { Meteor } from "meteor/meteor";
 import { WebApp } from "meteor/webapp";
-import { check } from "meteor/check";
-import {
-  projectImageCollection,
-  reportImageCollection,
-} from "./filesCollection";
+import { projectImageCollection } from "./filesCollection";
 import busboy from "busboy";
 import * as fs from "node:fs";
 import path from "node:path";
@@ -45,6 +41,13 @@ Meteor.methods({
     const jsonForms = JSON.parse(forms);
     if (jsonForms.version > version) return forms;
   },
+  "files.getPhotos": async function (
+    timeFrame,
+    project,
+    page,
+    pageSize,
+    sort
+  ) {},
 });
 
 const convertBase64ToFile = function (image, type) {

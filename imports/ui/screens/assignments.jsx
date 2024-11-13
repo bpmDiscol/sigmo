@@ -9,6 +9,8 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { GlobalContext } from "../context/globalsContext";
 import BatchAssign from "../../api/utils/batchAssign";
+import Incidences from "../components/incidences";
+import TotalDebts from "../components/totalDebt";
 
 export default function Assignments() {
   const navigate = useNavigate();
@@ -30,10 +32,9 @@ export default function Assignments() {
     total: 0,
   });
 
-  const [incidences, setIncidences] = useState();
   const voidSorter = { sortField: "NUMERO_DE_LA_ORDEN", sortOrder: 1 };
-  //#region load JSON
 
+  //#region load JSON
   useEffect(() => {
     async function getProjectData() {
       const proyectosStr = await Meteor.callAsync(
@@ -53,7 +54,6 @@ export default function Assignments() {
     if (!state) navigate("/");
     getData();
     getManagers();
-    getIncidences();
   }, [state, globals, reload, currentProject]);
 
   useEffect(() => {
@@ -92,13 +92,6 @@ export default function Assignments() {
     }));
   }
 
-  async function getIncidences() {
-    const inc = await Meteor.callAsync("record.incidences", state?.id, [
-      "DESCRIPCION_TIPO_PRODUCTO",
-    ]);
-    setIncidences(inc);
-  }
-
   //#region Search engine
 
   const handleSearch = (
@@ -108,8 +101,6 @@ export default function Assignments() {
     sort = voidSorter
   ) => {
     confirm();
-    setSearchText(selectedKeys[0]);
-    setSearchedColumn(dataIndex);
 
     const searchTerm = selectedKeys[0];
     const search = { ...searchKeys, ...{ [dataIndex]: searchTerm } };
@@ -125,8 +116,6 @@ export default function Assignments() {
     const search = delete searchKeys[dataIndex];
     clearFilters();
     confirm();
-    setSearchText("");
-    setSearchedColumn("");
     setSearchKeys(search);
     getData(1, pagination.pageSize, search);
     setPagination((prev) => ({
@@ -324,7 +313,27 @@ export default function Assignments() {
 
   return (
     <>
-      <Typography.Title>Asignaciones</Typography.Title>
+      <Flex justify="space-between" style={{ backgroundColor: "#f5f5f5", padding:8 }}>
+        <Typography.Title>Asignaciones</Typography.Title>
+        <Flex vertical align="end" gap={8}>
+          <Flex gap={8}>
+            <Incidences
+              timeFrame={state?.id}
+              groupField={"INDICADOR"}
+              title={"Indicador"}
+            />
+            <Incidences
+              timeFrame={state?.id}
+              groupField={"DESCRIPCION_TIPO_PRODUCTO"}
+              title={"Tipo de servicio"}
+            />
+          </Flex>
+          <TotalDebts timeFrame={state?.id} />
+        </Flex>
+      </Flex>
+      <Flex justify="space-between" align="center" style={{marginTop:8}}>
+        <BatchAssign timeFrame={state?.id} setReload={setReload} />
+      </Flex>
       <Table
         size="small"
         dataSource={records}
@@ -335,7 +344,6 @@ export default function Assignments() {
           ...pagination,
           showTotal: (total) => (
             <>
-              <BatchAssign timeFrame={state?.id} setReload={setReload} />
               <Typography.Text
                 keyboard
                 type="danger"

@@ -11,7 +11,7 @@ import {
   Table,
   Typography,
 } from "antd";
-import { PlusCircleTwoTone, UserOutlined } from "@ant-design/icons";
+import { PlusCircleTwoTone } from "@ant-design/icons";
 import AdminUsers from "./adminUsers";
 import { useNavigate } from "react-router-dom";
 import isAccesible from "../../api/utils/isAccesible";
@@ -39,12 +39,12 @@ export default function TeamAdmin() {
 
   useEffect(() => {
     if (globals?.members) {
-      // const members = globals.members.sort((a, b) => {
-      //   if (a.member.toLowerCase() < b.member.toLowerCase()) return -1;
-      //   if (a.member.toLowerCase() > b.member.toLowerCase()) return 1;
-      //   return 0;
-      // });
-      setCurrentMembers(globals?.members);
+      const members = globals.members.sort((a, b) => {
+        if (a.member.toLowerCase() < b.member.toLowerCase()) return -1;
+        if (a.member.toLowerCase() > b.member.toLowerCase()) return 1;
+        return 0;
+      });
+      setCurrentMembers(members);
     }
   }, [globals?.members]);
 
@@ -57,7 +57,7 @@ export default function TeamAdmin() {
 
   const columns = [
     {
-      title: "miembro",
+      title: "Miembro",
       dataIndex: "id",
       width: "20rem",
       render: (id) => (
@@ -68,21 +68,6 @@ export default function TeamAdmin() {
           onSelect={(member) => updateMembers(id, { member })}
           value={getValue(id, "member")}
           onChange={(member) => updateMembers(id, { member })}
-          suffixIcon={
-            getValue(id, "member") ? (
-              <UserOutlined />
-            ) : (
-              <Button
-                size={"small"}
-                type="link"
-                icon={<PlusCircleTwoTone />}
-                translate="yes"
-                onClick={() => setopenModal(true)}
-              >
-                Crear
-              </Button>
-            )
-          }
         />
       ),
     },
@@ -101,10 +86,24 @@ export default function TeamAdmin() {
       ),
     },
     {
+      title: (
+        <Button
+          type="primary"
+          icon={<PlusCircleTwoTone />}
+          style={{ width: "8rem" }}
+          onClick={() => setopenModal(true)}
+        >
+          Crear usuario
+        </Button>
+      ),
       dataIndex: "id",
-      width: "5rem",
       render: (id) => (
-        <Button danger type="primary" onClick={() => deleteMember(id)}>
+        <Button
+          danger
+          style={{ width: "8rem" }}
+          type="primary"
+          onClick={() => deleteMember(id)}
+        >
           Eliminar
         </Button>
       ),
@@ -136,12 +135,6 @@ export default function TeamAdmin() {
     setOptions(filteredOptions);
   }
 
-  function addMember() {
-    const id = Random.id();
-    const member = { id, member: "", position: "" };
-    const newMembers = [...currentMembers, member];
-    setCurrentMembers(newMembers);
-  }
   function deleteMember(id) {
     const newMembers = currentMembers.filter((member) => member.id != id);
     setCurrentMembers(newMembers);
@@ -163,18 +156,21 @@ export default function TeamAdmin() {
     <Flex vertical>
       <Flex justify="space-between" align="center">
         <Typography.Title>Mi equipo</Typography.Title>
-        <Button onClick={addMember} disabled={!globals?.project}>
-          Agregar miembro
-        </Button>
       </Flex>
       <Table
         key={roles.length}
         columns={columns}
         dataSource={currentMembers}
         rowKey={(value) => value.id}
+        pagination={false}
       />
       <Modal open={openModal} onCancel={() => setopenModal(false)} footer="">
-        <AdminUsers onClose={onCloseModal} />
+        <AdminUsers
+          onClose={onCloseModal}
+          saveMembers={saveMembers}
+          setCurrentMembers={setCurrentMembers}
+          currentMembers={currentMembers}
+        />
       </Modal>
     </Flex>
   );

@@ -7,10 +7,8 @@ import formatCurrency from "../../../api/utils/formatCurrency";
 
 export default function ManagerResultsTable({ data }) {
   function exportResultsToExcel() {
-    // Crear un objeto para las filas
     const rows = [];
 
-    // Encabezado básico
     const headers = [
       "Gestor",
       "Asignaciones",
@@ -21,15 +19,13 @@ export default function ManagerResultsTable({ data }) {
       "Total asignación gestionada",
     ];
 
-    // Mapear las fechas encontradas en resultsByDay para generar los encabezados dinámicos
-    const datesSet = new Set(); // Usamos un Set para no repetir fechas
+    const datesSet = new Set();
     data.forEach((item) => {
       item.resultsByDay.forEach((result) => {
-        datesSet.add(result.date); // Agregar la fecha única
+        datesSet.add(result.date);
       });
     });
 
-    // Añadir las columnas dinámicas al encabezado
     const dynamicColumns = [];
     datesSet.forEach((date) => {
       dynamicColumns.push(`Resueltas (${date})`);
@@ -37,7 +33,6 @@ export default function ManagerResultsTable({ data }) {
     });
     headers.push(...dynamicColumns);
 
-    // Crear las filas de datos
     data.forEach((item) => {
       const row = [
         item.manager,
@@ -49,47 +44,36 @@ export default function ManagerResultsTable({ data }) {
         item.totalPendingDebt,
       ];
 
-      // Agregar las columnas dinámicas según las fechas
       dynamicColumns.forEach((column, index) => {
-        const dateIndex = Math.floor(index / 2); // Cada fecha tiene dos columnas
-        const date = Array.from(datesSet)[dateIndex]; // Obtener la fecha en el índice correcto
+        const dateIndex = Math.floor(index / 2);
+        const date = Array.from(datesSet)[dateIndex];
         const result = item.resultsByDay.find((result) => result.date === date);
 
         if (index % 2 === 0) {
-          // resolvedCount
-          row.push(result ? result.resolvedCount : 0); // Si no hay datos para la fecha, se pone 0
+          row.push(result ? result.resolvedCount : 0);
         } else {
-          // totalPendingDebt
           row.push(result ? result.totalPendingDebt : 0);
         }
       });
 
-      // Añadir la fila
       rows.push(row);
     });
 
-    // Crear la hoja de Excel
     const worksheet = XLSX.utils.aoa_to_sheet([headers, ...rows]);
 
-    // Ajustar el ancho de las columnas
     const colWidths = headers.map((header, i) => {
-      // Calcular el ancho máximo del contenido en la columna
       const columnData = [
         header,
         ...rows.map((row) => row[i]?.toString() || ""),
       ];
       const maxWidth = Math.max(...columnData.map((val) => val.length));
-      return { wch: maxWidth + 2 }; // Ajustar ancho con 2 caracteres extra
+      return { wch: maxWidth + 2 };
     });
 
-    // Asignar los anchos de columna a la hoja de trabajo
     worksheet["!cols"] = colWidths;
 
-    // Crear el libro de trabajo
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Results");
-
-    // Exportar el archivo
     XLSX.writeFile(workbook, "results.xlsx");
   }
 
@@ -123,11 +107,14 @@ export default function ManagerResultsTable({ data }) {
       title: "Total Asignacion",
       dataIndex: "totalAssignedDebt",
       render: (value) => formatCurrency(value),
+      width: "9rem",
+
     },
     {
       title: "Total Asignacion gestionada",
       dataIndex: "totalPendingDebt",
       render: (value) => formatCurrency(value),
+      width: "9rem",
     },
     {
       title: "Resultados por dia",
@@ -141,12 +128,16 @@ export default function ManagerResultsTable({ data }) {
           ))}
         </ul>
       ),
+      width: "16rem",
+
     },
   ];
 
   return (
     <>
-      <Button type="primary" onClick={exportResultsToExcel}>Exportar a Excel</Button>
+      <Button type="primary" onClick={exportResultsToExcel}>
+        Exportar a Excel
+      </Button>
       <Table
         size="small"
         columns={columns}

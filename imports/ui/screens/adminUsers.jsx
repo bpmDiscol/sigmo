@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Form, Input, Button, Select, message, Typography, Flex } from "antd";
 import { Meteor } from "meteor/meteor";
+import { Random } from "meteor/random";
+
 
 const { Option } = Select;
 const { Title } = Typography;
 
-export default function AdminUsers({ onClose }) {
+export default function AdminUsers({ onClose, saveMembers, setCurrentMembers, currentMembers }) {
   const [form] = Form.useForm();
   const [localities, setLocalities] = useState([]);
 
@@ -28,6 +30,10 @@ export default function AdminUsers({ onClose }) {
         } else {
           message.success("Usuario creado con exito");
           form.resetFields();
+          const id = Random.id();
+          const newCurrentMembers = [...currentMembers, { id, member: username, position: "" }]
+          setCurrentMembers(newCurrentMembers)
+          saveMembers(newCurrentMembers)
         }
         onClose();
       }

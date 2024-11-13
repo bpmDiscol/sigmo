@@ -77,53 +77,34 @@ Meteor.methods({
     };
   },
 
-  "record.incidences": async function (
-    timeFrame,
-    filtersArray,
-    additionalFilter // filtro adicional
-  ) {
-    const filter = { timeFrame };
+  "record.incidences": async function (groupField, additionalFilter) {
+    const filter = {};
 
-    // Procesar el objeto additionalFilter (campo y valores)
-    if (additionalFilter && additionalFilter.field && additionalFilter.values) {
-      const { field, values } = additionalFilter;
-      if (Array.isArray(values)) {
-        filter[field] = { $in: values };
-      } else {
-        filter[field] = values;
-      }
-    }
+    Object.keys(additionalFilter).forEach((field) => {
+      if (Array.isArray(additionalFilter[field]))
+        filter[field] = { $in: additionalFilter[field] };
+      else filter[field] = additionalFilter[field];
+    });
 
-    // Procesar el array de filters y contar incidencias
     const aggregationPipeline = [{ $match: filter }];
+    aggregationPipeline.push({
+      $group: {
+        _id: `$${groupField}`,
+        count: { $sum: 1 },
+      },
+    });
 
-    if (Array.isArray(filtersArray) && filtersArray.length > 0) {
-      filtersArray.forEach((field) => {
-        aggregationPipeline.push({
-          $group: {
-            _id: `$${field}`, // Agrupar por el campo especificado
-            count: { $sum: 1 }, // Contar incidencias
-          },
-        });
-      });
-    }
-
-    // Ejecutar la consulta de agregación
     const records = await recordsCollection
       .rawCollection()
       .aggregate(aggregationPipeline)
       .toArray();
 
-    // Procesar los resultados de incidencias por campo
     let incidencesByField = {};
     records.forEach((record) => {
-      incidencesByField[record._id] = record.count;
+      if (record._id) incidencesByField[record._id] = record.count;
     });
 
-    return {
-      incidencesByField, // Devuelve las incidencias por campo
-      records,
-    };
+    return incidencesByField;
   },
 
   "record.delete": function (id) {
@@ -150,5 +131,24 @@ Meteor.methods({
         },
       ])
       .toArray();
+  },
+  "record.totalDebt": async function ({ timeFrame, locality }) {
+    const total = await recordsCollection
+      .rawCollection()
+      .aggregate([
+        {
+          $match: { timeFrame, locality },
+        },
+        {
+          $group: {
+            _id: null,
+            deudaTotalAsignada: {
+              $sum: { $toDouble: "$DEUDA_TOTAL_ASIGNADA" },
+            },
+          },
+        },
+      ])
+      .toArray();
+    return total.length ? total[0].deudaTotalAsignada : 0;
   },
 });
