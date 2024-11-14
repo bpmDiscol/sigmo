@@ -269,6 +269,7 @@ export default function Assignments() {
 
   function getManagers() {
     Meteor.call("getUsersByLocality", locality, (err, resp) => {
+      console.log("🚀 ~ Meteor.call ~ resp:", resp)
       const managers = globals?.members
         ? globals?.members
             .filter(
