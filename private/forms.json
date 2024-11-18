@@ -490,8 +490,7 @@
           "inmuebleConstruccion",
           "noPermite_Obstaculo",
           "menor_AdultoMayor"
-        ],
-        "tipoDeVivienda": ["residencial", "comercial", "residencial_comercial"]
+        ]
       },
       "extDepends": {
         "service": [
@@ -757,7 +756,7 @@
     {
       "element": "Dropdown",
       "name": "gestion",
-      "field": "gestion",
+      "field": "gestion_fracort",
       "label": "Gestión",
       "options": [
         { "label": "Sin visitar", "value": "01" },
