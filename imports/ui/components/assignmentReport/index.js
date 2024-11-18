@@ -51,11 +51,12 @@ export default function AssignmentReport({
         data.report?.status === "done"
           ? "Terminado"
           : data.report?.status === "reassigned"
-          ? "Desasignada"
+          ? "Reasignada"
           : "en proceso",
     }));
+    const filtereds = newAssignments.filter(assign => !assign.status === "Reasignada")
     if (!excel) {
-      setAssignments(newAssignments);
+      setAssignments(filtereds);
       setPagination((prev) => ({
         ...prev,
         current,
@@ -63,7 +64,7 @@ export default function AssignmentReport({
       }));
     }
 
-    if (excel) return { newAssignments, totalCount: assignments[0].totalCount };
+    if (excel) return { filtereds, totalCount: assignments[0].totalCount };
   }
 
   useEffect(() => {
@@ -95,7 +96,7 @@ export default function AssignmentReport({
           if (col.type === "date") {
             const date = item[col.dataIndex]
               ? moment(item[col.dataIndex]).format("DD/MM/YYYY, h:mm:ss a")
-              : "Sin terminar";
+              : "";
             formattedItem[col.title] = date;
           } else formattedItem[col.title] = item[col.dataIndex] || "";
         });
@@ -126,7 +127,7 @@ export default function AssignmentReport({
           column.render = (date) =>
             date
               ? moment(date).format("DD/MM/YYYY, h:mm:ss a")
-              : "Sin terminar";
+              : "";
         return column;
       });
       setColumns(reconstructeds);
