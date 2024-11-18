@@ -27,8 +27,8 @@ export default function BatchAssign({ setReload, timeFrame }) {
       rows.forEach(async (row, index) => {
         const [manager, NUMERO_DE_LA_ORDEN] = row;
 
-        if (!manager || !NUMERO_DE_LA_ORDEN) {
-          return console.warn("Sin gestor o número de la orden", row);
+        if (!manager) {
+          return console.warn("Sin gestor", row);
         }
 
         Meteor.callAsync(

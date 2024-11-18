@@ -13,6 +13,7 @@ Meteor.methods({
       PRODUCTO: data.PRODUCTO,
       CONTRATO: data.CONTRATO,
       CLIENTE: data.CLIENTE,
+      NUMERO_DE_LA_ORDEN: data.NUMERO_DE_LA_ORDEN,
       timeFrame: data.timeFrame,
       project: data.project,
     });
