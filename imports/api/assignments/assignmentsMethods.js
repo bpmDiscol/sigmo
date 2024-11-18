@@ -582,7 +582,7 @@ Meteor.methods({
         },
         { $unwind: "$reportData" },
         {
-          $match: { "reportData.status": { $ne: "reassigned" } },
+          $match: { "reportData.status":{$ne: "reassigned"} },
         },
         {
           $group: {
@@ -595,15 +595,6 @@ Meteor.methods({
             },
           },
         },
-        {
-          $group: {
-            _id: null,
-            totalAssignmentsGlobal: { $sum: "$totalAssignments" }, // Total de asignaciones
-            totalPendingDebtGlobal: { $sum: "$totalPendingDebt" }, // Total de deuda pendiente
-            data: { $push: "$$ROOT" },
-          },
-        },
-        { $unwind: "$data" },
         {
           $project: {
             _id: "$data._id",
@@ -621,15 +612,21 @@ Meteor.methods({
               ],
             },
             debtPercentage: {
-              $multiply: [
-                {
-                  $divide: [
-                    "$data.totalPendingDebt",
-                    "$totalPendingDebtGlobal",
+              $cond: {
+                if: { $eq: ["$totalPendingDebtGlobal", 0] },
+                then: 0,
+                else: {
+                  $multiply: [
+                    {
+                      $divide: [
+                        "$data.totalPendingDebt",
+                        "$totalPendingDebtGlobal",
+                      ],
+                    },
+                    100,
                   ],
                 },
-                100,
-              ],
+              },
             },
           },
         },

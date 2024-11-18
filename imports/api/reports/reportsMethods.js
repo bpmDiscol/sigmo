@@ -41,7 +41,6 @@ Meteor.methods({
         },
       ])
       .toArray();
-
     return records;
   },
   "report.readRecents": async function (

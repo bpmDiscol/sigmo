@@ -21,7 +21,8 @@ export default function Incidences({ timeFrame, groupField, title }) {
   }, []);
   return (
     <Descriptions
-      style={{ visibility: incidences.length ? "visible" : "collapse", width:'15rem', marginTop:'2rem' }}
+      style={{ visibility: incidences.length ? "visible" : "collapse", marginTop:'2rem' }}
+      contentStyle={{width: "5rem"}}
       title={title}
       items={incidences}
       column={1}

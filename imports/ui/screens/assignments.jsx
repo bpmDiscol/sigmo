@@ -251,6 +251,7 @@ export default function Assignments() {
       sort,
       currentProject?.search,
       (err, res) => {
+        console.log("🚀 ~ getData ~ res:", res)
         if (err) return console.error(err);
 
         setRecords(res?.data || []);
@@ -269,7 +270,6 @@ export default function Assignments() {
 
   function getManagers() {
     Meteor.call("getUsersByLocality", locality, (err, resp) => {
-      console.log("🚀 ~ Meteor.call ~ resp:", resp)
       const managers = globals?.members
         ? globals?.members
             .filter(

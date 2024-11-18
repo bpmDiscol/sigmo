@@ -124,7 +124,7 @@ export default function ManagerResultsTable({ data }) {
           {resultsByDay.map((result, index) => (
             <li key={index}>{`${result.date}, Resueltas: ${
               result.resolvedCount
-            }, Recaudado: ${formatCurrency(result.totalPendingDebt)}`}</li>
+            }, Normalizado: ${formatCurrency(result.totalPendingDebt)}`}</li>
           ))}
         </ul>
       ),

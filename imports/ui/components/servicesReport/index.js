@@ -24,18 +24,18 @@ const columns = [
     key: "assignmentPercentage",
   },
   {
-    title: "Deuda Pendiente",
+    title: "Valor cartera",
     dataIndex: "totalPendingDebt",
     key: "totalPendingDebt",
   },
   {
-    title: "Porcentaje Deuda",
+    title: "Porcentaje cartera",
     dataIndex: "debtPercentage",
     key: "debtPercentage",
   },
 ];
 
-export default function ServicesReport({id, locality}) {
+export default function ServicesReport({ id, locality }) {
   const [data, setData] = useState([]);
   const { globals } = useContext(GlobalContext);
   const [diccionario, setDiccionario] = useState([]);
@@ -48,7 +48,8 @@ export default function ServicesReport({id, locality}) {
       globals?.project?._id,
       locality,
       (err, resp) => {
-        setData(resp);
+        console.log("🚀 ~ useEffect ~ resp:", resp);
+        if (resp) setData(resp);
       }
     );
   }, [locality]);
@@ -83,9 +84,9 @@ export default function ServicesReport({id, locality}) {
     key: index,
     gestion: translate(item._id) || "Efectiva",
     totalAssignments: item.totalAssignments,
-    assignmentPercentage: `${item.assignmentPercentage.toFixed(2)}%`,
+    assignmentPercentage: `${(item.assignmentPercentage || 0).toFixed(2)}%`,
     totalPendingDebt: formatCurrency(item.totalPendingDebt),
-    debtPercentage: `${item.debtPercentage.toFixed(2)}%`,
+    debtPercentage: `${(item.debtPercentage || 0).toFixed(2)}%`,
   }));
 
   function exportGestionToExcel(data) {
@@ -118,9 +119,9 @@ export default function ServicesReport({id, locality}) {
     const totalRow = [
       "Total",
       totalAssignments,
-      `${totalAssignmentPercentage.toFixed(2)}%`,
+      `${(totalAssignmentPercentage || 0).toFixed(2)}%`,
       formatCurrency(totalPendingDebt),
-      `${totalDebtPercentage.toFixed(2)}%`,
+      `${(totalDebtPercentage || 0).toFixed(2)}%`,
     ];
     rows.push(totalRow); // Añadir fila de totales al final
 
@@ -166,13 +167,13 @@ export default function ServicesReport({id, locality}) {
             </Table.Summary.Cell>
             <Table.Summary.Cell>{totalAssignments}</Table.Summary.Cell>
             <Table.Summary.Cell>
-              {totalAssignmentPercentage.toFixed(2)}%
+              {(totalAssignmentPercentage || 0).toFixed(2)}%
             </Table.Summary.Cell>
             <Table.Summary.Cell>
               {formatCurrency(totalPendingDebt)}
             </Table.Summary.Cell>
             <Table.Summary.Cell>
-              {totalDebtPercentage.toFixed(2)}%
+              {(totalDebtPercentage || 0).toFixed(2)}%
             </Table.Summary.Cell>
           </Table.Summary.Row>
         )}

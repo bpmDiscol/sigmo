@@ -1,6 +1,6 @@
 {
   "title": "SIGMo",
-  "version": 2,
+  "version": 12,
   "maps": false,
   "icons": [
     {
@@ -9,11 +9,23 @@
     },
     {
       "icon": "alpha-p-circle-outline",
-      "label": "Servicios Financieros"
+      "label": "Servicios Financieros CM"
     },
     {
-      "icon": "fire",
-      "label": "Gas"
+      "icon": "alpha-f-circle-outline",
+      "label": "Suspension por persecución CM"
+    },
+    {
+      "icon": "alpha-f-circle-outline",
+      "label": "Suspension por mora CM"
+    },
+    {
+      "icon": "alpha-f-circle-outline",
+      "label": "Reconexión por pago CM"
+    },
+    {
+      "icon": "alpha-f-circle-outline",
+      "label": "Instalación de válvula CM"
     }
   ],
   "translate": {
@@ -53,7 +65,11 @@
     "TOTAL_DEUDA_CORRIENTE": "total_deuda_corriente",
     "PAGO": "total_deuda_corriente",
     "INTERESES": "intereses",
-    "OBSERVACION": "observacion"
+    "OBSERVACION": "observacion",
+    "SUSPENSIÓN DESDE CM POR PERSECUCIÓN": "Suspension por persecución CM",
+    "SUSPENSIÓN DESDE CENTRO DE MEDICIÓN POR MORA": "Suspension por mora CM",
+    "RECONEXIÓN DESDE CENTRO DE MEDICIÓN POR PAGO": "Reconexión por pago CM",
+    "CART - INSTALACION DE VALVULA DE SEGURIDAD EN CM": "Instalación de válvula CM"
   },
   "translateKeys": {
     "numero_de_orden": "Número de la Orden",
@@ -591,15 +607,6 @@
       }
     },
     {
-      "element": "TextInput",
-      "name": "observacion",
-      "field": "observacion",
-      "label": "Observación",
-      "props": {
-        "style": { "marginBottom": 16 }
-      }
-    },
-    {
       "element": "Dropdown",
       "name": "tipoHabitante",
       "field": "tipoHabitante",
@@ -693,6 +700,336 @@
       },
       "props": {
         "keyboardType": "phone-pad"
+      }
+    },
+    {
+      "element": "NumberInput",
+      "name": "numIVT",
+      "field": "numIVT",
+      "label": "Número IVT",
+      "extDepends": {
+        "service": [
+          "Servicios Financieros CM",
+          "Suspension por persecución CM",
+          "Suspension por mora CM",
+          "Reconexión por pago CM"
+        ]
+      },
+      "props": {
+        "keyboardType": "phone-pad"
+      }
+    },
+    {
+      "element": "Dropdown",
+      "name": "ejecIVT",
+      "field": "ejecIVT",
+      "label": "Ejecución IVT",
+      "options": [
+        { "label": "Si", "value": "1" },
+        { "label": "No", "value": "0" }
+      ],
+      "extDepends": {
+        "service": [
+          "Servicios Financieros CM",
+          "Suspension por persecución CM",
+          "Suspension por mora CM",
+          "Reconexión por pago CM"
+        ]
+      }
+    },
+    {
+      "element": "TextInput",
+      "name": "motivoNoEjecucion",
+      "field": "motivoNoEjecucion",
+      "label": "Motivo de no ejecucuón",
+      "extDepends": {
+        "service": [
+          "Servicios Financieros CM",
+          "Suspension por persecución CM",
+          "Suspension por mora CM",
+          "Reconexión por pago CM"
+        ]
+      },
+      "dependsOn": {
+        "ejecIVT": ["0"]
+      }
+    },
+    {
+      "element": "Dropdown",
+      "name": "gestion",
+      "field": "gestion",
+      "label": "Gestión",
+      "options": [
+        { "label": "Sin visitar", "value": "01" },
+        { "label": "inmueble solo", "value": "02" },
+        { "label": "Inmueble desocupado/Abandonado", "value": "03" },
+        { "label": "Inmueble demolido/Solar/Lote", "value": "04" },
+        { "label": "Inmueble en construccion", "value": 0 },
+        {
+          "label": "Inmueble en zona de dificil acceso/Peligroso",
+          "value": "05"
+        },
+        { "label": "Inmueble con rejas y candado", "value": "06" },
+        { "label": "Dirección errada/Predio no localizado", "value": "07" },
+        { "label": "Administración no permite acceso", "value": "08" },
+        { "label": "Adulto mayor/ menor en casa", "value": "09" },
+        { "label": "Imposibilidades técnicas", "value": "10" },
+        { "label": "Oposición/Cliente agresivo", "value": "11" },
+        {
+          "label": "Zona de calamidad(inundaciones/cuerentena)",
+          "value": "12"
+        },
+        { "label": "Acometida no encontrada/no visible", "value": "13" },
+        { "label": "Acometida en terraza", "value": "14" },
+        { "label": "Medidor no coincide", "value": "15" },
+        { "label": "Medidor no ubicado", "value": "16" },
+        { "label": "Calamidad familiar por fallecimiento", "value": "17" },
+        { "label": "Medidor obstaculizado", "value": "18" },
+        { "label": "Recibo cancelado", "value": "19" },
+        { "label": "Gestionado", "value": "20" }
+      ],
+      "extDepends": {
+        "service": [
+          "Servicios Financieros CM",
+          "Suspension por persecución CM",
+          "Suspension por mora CM",
+          "Reconexión por pago CM"
+        ]
+      },
+      "dependsOn": {
+        "ejecIVT": ["1", "0"]
+      }
+    },
+    {
+      "element": "Time",
+      "name": "horaInicio",
+      "field": "horaInicio",
+      "label": "Hora de inicio",
+      "extDepends": {
+        "service": [
+          "Servicios Financieros CM",
+          "Suspension por persecución CM",
+          "Suspension por mora CM",
+          "Reconexión por pago CM"
+        ]
+      },
+      "dependsOn": {
+        "causal": ["20"]
+      }
+    },
+    {
+      "element": "Time",
+      "name": "horaFin",
+      "field": "horaFin",
+      "label": "Hora final",
+      "extDepends": {
+        "service": [
+          "Servicios Financieros CM",
+          "Suspension por persecución CM",
+          "Suspension por mora CM",
+          "Reconexión por pago CM"
+        ]
+      },
+      "dependsOn": {
+        "causal": ["20"],
+        "horaInicio": "*"
+      }
+    },
+    {
+      "element": "TextInput",
+      "name": "lectura",
+      "field": "lectura",
+      "label": "Lectura del medidor",
+      "extDepends": {
+        "service": [
+          "Servicios Financieros CM",
+          "Suspension por persecución CM",
+          "Suspension por mora CM",
+          "Reconexión por pago CM"
+        ]
+      },
+      "dependsOn": {
+        "causal": ["20"],
+        "horaFin": "*"
+      },
+      "props": {
+        "keyboardType": "phone-pad"
+      }
+    },
+
+    {
+      "element": "NumberInput",
+      "name": "serieVF",
+      "field": "serieVF",
+      "label": "Serie VF",
+      "extDepends": {
+        "service": [
+          "Servicios Financieros CM",
+          "Suspension por persecución CM",
+          "Suspension por mora CM",
+          "Reconexión por pago CM"
+        ]
+      },
+      "dependsOn": {
+        "causal": ["20"],
+        "lectura": "*"
+      },
+      "props": {
+        "keyboardType": "phone-pad"
+      }
+    },
+    {
+      "element": "TextInput",
+      "name": "contacto",
+      "field": "contacto",
+      "label": "Contacto",
+      "extDepends": {
+        "service": [
+          "Servicios Financieros CM",
+          "Suspension por persecución CM",
+          "Suspension por mora CM",
+          "Reconexión por pago CM"
+        ]
+      },
+      "dependsOn": {
+        "causal": ["20"],
+        "serieVF": "*"
+      }
+    },
+    {
+      "element": "TextInput",
+      "name": "cedula",
+      "field": "cedula",
+      "label": "Cédula",
+      "extDepends": {
+        "service": [
+          "Servicios Financieros CM",
+          "Suspension por persecución CM",
+          "Suspension por mora CM",
+          "Reconexión por pago CM"
+        ]
+      },
+      "dependsOn": {
+        "causal": ["20"],
+        "contacto": "*"
+      },
+      "props": {
+        "keyboardType": "phone-pad"
+      }
+    },
+    {
+      "element": "TextInput",
+      "name": "telefono",
+      "field": "telefono",
+      "label": "Teléfono",
+
+      "extDepends": {
+        "service": [
+          "Servicios Financieros CM",
+          "Suspension por persecución CM",
+          "Suspension por mora CM",
+          "Reconexión por pago CM"
+        ]
+      },
+      "dependsOn": {
+        "causal": ["20"],
+        "cedula": "*"
+      },
+      "props": {
+        "keyboardType": "phone-pad"
+      }
+    },
+    {
+      "element": "TextInput",
+      "name": "observacion",
+      "field": "observacion",
+      "label": "Observación",
+      "props": {
+        "style": { "marginBottom": 16 }
+      }
+    },
+    {
+      "element": "NumberInput-H",
+      "name": "2198",
+      "field": "2198",
+      "label": "Valvula Seg. 3/8 M-P",
+      "extDepends": {
+        "service": [
+          "Servicios Financieros CM",
+          "Suspension por persecución CM",
+          "Suspension por mora CM",
+          "Reconexión por pago CM"
+        ]
+      },
+      "dependsOn": {
+        "observacion": "*"
+      },
+      "props": {
+        "keyboardType": "phone-pad",
+        "maxLength": 3
+      }
+    },
+    {
+      "element": "NumberInput-H",
+      "name": "2199",
+      "field": "2199",
+      "label": "Valvula Seg. 3/8 P-P",
+      "extDepends": {
+        "service": [
+          "Servicios Financieros CM",
+          "Suspension por persecución CM",
+          "Suspension por mora CM",
+          "Reconexión por pago CM"
+        ]
+      },
+      "dependsOn": {
+        "observacion": "*"
+      },
+      "props": {
+        "keyboardType": "phone-pad",
+        "maxLength": 3
+      }
+    },
+    {
+      "element": "NumberInput-H",
+      "name": "2201",
+      "field": "2201",
+      "label": "Llave de paso 3/8 H-M",
+      "extDepends": {
+        "service": [
+          "Servicios Financieros CM",
+          "Suspension por persecución CM",
+          "Suspension por mora CM",
+          "Reconexión por pago CM"
+        ]
+      },
+      "dependsOn": {
+        "observacion": "*"
+      },
+      "props": {
+        "keyboardType": "phone-pad",
+        "maxLength": 3
+      }
+    },
+    {
+      "element": "NumberInput-H",
+      "name": "2258",
+      "field": "2258",
+      "label": "Trampillon",
+      "extDepends": {
+        "service": [
+          "Servicios Financieros CM",
+          "Suspension por persecución CM",
+          "Suspension por mora CM",
+          "Reconexión por pago CM"
+        ]
+      },
+      "dependsOn": {
+        "observacion": "*"
+      },
+      "props": {
+        "keyboardType": "phone-pad",
+        "maxLength": 3
       }
     }
   ]

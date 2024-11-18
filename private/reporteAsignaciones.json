@@ -298,5 +298,139 @@
       "dataIndex": "observacion",
       "width": "15rem"
     }
+  ],
+  "cCbwLzBDACcRCCtrq": [
+    {
+      "title": "Codigo de visita",
+      "dataIndex": "_id",
+      "width": "15rem"
+    },
+    {
+      "title": "Producto",
+      "dataIndex": "PRODUCTO",
+      "width": "15rem"
+    },
+    {
+      "title": "Gestor",
+      "dataIndex": "manager",
+      "width": "15rem"
+    },
+    {
+      "title": "Cliente",
+      "dataIndex": "NOMBRE_CLIENTE",
+      "width": "15rem"
+    },
+    {
+      "title": "Orden",
+      "dataIndex": "NUMERO_DE_LA_ORDEN",
+      "width": "15rem"
+    },
+    {
+      "title": "Descripción Barrio",
+      "dataIndex": "DESCRIPCION_BARRIO",
+      "width": "15rem"
+    },
+    {
+      "title": "Dirección Predio",
+      "dataIndex": "DIRECCION_PREDIO",
+      "width": "15rem"
+    },
+    {
+      "title": "Causal",
+      "dataIndex": "gestion",
+      "width": "15rem"
+    },
+    {
+      "title": "Numero IVT",
+      "dataIndex": "numIVT",
+      "width": "15rem"
+    },
+    {
+      "title": "Motivo no IVT",
+      "dataIndex": "motivoNoEjecucion",
+      "width": "15rem"
+    },
+    {
+      "title": "Hora de inicio",
+      "dataIndex": "horaInicio",
+      "width": "15rem",
+      "type": "date"
+    },
+    {
+      "title": "Hora finalización",
+      "dataIndex": "horaFin",
+      "width": "15rem",
+      "type": "date"
+    },
+    {
+      "title": "Medidor",
+      "dataIndex": "ELEMENTO_MEDICION",
+      "width": "15rem"
+    },
+    {
+      "title": "Lectura",
+      "dataIndex": "lectura",
+      "width": "15rem"
+    },
+    {
+      "title": "Serie VF",
+      "dataIndex": "serieVF",
+      "width": "15rem"
+    },
+    {
+      "title": "Contacto",
+      "dataIndex": "telefonoContacto",
+      "width": "15rem"
+    },
+    {
+      "title": "Cedula contacto",
+      "dataIndex": "cedula",
+      "width": "15rem"
+    },
+    {
+      "title": "Telefono contacto",
+      "dataIndex": "telefono",
+      "width": "15rem"
+    },
+    {
+      "title": "Observación",
+      "dataIndex": "observacion",
+      "width": "15rem"
+    },
+    {
+      "title": "Estado",
+      "dataIndex": "status",
+      "width": "15rem"
+    },
+    {
+      "title": "Fecha Asignación",
+      "dataIndex": "assignmentDate",
+      "type": "date"
+    },
+    {
+      "title": "Fecha Gestión",
+      "dataIndex": "reportDate",
+      "type": "date"
+    },
+    {
+      "title": "2258",
+      "dataIndex": "2258",
+      "width": "15rem"
+    },
+    {
+      "title": "2201",
+      "dataIndex": "2201",
+      "width": "15rem"
+    },
+    {
+      "title": "2199",
+      "dataIndex": "2199",
+      "width": "15rem"
+    },
+    {
+      "title": "2198",
+      "dataIndex": "2198",
+      "width": "15rem"
+    }
   ]
 }

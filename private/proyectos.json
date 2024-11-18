@@ -310,5 +310,92 @@
         "type": "text"
       }
     ]
+  },
+  "Fracort": {
+    "search": [
+      "_id",
+      "PRODUCTO",
+      "CONTRATO",
+      "TIPO_TRABAJO",
+      "DESCRIPCION_TIPO_PRODUCTO",
+      "NUMERO_DE_LA_ORDEN",
+      "ELEMENTO_MEDICION",
+      "CICLO",
+      "NOMBRE_CLIENTE",
+      "DESCRIPCION_BARRIO",
+      "NOMBRE_BARRIO",
+      "DIRECCION_PREDIO",
+      "ESTADO_ORDEN",
+      "DESCRIPCION_ESTRATO",
+      "ELEMENTO_MEDICION"
+    ],
+    "fields": [
+      {
+        "title": "Gestor",
+        "dataIndex": "_id",
+        "type": "select"
+      },
+      {
+        "title": "Producto",
+        "dataIndex": "PRODUCTO",
+        "type": "text"
+      },
+      {
+        "title": "Contrato",
+        "dataIndex": "CONTRATO",
+        "type": "text"
+      },
+      {
+        "title": "Trabajo",
+        "dataIndex": "TIPO_TRABAJO",
+        "type": "text"
+      },
+      {
+        "title": "Descripción Tipo Producto",
+        "dataIndex": "DESCRIPCION_TIPO_PRODUCTO",
+        "type": "text"
+      },
+      {
+        "title": "Número de la Orden",
+        "dataIndex": "NUMERO_DE_LA_ORDEN",
+        "type": "text"
+      },
+      {
+        "title": "Elemento de Medición",
+        "dataIndex": "ELEMENTO_MEDICION",
+        "type": "text"
+      },
+      {
+        "title": "Ciclo",
+        "dataIndex": "CICLO",
+        "type": "text"
+      },
+      {
+        "title": "Nombre del Cliente",
+        "dataIndex": "NOMBRE_CLIENTE",
+        "type": "text"
+      },
+      {
+        "title": "Descripción Barrio",
+        "dataIndex": "DESCRIPCION_BARRIO",
+        "type": "text"
+      },
+      {
+        "title": "Dirección",
+        "dataIndex": "DIRECCION_PREDIO",
+        "type": "text"
+      },
+      
+      {
+        "title": "Estado de la orden",
+        "dataIndex": "ESTADO_ORDEN",
+        "type": "text"
+      },
+      {
+        "title": "Estrato",
+        "dataIndex": "DESCRIPCION_ESTRATO",
+        "type": "text"
+      }
+    ]
   }
 }

@@ -70,7 +70,9 @@
   },
   { "label": "PRED_ESTADO", "value": "ESTADO_FINANCIERO" },
   { "label": "NUM_MEDIDOR", "value": "ELEMENTO_MEDICION" },
+  { "label": "SERIE_MEDIDOR", "value": "ELEMENTO_MEDICION" },
   { "label": "BARRIO", "value": "DESCRIPCION_BARRIO" },
+  { "label": "NOMBRE_BARRIO", "value": "DESCRIPCION_BARRIO" },
   { "label": "RUTA", "value": "DESCRIPCION_CICLO" },
   { "label": "PROG_MES", "value": "IDENTIFICACION" },
   { "label": "NOMBRE", "value": "NOMBRE_CLIENTE" },
@@ -82,5 +84,10 @@
   { "label": "FINANCIACIONES", "value": "REFINANCIACIONES_PRODUCTO" },
   { "label": "EDAD", "value": "EDAD_MORA_ACTUAL" },
   { "label": "PAGO", "value": "TOTAL_DEUDA_CORRIENTE" },
-  { "label": "DIFERIDOS", "value": "INDICADOR" }
+  { "label": "DIFERIDOS", "value": "INDICADOR" },
+  { "label": "NUMERO_ORDEN", "value": "NUMERO_DE_LA_ORDEN" },
+  { "label": "DESCRIPCION_TIPO_TRABAJO", "value": "DESCRIPCION_TIPO_PRODUCTO" },
+  { "label": "NOMBRES_CLIENTE", "value": "NOMBRE_CLIENTE" },
+  { "label": "20", "value": "Gestionado" },
+  { "label": "Gestionado", "value": "20" }
 ]
