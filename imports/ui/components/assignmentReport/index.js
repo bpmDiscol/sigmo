@@ -55,8 +55,6 @@ export default function AssignmentReport({
           : "en proceso",
     }));
     const filtereds = newAssignments.filter(assign => assign.status !== "Reasignada")
-    console.log("🚀 ~ getAssignments ~ newAssignments:", newAssignments)
-    console.log("🚀 ~ getAssignments ~ filtereds:", filtereds)
     if (!excel) {
       setAssignments(filtereds);
       setPagination((prev) => ({

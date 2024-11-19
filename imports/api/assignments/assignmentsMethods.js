@@ -596,6 +596,15 @@ Meteor.methods({
           },
         },
         {
+          $group: {
+            _id: null,
+            totalAssignmentsGlobal: { $sum: "$totalAssignments" }, // Total de asignaciones
+            totalPendingDebtGlobal: { $sum: "$totalPendingDebt" }, // Total de deuda pendiente
+            data: { $push: "$$ROOT" },
+          },
+        },
+        { $unwind: "$data" },
+        {
           $project: {
             _id: "$data._id",
             totalAssignments: "$data.totalAssignments",
