@@ -35,33 +35,21 @@ const columns = [
   },
 ];
 
-export default function ServicesReport({ id, locality }) {
+export default function ServicesReport({ id, locality, translate }) {
   const [data, setData] = useState([]);
   const { globals } = useContext(GlobalContext);
-  const [diccionario, setDiccionario] = useState([]);
 
   useEffect(() => {
-    fillDicctionary();
     Meteor.call(
       "assignment.gestiones",
       id,
       globals?.project?._id,
       locality,
       (err, resp) => {
-        console.log("🚀 ~ useEffect ~ resp:", resp);
         if (resp) setData(resp);
       }
     );
   }, [locality]);
-
-  async function fillDicctionary() {
-    const file = await Meteor.callAsync("getTextAssets", "diccionario.json");
-    setDiccionario(JSON.parse(file));
-  }
-
-  function translate(name) {
-    return diccionario.find((entry) => entry.value == name)?.label;
-  }
 
   const totalAssignments = data.reduce(
     (sum, item) => sum + item.totalAssignments,

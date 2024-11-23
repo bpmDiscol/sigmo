@@ -1,5 +1,6 @@
 import { Meteor } from "meteor/meteor";
 import { reportsCollection } from "./reportsCollection";
+import getFilters from "../utils/getFilters";
 
 Meteor.methods({
   "report.create": function (data) {
@@ -53,28 +54,13 @@ Meteor.methods({
     page = parseInt(page, 10) || 1;
     pageSize = parseInt(pageSize, 10) || 10;
 
-    let filter = { project };
-
-    if (filters) {
-      for (const [key, value] of Object.entries(filters)) {
-        if (key === "recordId") {
-          filter[key] = { $in: Array.isArray(value) ? value : [value] };
-        } else if (key === "manager") {
-          // Filtra por el manager asignado específico
-          filter[key] = { $eq: value }; // Asegúrate de que 'manager' sea el valor pasado
-        } else {
-          filter[key] = { $regex: value, $options: "i" };
-        }
-      }
-    }
-
     const { sortField, sortOrder } = sort;
 
     const records = await reportsCollection
       .rawCollection()
       .aggregate([
         {
-          $match: filter, // Filtra por project, recordId y el manager asignado
+          $match: getFilters({ ...filters, project }), // Filtra por project, recordId y el manager asignado
         },
         {
           // Ordena por recordId y por fecha (date) de manera descendente
@@ -122,5 +108,114 @@ Meteor.methods({
   },
   "report.readByRecordId": async function (recordId) {
     return await reportsCollection.findOneAsync({ recordId });
+  },
+  // timeFrame, project, locality
+
+  "report.photoReports": async function (page, pageSize, projectName, filters) {
+    page = parseInt(page, 10) || 1;
+    pageSize = parseInt(pageSize, 10) || 10;
+    const projectText = await Assets.getTextAsync("photoReportOutput.json");
+    const project = JSON.parse(projectText)[projectName];
+
+    return await reportsCollection
+      .rawCollection()
+      .aggregate([
+        {
+          $match: { images: { $exists: true, $ne: [] } },
+        },
+        {
+          $lookup: {
+            from: "assignments",
+            localField: "_id",
+            foreignField: "_id",
+            as: "assignmentData",
+          },
+        },
+        { $unwind: "$assignmentData" },
+        {
+          $lookup: {
+            from: "records",
+            localField: "assignmentData.recordId",
+            foreignField: "_id",
+            as: "recordData",
+          },
+        },
+        { $unwind: "$recordData" },
+        { $match: getFilters(filters) },
+        { $project: project.project },
+        {
+          $facet: {
+            metadata: [{ $count: "totalCount" }],
+            data: [{ $skip: (page - 1) * pageSize }, { $limit: pageSize }],
+          },
+        },
+        {
+          $project: {
+            data: 1,
+            total: { $arrayElemAt: ["$metadata.totalCount", 0] },
+          },
+        },
+      ])
+      .toArray();
+  },
+  "report.serviceStatus": async function (
+    page,
+    pageSize,
+    projectName,
+    search,
+    filters
+  ) {
+    let projectText = "";
+    try {
+      projectText = await Assets.getTextAsync(Object.keys(search)[0] + ".json");
+    } catch {
+      projectText = await Assets.getTextAsync(Object.values(search)[0] + ".json");
+    }
+
+    const project = JSON.parse(projectText)[projectName];
+
+    return await reportsCollection
+      .rawCollection()
+      .aggregate([
+        {
+          $match: getFilters(search),
+        },
+        {
+          $lookup: {
+            from: "assignments",
+            localField: "_id",
+            foreignField: "_id",
+            as: "assignmentData",
+          },
+        },
+        { $unwind: "$assignmentData" },
+        {
+          $lookup: {
+            from: "records",
+            localField: "assignmentData.recordId",
+            foreignField: "_id",
+            as: "recordData",
+          },
+        },
+        { $unwind: "$recordData" },
+        { $match: getFilters(filters) },
+        { $project: project.project },
+        {
+          $facet: {
+            metadata: [{ $count: "totalCount" }],
+            data: [{ $skip: (page - 1) * pageSize }, { $limit: pageSize }],
+          },
+        },
+        {
+          $project: {
+            data: 1,
+            total: { $arrayElemAt: ["$metadata.totalCount", 0] },
+          },
+        },
+      ])
+      .toArray();
+  },
+  "report.distinct": async function (field) {
+    return await reportsCollection.rawCollection().distinct(field);
   },
 });

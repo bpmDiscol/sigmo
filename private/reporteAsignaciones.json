@@ -119,6 +119,16 @@
       "title": "Fecha Gestión",
       "dataIndex": "reportDate",
       "type": "date"
+    },
+    {
+      "title": "Estado del servicio",
+      "dataIndex": "estado",
+      "width": "15rem"
+    },
+    {
+      "title": "Solicita equipo de medición",
+      "dataIndex": "solicitaMedidor",
+      "width": "15rem"
     }
   ],
   "XjpjSuFFJDkbtQ5gq": [
@@ -300,11 +310,7 @@
     }
   ],
   "cCbwLzBDACcRCCtrq": [
-    {
-      "title": "Codigo de visita",
-      "dataIndex": "_id",
-      "width": "15rem"
-    },
+    
     {
       "title": "Producto",
       "dataIndex": "PRODUCTO",
@@ -368,8 +374,23 @@
       "width": "15rem"
     },
     {
+      "title": "Medidor encontrado",
+      "dataIndex": "serialMedidor",
+      "width": "15rem"
+    },
+    {
       "title": "Lectura",
       "dataIndex": "lectura",
+      "width": "15rem"
+    },
+    {
+      "title": "Método empleado/quitado",
+      "dataIndex": "metodo",
+      "width": "15rem"
+    },
+    {
+      "title": "¿Usuario autoreconectado?",
+      "dataIndex": "usAutoreconectado",
       "width": "15rem"
     },
     {
@@ -378,8 +399,8 @@
       "width": "15rem"
     },
     {
-      "title": "Contacto",
-      "dataIndex": "telefonoContacto",
+      "title": "Nombre de contacto",
+      "dataIndex": "contacto",
       "width": "15rem"
     },
     {
@@ -405,12 +426,19 @@
     {
       "title": "Fecha Asignación",
       "dataIndex": "assignmentDate",
-      "type": "date"
+      "type": "date",
+      "width": "15rem"
     },
     {
       "title": "Fecha Gestión",
       "dataIndex": "reportDate",
-      "type": "date"
+      "type": "date",
+      "width": "15rem"
+    },
+    {
+      "title": "Codigo de visita",
+      "dataIndex": "_id",
+      "width": "15rem"
     },
     {
       "title": "2258",

@@ -7,6 +7,8 @@ import LocalityTable from "../components/reportCarteraByLocality";
 import { GlobalContext } from "../context/globalsContext";
 import ManagerResultsTable from "../components/managerResultTable";
 import AssignmentReport from "../components/assignmentReport";
+import PhotoReport from "../components/photoReport";
+import ReportServiceStatus from "../components/reportServiceStatus";
 
 export default function Reports() {
   const { state } = useLocation();
@@ -15,10 +17,26 @@ export default function Reports() {
   const myLocality = Meteor.user().profile.locality;
   const [localities, setLocalities] = useState([]);
   const [currentLocality, setCurrentLocality] = useState(myLocality);
+  const [diccionario, setDiccionario] = useState();
+
+  function translate(name) {
+    return diccionario.find((entry) => entry.value == name)?.label;
+  }
+
+  async function getDiccionario() {
+    const diccionarioStr = await Meteor.callAsync(
+      "getTextAssets",
+      "diccionario.json"
+    );
+    const parsedDiccionario = JSON.parse(diccionarioStr);
+    setDiccionario(parsedDiccionario);
+  }
+
   useEffect(() => {
     Meteor.call("getTextAssets", "localities.json", (err, file) => {
       if (!err) setLocalities(JSON.parse(file));
     });
+    getDiccionario();
   }, []);
 
   useEffect(() => {
@@ -64,7 +82,13 @@ export default function Reports() {
     {
       label: "Cartera por gestión/causales",
       key: 3,
-      children: <ServicesReport id={state.id} locality={currentLocality} />,
+      children: (
+        <ServicesReport
+          id={state.id}
+          locality={currentLocality}
+          translate={translate}
+        />
+      ),
     },
     {
       label: "Gestiones asignadas",
@@ -75,6 +99,59 @@ export default function Reports() {
           projectName={globals?.project?.name}
           timeFrame={state.id}
           locality={currentLocality}
+          translate={translate}
+        />
+      ),
+    },
+    {
+      label: "Reportes con fotos",
+      key: 5,
+      children: (
+        <PhotoReport
+          projectName={globals?.project?.name}
+          timeFrame={state.id}
+          locality={currentLocality}
+          translate={translate}
+        />
+      ),
+    },
+    {
+      label: "Estado de servicio",
+      key: 6,
+      children: (
+        <ReportServiceStatus
+          projectName={globals?.project?.name}
+          timeFrame={state.id}
+          locality={currentLocality}
+          translate={translate}
+          field={"estado"}
+        />
+      ),
+    },
+    {
+      label: "Reportes Efectividad",
+      key: 7,
+      children: (
+        <ReportServiceStatus
+          projectName={globals?.project?.name}
+          timeFrame={state.id}
+          locality={currentLocality}
+          translate={translate}
+          field={"resultadoDeGestion"}
+        />
+      ),
+    },
+    {
+      label: "Reportes con télefonos",
+      key: 8,
+      children: (
+        <ReportServiceStatus
+          projectName={globals?.project?.name}
+          timeFrame={state.id}
+          locality={currentLocality}
+          translate={translate}
+          field={"telefonoContacto"}
+          all
         />
       ),
     },

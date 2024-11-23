@@ -1,0 +1,122 @@
+{
+  "Fracort": {
+    "project": {
+      "manager": "$assignmentData.manager",
+      "gestion": 1,
+      "images": 1,
+      "contrato": "$recordData.CONTRATO",
+      "producto": "$recordData.PRODUCTO",
+      "ciclo": "$recordData.CICLO",
+      "barrio": "$recordData.DESCRIPCION_BARRIO",
+      "direccion": "$recordData.DIRECCION_PREDIO",
+      "createdAt": 1
+    },
+    "columns": [
+      {
+        "title": "Gestor",
+        "dataIndex": "manager",
+        "type": "text"
+      },
+      {
+        "title": "Producto",
+        "dataIndex": "producto",
+        "type": "text"
+      },
+      {
+        "title": "Contrato",
+        "dataIndex": "contrato",
+        "type": "text"
+      },
+      {
+        "title": "Barrio",
+        "dataIndex": "barrio",
+        "type": "text"
+      },
+      {
+        "title": "Dirección",
+        "dataIndex": "direccion",
+        "type": "text"
+      },
+      {
+        "title": "Ciclo",
+        "dataIndex": "ciclo",
+        "type": "text"
+      },
+      {
+        "title": "Fecha de gestión",
+        "dataIndex": "createdAt",
+        "type": "date"
+      },
+      {
+        "title": "Causal",
+        "dataIndex": "gestion",
+        "type": "text"
+      },
+      {
+        "title": "Imagenes",
+        "dataIndex": "images",
+        "type": "images"
+      }
+    ]
+  },
+  "Cienaga": {
+    "project": {
+      "manager": "$assignmentData.manager",
+      "gestion": 1,
+      "images": 1,
+      "contrato": "$recordData.CONTRATO",
+      "producto": "$recordData.PRODUCTO",
+      "ciclo": "$recordData.CICLO",
+      "barrio": "$recordData.DESCRIPCION_BARRIO",
+      "direccion": "$recordData.DIRECCION_PREDIO",
+      "createdAt": 1
+    },
+    "columns": [
+      {
+        "title": "Gestor",
+        "dataIndex": "manager",
+        "type": "text"
+      },
+      {
+        "title": "Producto",
+        "dataIndex": "producto",
+        "type": "text"
+      },
+      {
+        "title": "Contrato",
+        "dataIndex": "contrato",
+        "type": "text"
+      },
+      {
+        "title": "Barrio",
+        "dataIndex": "barrio",
+        "type": "text"
+      },
+      {
+        "title": "Dirección",
+        "dataIndex": "direccion",
+        "type": "text"
+      },
+      {
+        "title": "Ciclo",
+        "dataIndex": "ciclo",
+        "type": "text"
+      },
+      {
+        "title": "Fecha de gestión",
+        "dataIndex": "createdAt",
+        "type": "date"
+      },
+      {
+        "title": "Causal",
+        "dataIndex": "gestion",
+        "type": "text"
+      },
+      {
+        "title": "Imagenes",
+        "dataIndex": "images",
+        "type": "images"
+      }
+    ]
+  }
+}

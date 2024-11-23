@@ -1,6 +1,6 @@
 {
   "title": "SIGMo",
-  "version": 12,
+  "version": 15,
   "maps": false,
   "icons": [
     {
@@ -178,6 +178,22 @@
           "residencial_comercial",
           "interesSocial"
         ]
+      }
+    },
+    {
+      "element": "Dropdown",
+      "name": "solicitaMedidor",
+      "field": "solicitaMedidor",
+      "label": "¿Se solicita equipo de medición?",
+      "options": [
+        { "label": "Si", "value": "si" },
+        { "label": "No", "value": "no" }
+      ],
+      "extDepends": {
+        "service": ["Gcartera", "Mantenimiento_N"]
+      },
+      "dependsOn": {
+        "resultadoDeGestion": ["efectiva"]
       }
     },
     {
@@ -711,7 +727,8 @@
           "Servicios Financieros CM",
           "Suspension por persecución CM",
           "Suspension por mora CM",
-          "Reconexión por pago CM"
+          "Reconexión por pago CM",
+          "Instalación de válvula CM"
         ]
       },
       "props": {
@@ -732,7 +749,8 @@
           "Servicios Financieros CM",
           "Suspension por persecución CM",
           "Suspension por mora CM",
-          "Reconexión por pago CM"
+          "Reconexión por pago CM",
+          "Instalación de válvula CM"
         ]
       }
     },
@@ -746,7 +764,8 @@
           "Servicios Financieros CM",
           "Suspension por persecución CM",
           "Suspension por mora CM",
-          "Reconexión por pago CM"
+          "Reconexión por pago CM",
+          "Instalación de válvula CM"
         ]
       },
       "dependsOn": {
@@ -759,11 +778,10 @@
       "field": "gestion_fracort",
       "label": "Gestión",
       "options": [
-        { "label": "Sin visitar", "value": "01" },
-        { "label": "inmueble solo", "value": "02" },
-        { "label": "Inmueble desocupado/Abandonado", "value": "03" },
-        { "label": "Inmueble demolido/Solar/Lote", "value": "04" },
-        { "label": "Inmueble en construccion", "value": 0 },
+        { "label": "inmueble solo", "value": "01" },
+        { "label": "Inmueble desocupado/Abandonado", "value": "02" },
+        { "label": "Inmueble demolido/Solar/Lote", "value": "03" },
+        { "label": "Inmueble en construccion", "value": "04" },
         {
           "label": "Inmueble en zona de dificil acceso/Peligroso",
           "value": "05"
@@ -792,11 +810,58 @@
           "Servicios Financieros CM",
           "Suspension por persecución CM",
           "Suspension por mora CM",
-          "Reconexión por pago CM"
+          "Reconexión por pago CM",
+          "Instalación de válvula CM"
         ]
       },
       "dependsOn": {
         "ejecIVT": ["1", "0"]
+      }
+    },
+    {
+      "element": "Dropdown",
+      "name": "metodo",
+      "field": "metodo",
+      "label": "Método empleado/quitado",
+      "options": [
+        { "label": "Cepo", "value": "cepo" },
+        { "label": "Conector ciego", "value": "conector ciego" },
+        { "label": "Galvanizado", "value": "galvanizado" },
+        { "label": "Cierre de válvula", "value": "cierre de valvula" }
+      ],
+      "extDepends": {
+        "service": [
+          "Servicios Financieros CM",
+          "Suspension por persecución CM",
+          "Suspension por mora CM",
+          "Reconexión por pago CM"
+        ]
+      },
+      "dependsOn": {
+        "gestion": ["15", "20"]
+      }
+    },
+    {
+      "element": "Dropdown",
+      "name": "usAutoreconectado",
+      "field": "usAutoreconectado",
+      "label": "¿Usuario autoreconectado?",
+      "options": [
+        { "label": "Si, se reconectó", "value": "si, se reconecto" },
+        { "label": "No fue validado", "value": "no fue validado" },
+        { "label": "No se reconectó", "value": "no se reconecto" }
+      ],
+      "extDepends": {
+        "service": [
+          "Servicios Financieros CM",
+          "Suspension por persecución CM",
+          "Suspension por mora CM",
+          "Reconexión por pago CM",
+          "Instalación de válvula CM"
+        ]
+      },
+      "dependsOn": {
+        "gestion": "*"
       }
     },
     {
@@ -809,11 +874,13 @@
           "Servicios Financieros CM",
           "Suspension por persecución CM",
           "Suspension por mora CM",
-          "Reconexión por pago CM"
+          "Reconexión por pago CM",
+          "Instalación de válvula CM"
         ]
       },
       "dependsOn": {
-        "causal": ["20"]
+        "gestion": ["15", "20"],
+        "usAutoreconectado": "*"
       }
     },
     {
@@ -826,12 +893,32 @@
           "Servicios Financieros CM",
           "Suspension por persecución CM",
           "Suspension por mora CM",
-          "Reconexión por pago CM"
+          "Reconexión por pago CM",
+          "Instalación de válvula CM"
         ]
       },
       "dependsOn": {
-        "causal": ["20"],
+        "gestion": ["15", "20"],
         "horaInicio": "*"
+      }
+    },
+    {
+      "element": "TextInput",
+      "name": "serialMedidor",
+      "field": "serialMedidor",
+      "label": "Serial del medidor",
+      "extDepends": {
+        "service": [
+          "Servicios Financieros CM",
+          "Suspension por persecución CM",
+          "Suspension por mora CM",
+          "Reconexión por pago CM",
+          "Instalación de válvula CM"
+        ]
+      },
+      "dependsOn": {
+        "gestion": ["15", "20"],
+        "horaFin": "*"
       }
     },
     {
@@ -844,33 +931,34 @@
           "Servicios Financieros CM",
           "Suspension por persecución CM",
           "Suspension por mora CM",
-          "Reconexión por pago CM"
+          "Reconexión por pago CM",
+          "Instalación de válvula CM"
         ]
       },
       "dependsOn": {
-        "causal": ["20"],
-        "horaFin": "*"
+        "gestion": ["15", "20"],
+        "serialMedidor": "*"
       },
       "props": {
         "keyboardType": "phone-pad"
       }
     },
-
     {
       "element": "NumberInput",
       "name": "serieVF",
       "field": "serieVF",
-      "label": "Serie VF",
+      "label": "Serial de la válvula",
       "extDepends": {
         "service": [
           "Servicios Financieros CM",
           "Suspension por persecución CM",
           "Suspension por mora CM",
-          "Reconexión por pago CM"
+          "Reconexión por pago CM",
+          "Instalación de válvula CM"
         ]
       },
       "dependsOn": {
-        "causal": ["20"],
+        "gestion": ["15", "20"],
         "lectura": "*"
       },
       "props": {
@@ -881,17 +969,18 @@
       "element": "TextInput",
       "name": "contacto",
       "field": "contacto",
-      "label": "Contacto",
+      "label": "Nombre de contacto",
       "extDepends": {
         "service": [
           "Servicios Financieros CM",
           "Suspension por persecución CM",
           "Suspension por mora CM",
-          "Reconexión por pago CM"
+          "Reconexión por pago CM",
+          "Instalación de válvula CM"
         ]
       },
       "dependsOn": {
-        "causal": ["20"],
+        "gestion": ["15", "20"],
         "serieVF": "*"
       }
     },
@@ -905,11 +994,12 @@
           "Servicios Financieros CM",
           "Suspension por persecución CM",
           "Suspension por mora CM",
-          "Reconexión por pago CM"
+          "Reconexión por pago CM",
+          "Instalación de válvula CM"
         ]
       },
       "dependsOn": {
-        "causal": ["20"],
+        "gestion": ["15", "20"],
         "contacto": "*"
       },
       "props": {
@@ -927,11 +1017,12 @@
           "Servicios Financieros CM",
           "Suspension por persecución CM",
           "Suspension por mora CM",
-          "Reconexión por pago CM"
+          "Reconexión por pago CM",
+          "Instalación de válvula CM"
         ]
       },
       "dependsOn": {
-        "causal": ["20"],
+        "gestion": ["15", "20"],
         "cedula": "*"
       },
       "props": {
@@ -953,15 +1044,11 @@
       "field": "2198",
       "label": "Valvula Seg. 3/8 M-P",
       "extDepends": {
-        "service": [
-          "Servicios Financieros CM",
-          "Suspension por persecución CM",
-          "Suspension por mora CM",
-          "Reconexión por pago CM"
-        ]
+        "service": ["Instalación de válvula CM"]
       },
       "dependsOn": {
-        "observacion": "*"
+        "observacion": "*",
+        "gestion": ["15", "20"]
       },
       "props": {
         "keyboardType": "phone-pad",
@@ -974,15 +1061,11 @@
       "field": "2199",
       "label": "Valvula Seg. 3/8 P-P",
       "extDepends": {
-        "service": [
-          "Servicios Financieros CM",
-          "Suspension por persecución CM",
-          "Suspension por mora CM",
-          "Reconexión por pago CM"
-        ]
+        "service": ["Instalación de válvula CM"]
       },
       "dependsOn": {
-        "observacion": "*"
+        "observacion": "*",
+        "gestion": ["15", "20"]
       },
       "props": {
         "keyboardType": "phone-pad",
@@ -995,15 +1078,11 @@
       "field": "2201",
       "label": "Llave de paso 3/8 H-M",
       "extDepends": {
-        "service": [
-          "Servicios Financieros CM",
-          "Suspension por persecución CM",
-          "Suspension por mora CM",
-          "Reconexión por pago CM"
-        ]
+        "service": ["Instalación de válvula CM"]
       },
       "dependsOn": {
-        "observacion": "*"
+        "observacion": "*",
+        "gestion": ["15", "20"]
       },
       "props": {
         "keyboardType": "phone-pad",
@@ -1016,15 +1095,11 @@
       "field": "2258",
       "label": "Trampillon",
       "extDepends": {
-        "service": [
-          "Servicios Financieros CM",
-          "Suspension por persecución CM",
-          "Suspension por mora CM",
-          "Reconexión por pago CM"
-        ]
+        "service": ["Instalación de válvula CM"]
       },
       "dependsOn": {
-        "observacion": "*"
+        "observacion": "*",
+        "gestion": ["15", "20"]
       },
       "props": {
         "keyboardType": "phone-pad",

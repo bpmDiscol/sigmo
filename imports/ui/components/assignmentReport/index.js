@@ -8,6 +8,7 @@ export default function AssignmentReport({
   timeFrame,
   projectName,
   locality,
+  translate
 }) {
   const voidSorter = { sortField: null, sortOrder: 1 };
   const [assignments, setAssignments] = useState([]);
@@ -37,11 +38,11 @@ export default function AssignmentReport({
       ...data.report,
       causal_de_pago:
         data.report?.resultadoDeGestion === "efectiva"
-          ? data.report.gestion
+          ? translate(data.report.gestion)
           : null,
       causal_de_no_pago:
         data.report?.resultadoDeGestion === "no_efectiva"
-          ? data.report.gestion
+          ? translate(data.report.gestion)
           : null,
       manager: data.manager,
       projectName,
@@ -53,6 +54,7 @@ export default function AssignmentReport({
           : data.report?.status === "reassigned"
           ? "Reasignada"
           : "en proceso",
+      
     }));
     const filtereds = newAssignments.filter(assign => assign.status !== "Reasignada")
     if (!excel) {

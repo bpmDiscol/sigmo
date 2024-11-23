@@ -41,27 +41,7 @@ Meteor.methods({
     const jsonForms = JSON.parse(forms);
     if (jsonForms.version > version) return forms;
   },
-  "files.getPhotos": async function (
-    timeFrame,
-    project,
-    page,
-    pageSize,
-    sort
-  ) {},
 });
-
-const convertBase64ToFile = function (image, type) {
-  const byteString = atob(image.split(",")[1]);
-  const ab = new ArrayBuffer(byteString.length);
-  const ia = new Uint8Array(ab);
-  for (let i = 0; i < byteString.length; i += 1) {
-    ia[i] = byteString.charCodeAt(i);
-  }
-  const newBlob = new Blob([ab], {
-    type,
-  });
-  return newBlob;
-};
 
 WebApp.rawConnectHandlers.use((req, res, next) => {
   res.setHeader("Content-Length", "50000000"); // 50MB
@@ -76,7 +56,7 @@ WebApp.rawConnectHandlers.use((req, res, next) => {
 WebApp.connectHandlers.use("/upload", (req, res, next) => {
   console.log("Acceso", req.method);
   if (req.method === "OPTIONS") {
-    res.writeHead(200);
+    res.writeHead(200, { "Content-Type": "application/json" });
     return res.end();
   }
 
@@ -87,7 +67,7 @@ WebApp.connectHandlers.use("/upload", (req, res, next) => {
       highWaterMark: 2 * 1024 * 1024,
     });
 
-    let fileType = "";
+    let fileType = ""
     let fileName = "";
     const fileData = {};
 
@@ -140,6 +120,70 @@ WebApp.connectHandlers.use("/upload", (req, res, next) => {
     res.writeHead(405);
     res.end(
       JSON.stringify({ success: false, message: "Método no permitido." })
+    );
+  }
+});
+
+WebApp.connectHandlers.use("/download", (req, res) => {
+  const { query } = require("url").parse(req.url, true);
+  const { fileName, predio } = query;
+
+  if (req.method === "OPTIONS") {
+    res.writeHead(200);
+    return res.end();
+  }
+
+  if (req.method !== "GET") {
+    res.writeHead(400);
+    return res.end(
+      JSON.stringify({
+        success: false,
+        message: "Método no permitido",
+      })
+    );
+  }
+
+  if (!fileName || !predio) {
+    res.writeHead(400, { "Content-Type": "application/json" });
+    res.end(JSON.stringify({ success: false, message: "Faltan parámetros." }));
+    return;
+  }
+
+  const filePath = path.join("/app/uploads/reportImage/", predio, fileName);
+
+  if (!fs.existsSync(filePath)) {
+    res.writeHead(404, { "Content-Type": "application/json" });
+    res.end(
+      JSON.stringify({ success: false, message: "Archivo no encontrado." })
+    );
+    return;
+  }
+  
+
+  try {
+    const stats = fs.statSync(filePath);
+    res.setHeader("Content-Disposition", `attachment; filename="${fileName}"`);
+    res.setHeader("Content-Type", "application/octet-stream");
+    res.setHeader("Content-Length", stats.size);
+
+    const fileStream = fs.createReadStream(filePath);
+
+    fileStream.on("error", (err) => {
+      console.error("Error al leer el archivo:", err);
+      res.writeHead(500, { "Content-Type": "application/json" });
+      res.end(
+        JSON.stringify({ success: false, message: "Error al leer el archivo." })
+      );
+    });
+
+    fileStream.pipe(res).on("finish", () => {
+      console.log("Descarga completada para el archivo:", fileName, predio);
+    });
+  } catch (err) {
+    console.error("Error en el servidor:", err);
+    res.writeHead(500, { "Content-Type": "application/json" });
+    res.end(
+      JSON.stringify({ success: false, message: "Error interno del servidor." })
     );
   }
 });

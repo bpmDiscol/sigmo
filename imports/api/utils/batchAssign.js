@@ -9,6 +9,11 @@ export default function BatchAssign({ setReload, timeFrame }) {
   const [percent, setPercent] = useState(null);
   const [errorassignments, setErrorAssignments] = useState([]);
 
+  function getManager(manager) {
+    if (!manager) return null;
+    return manager.trim() === "desasignar" ? null : manager.trim();
+  }
+
   const handleFileUpload = (file) => {
     setLoading(true);
     const reader = new FileReader();
@@ -27,15 +32,15 @@ export default function BatchAssign({ setReload, timeFrame }) {
       rows.forEach(async (row, index) => {
         const [manager, NUMERO_DE_LA_ORDEN] = row;
 
-        if (!manager) {
-          return console.warn("Sin gestor", row);
+        if (!NUMERO_DE_LA_ORDEN) {
+          return console.warn("Sin numero de orden", row);
         }
 
         Meteor.callAsync(
           "assignment.createByOrderId",
           NUMERO_DE_LA_ORDEN.toString(),
           timeFrame,
-          manager.trim(),
+          getManager(manager),
           Date.now()
         )
           .catch((err) => {

@@ -251,7 +251,6 @@ export default function Assignments() {
       sort,
       currentProject?.search,
       (err, res) => {
-        console.log("🚀 ~ getData ~ res:", res)
         if (err) return console.error(err);
 
         setRecords(res?.data || []);
@@ -314,7 +313,10 @@ export default function Assignments() {
 
   return (
     <>
-      <Flex justify="space-between" style={{ backgroundColor: "#f5f5f5", padding:8 }}>
+      <Flex
+        justify="space-between"
+        style={{ backgroundColor: "#f5f5f5", padding: 8 }}
+      >
         <Typography.Title>Asignaciones</Typography.Title>
         <Flex vertical align="end" gap={8}>
           <Flex gap={8}>
@@ -332,8 +334,13 @@ export default function Assignments() {
           <TotalDebts timeFrame={state?.id} />
         </Flex>
       </Flex>
-      <Flex justify="space-between" align="center" style={{marginTop:8}}>
-        <BatchAssign timeFrame={state?.id} setReload={setReload} />
+      <Flex justify="space-between" align="center" style={{ marginTop: 8 }}>
+        <BatchAssign
+          timeFrame={state?.id}
+          setReload={(m) => {
+            navigate("/timeframe");
+          }}
+        />
       </Flex>
       <Table
         size="small"

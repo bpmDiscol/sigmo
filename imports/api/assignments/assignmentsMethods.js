@@ -57,14 +57,22 @@ Meteor.methods({
       { _id: 1 }
     );
     if (record) {
-      const id = await Meteor.callAsync("assignment.create", {
-        recordId: record._id,
-        manager,
-        date,
-      }).catch((err) => {
-        console.log(err);
-        data.error = true;
-      });
+      const obj = manager
+        ? {
+            recordId: record._id,
+            manager,
+            date,
+          }
+        : {
+            recordId: record._id,
+            date,
+          };
+      const id = await Meteor.callAsync("assignment.create", obj).catch(
+        (err) => {
+          console.log(err);
+          data.error = true;
+        }
+      );
       if (!id) {
         console.warn(id);
         data.error = true;
@@ -582,7 +590,7 @@ Meteor.methods({
         },
         { $unwind: "$reportData" },
         {
-          $match: { "reportData.status":{$ne: "reassigned"} },
+          $match: { "reportData.status": { $ne: "reassigned" } },
         },
         {
           $group: {
