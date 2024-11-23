@@ -1,10 +1,15 @@
-import { Button, message, Table } from "antd";
+import { Button, Flex, message, Table, Typography } from "antd";
 import React, { useEffect, useState } from "react";
 import ImagesRender from "../assignmentReport/imagesRender";
 import moment from "moment";
 import ExcelJS from "exceljs";
 
-export default function PhotoReport({ projectName, timeFrame, locality, translate }) {
+export default function PhotoReport({
+  projectName,
+  timeFrame,
+  locality,
+  translate,
+}) {
   const [reportData, setReportData] = useState([]);
   const [downloadReport, setDownloadReport] = useState({
     loading: false,
@@ -16,7 +21,6 @@ export default function PhotoReport({ projectName, timeFrame, locality, translat
     pageSize: 10,
     total: 0,
   });
-
   function getLink(image) {
     return Meteor.absoluteUrl(
       `download?fileName=${encodeURIComponent(
@@ -38,29 +42,29 @@ export default function PhotoReport({ projectName, timeFrame, locality, translat
       { "recordData.timeFrame": timeFrame, "recordData.locality": locality }
     );
 
-    const parsedColumns = JSON.parse(columnsStr);
-    const myColumns = parsedColumns[projectName].columns;
-
-    const processedColumns = myColumns.map((column) => {
-      let render = {};
-      if (column.type === "text")
-        render = (data) => translate(data) || data;
-      if (column.type === "date")
-        render = (data) => moment(data).format("DD/MM/YYYY hh:mm A");
-      if (column.type === "images")
-        render = (data) => <ImagesRender images={data} />;
-
-      return {
-        ...column,
-        render,
-      };
-    });
     if (excel) {
       return {
         data: imagesData[0].data,
         total: imagesData[0].total,
       };
     } else {
+      const parsedColumns = JSON.parse(columnsStr);
+      const myColumns = parsedColumns[projectName].columns;
+
+      const processedColumns = myColumns.map((column) => {
+        let render = {};
+        if (column.type === "text") render = (data) => translate(data) || data;
+        if (column.type === "date")
+          render = (data) => moment(data).format("DD/MM/YYYY hh:mm A");
+        if (column.type === "images")
+          render = (data) => <ImagesRender images={data} />;
+
+        return {
+          ...column,
+          render,
+        };
+      });
+
       setColumns(processedColumns);
       setReportData(imagesData[0].data);
       setPagination((prev) => ({
@@ -73,11 +77,11 @@ export default function PhotoReport({ projectName, timeFrame, locality, translat
 
   function handleTableChange(pagination) {
     getColumns(pagination.current, pagination.pageSize);
-    setPagination(pagination);
+    // setPagination(pagination);
   }
 
   useEffect(() => {
-    if (translate) getColumns(pagination.current, pagination.pageSize);
+    if (translate) getColumns(1, pagination.pageSize);
   }, [translate]);
 
   async function handleExport() {
@@ -90,7 +94,11 @@ export default function PhotoReport({ projectName, timeFrame, locality, translat
         const data = await getColumns(page, pageSize, true);
         if (data.total) total = data.total;
         allData.push(data.data);
-        setDownloadReport({ percent: page / total, loading: true });
+        setDownloadReport({
+          status: "Leyendo datos",
+          percent: page > pageSize ? (page * pageSize) / total : page / total,
+          loading: true,
+        });
         page++;
       }
 
@@ -106,7 +114,13 @@ export default function PhotoReport({ projectName, timeFrame, locality, translat
 
       const formattedData = allData.flat(1).map((item) => {
         const formattedItem = {};
-        columns.forEach((col) => {
+        columns.forEach((col, index) => {
+          setDownloadReport({
+            status: "Obteniendo vinculos",
+            percent: index / columns.length,
+            loading: true,
+          });
+
           if (col.type === "date") {
             const date = item[col.dataIndex]
               ? moment(item[col.dataIndex]).format("DD/MM/YYYY, h:mm A")
@@ -118,42 +132,52 @@ export default function PhotoReport({ projectName, timeFrame, locality, translat
             );
           } else
             formattedItem[col.dataIndex] =
-              translate(item[col.dataIndex]) ||
-              item[col.dataIndex];
+              translate(item[col.dataIndex]) || item[col.dataIndex];
         });
         return formattedItem;
       });
 
+      let dataIndx = 0;
       for (const data of formattedData) {
         const { images, ...item } = data;
         const row = worksheet.addRow(item);
         worksheet.getRow(row.number).height = 120;
 
+        setDownloadReport({
+          status: "Descargando imagenes",
+          percent: dataIndx / formattedData.length,
+          loading: true,
+        });
+        dataIndx++;
+
         // Manejar imágenes
         let inx = Object.keys(item).length;
         for (const image of images) {
           const imageBuffer = await fetch(image)
+            .catch((e) => console.warn(e))
             .then((res) => res.arrayBuffer())
             .then((buffer) => new Uint8Array(buffer));
 
-          const imageElement = new Image();
-          imageElement.src = URL.createObjectURL(new Blob([imageBuffer]));
-          await new Promise((resolve) => {
-            imageElement.onload = () => resolve();
-          });
+          if (imageBuffer.length > 100) {
+            const imageElement = new Image();
+            imageElement.src = URL.createObjectURL(new Blob([imageBuffer]));
+            await new Promise((resolve) => {
+              imageElement.onload = () => resolve();
+            });
 
-          const imageId = workbook.addImage({
-            buffer: imageBuffer,
-            extension: "jpeg",
-          });
-          worksheet.addImage(imageId, {
-            tl: { col: inx, row: row.number - 1 },
-            ext: {
-              width: imageElement.width * 0.2,
-              height: imageElement.height * 0.2,
-            },
-          });
-          worksheet.getColumn(inx + 1).width = 16;
+            const imageId = workbook.addImage({
+              buffer: imageBuffer,
+              extension: "jpeg",
+            });
+            worksheet.addImage(imageId, {
+              tl: { col: inx, row: row.number - 1 },
+              ext: {
+                width: imageElement.width * 0.2,
+                height: imageElement.height * 0.2,
+              },
+            });
+            worksheet.getColumn(inx + 1).width = 16;
+          }
           inx++;
         }
 
@@ -194,18 +218,25 @@ export default function PhotoReport({ projectName, timeFrame, locality, translat
 
   return (
     <div>
-      <Button
-        type="primary"
-        style={{ width: "10rem", marginRight: "8px" }}
-        onClick={handleExport}
-        disabled={reportData.length === 0}
-        loading={downloadReport.loading}
-        danger={downloadReport.loading}
-      >
-        {downloadReport.loading
-          ? (downloadReport.percent * 100).toFixed(1) + "% descargado"
-          : "Exportar a Excel"}
-      </Button>
+      <Flex>
+        <Button
+          type="primary"
+          style={{ width: "10rem", marginRight: "8px" }}
+          onClick={handleExport}
+          disabled={reportData.length === 0}
+          loading={downloadReport.loading}
+          danger={downloadReport.loading}
+        >
+          Exportar a Excel
+        </Button>
+        {downloadReport.loading && (
+          <Typography.Text color="red">
+            {`${downloadReport.status} ` +
+              (downloadReport.percent * 100).toFixed(1) +
+              "%"}
+          </Typography.Text>
+        )}
+      </Flex>
       <Table
         size="small"
         columns={columns}
@@ -213,7 +244,7 @@ export default function PhotoReport({ projectName, timeFrame, locality, translat
         rowKey={(record) => record._id}
         scroll={{ x: "max-content" }}
         pagination={{
-          ...setPagination,
+          ...pagination,
           position: ["topRight"],
           showTotal: (total) => `${total} Registros con fotos`,
         }}

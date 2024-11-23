@@ -94,7 +94,7 @@
   { "label": "NOMBRES_CLIENTE", "value": "NOMBRE_CLIENTE" },
   { "label": "Gestionado", "value": "20" },
   { "label": "Recibo cancelado", "value": "19" },
-  { "label": "Medidor onstaculizado", "value": "18" },
+  { "label": "Medidor obstaculizado", "value": "18" },
   { "label": "Calamidad familiar por fallecimiento", "value": "17" },
   { "label": "Medidor no ubicado", "value": "16" },
   { "label": "Medidor no coincide", "value": "15" },

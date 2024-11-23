@@ -184,7 +184,7 @@ export default function ReportServiceStatus({
         rowKey={(record) => record._id}
         scroll={{ x: "max-content" }}
         pagination={{
-          ...setPagination,
+          pagination,
           position: ["bottomLeft"],
           showTotal: (total) => `${total} Registros`,
         }}
