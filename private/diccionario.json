@@ -112,5 +112,10 @@
   { "label": "Inmueble demolido/solar/lote", "value": "03" },
   { "label": "Inmueble desocupado/abandonado", "value": "02" },
   { "label": "Inmueble solo", "value": "01" },
-  { "label": "No visitado", "value": "00" }
+  { "label": "No visitado", "value": "00" },
+  { "label": "Si contacto", "value": "si_contacto" },
+  { "label": "Inquilino", "value": "inquilino" },
+  { "label": "Familiar", "value": "familiar" },
+  { "label": "Vecino", "value": "vecino" },
+  { "label": "No contacto", "value": "no_contacto" }
 ]

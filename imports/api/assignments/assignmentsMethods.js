@@ -3,44 +3,50 @@ import { assignmentsCollection } from "./assignmensCollection";
 import { reportsCollection } from "../reports/reportsCollection";
 import { recordsCollection } from "../records/recordsCollection";
 import moment from "moment";
+import getFilters from "../utils/getFilters";
 
 Meteor.methods({
   "assignment.create": async function (data) {
-    Meteor.users
-      .updateAsync(
-        {},
-        { $pull: { "profile.assignments": data.recordId } },
-        { multi: true }
-      )
-      .then(
-        Meteor.users.updateAsync(
-          { username: data.manager },
-          { $push: { "profile.assignments": data.recordId } }
-        )
-      );
     const thisAssignment = await assignmentsCollection.findOneAsync(
       { recordId: data.recordId },
       {
-        sort: { date: -1 },
+        sort: { date: -1, manager: 1 },
       }
     );
 
-    if (thisAssignment)
+    if (thisAssignment) {
       await reportsCollection.updateAsync(
         { _id: thisAssignment._id },
         {
-          $setOnInsert: {
-            _id: thisAssignment._id,
-            status: "reassigned",
-          },
+          $set: { status: "reassigned" },
         },
         { upsert: true }
       );
-
-    return assignmentsCollection.insertAsync(data, (err, id) => {
+      Meteor.users.updateAsync(
+        { username: thisAssignment.manager },
+        { $set: { "profile.assignments": Math.random() } }
+      );
+    }
+    await assignmentsCollection.insertAsync(data, (err, id) => {
       if (err) throw new Error("error al asignar");
       return id;
     });
+    Meteor.users.updateAsync(
+      { username: data.manager },
+      { $set: { "profile.assignments": Math.random() } }
+    );
+  },
+  "assignment.recreate": async function (data) {
+    const user = await Meteor.users.findOneAsync({ _id: data.currentUser });
+    const manager = user?.username;
+    if (manager)
+      return await assignmentsCollection
+        .insertAsync({ ...data, manager, date: Date.now() })
+        .catch((e) => console.error(e));
+  },
+  "assignment.getRecordId": async function (_id) {
+    const assignment = await assignmentsCollection.findOneAsync(_id);
+    return assignment?.recordId;
   },
   "assignment.createByOrderId": async function (
     NUMERO_DE_LA_ORDEN,
@@ -722,6 +728,44 @@ Meteor.methods({
             data: 1,
             totalCount: { $arrayElemAt: ["$metadata.totalCount", 0] },
           },
+        },
+      ])
+      .toArray();
+  },
+  "assignments.managers": async function (filters) {
+    return await assignmentsCollection
+      .rawCollection()
+      .aggregate([
+        {
+          $lookup: {
+            from: "reports",
+            localField: "_id",
+            foreignField: "_id",
+            as: "reportData",
+          },
+        },
+        {
+          $lookup: {
+            from: "records",
+            localField: "recordId",
+            foreignField: "_id",
+            as: "recordData",
+            // pipeline: [{ $project: recordProject }],
+          },
+        },
+        { $unwind: "$recordData" },
+        {
+          $lookup: {
+            from: "timeFrame",
+            localField: "recordData.timeFrame",
+            foreignField: "_id",
+            as: "timeFrame",
+            // pipeline: [{ $project: recordProject }],
+          },
+        },
+        { $unwind: "$timeFrame" },
+        {
+          $match: getFilters(filters),
         },
       ])
       .toArray();

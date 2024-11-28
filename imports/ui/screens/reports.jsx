@@ -108,6 +108,7 @@ export default function Reports() {
       key: 5,
       children: (
         <PhotoReport
+          id={globals?.project?._id}
           projectName={globals?.project?.name}
           timeFrame={state.id}
           locality={currentLocality}
@@ -120,6 +121,7 @@ export default function Reports() {
       key: 6,
       children: (
         <ReportServiceStatus
+          id={globals?.project?._id}
           projectName={globals?.project?.name}
           timeFrame={state.id}
           locality={currentLocality}
@@ -133,6 +135,7 @@ export default function Reports() {
       key: 7,
       children: (
         <ReportServiceStatus
+          id={globals?.project?._id}
           projectName={globals?.project?.name}
           timeFrame={state.id}
           locality={currentLocality}
@@ -146,6 +149,7 @@ export default function Reports() {
       key: 8,
       children: (
         <ReportServiceStatus
+          id={globals?.project?._id}
           projectName={globals?.project?.name}
           timeFrame={state.id}
           locality={currentLocality}

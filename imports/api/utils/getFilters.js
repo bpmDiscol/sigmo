@@ -3,14 +3,19 @@ export default function getFilters(filters) {
   if (filters) {
     for (const [key, value] of Object.entries(filters)) {
       if (value) {
-        if (key === "GESTOR") {
-          filter[key] = value == 0 ? { $eq: null } : { $eq: value };
-        } else if (key === "recordId") {
+        if (key === "recordId" || key === "_id" || key === "manager") {
           filter[key] = { $in: Array.isArray(value) ? value : [value] };
-        } else if (key === "_id") {
-          filter[key] = { $in: Array.isArray(value) ? value : [value] };
+        } else if (key === "date") {
+          filter[value.field] = {
+            $gte: value.searchDate.start,
+            $lte: value.searchDate.end,
+          };
         } else if (key === "exists") {
           filter[value] = { $exists: 1 };
+        } else if (key === "not") {
+          filter[value.field] = {
+            $not: { $regex: value.value, $options: "i" },
+          };
         } else {
           filter[key] = { $regex: value, $options: "i" };
         }

@@ -1,5 +1,11 @@
 {
-  "qHPrdbt7LrwHvdxDq": [
+  "XjpjSuFFJDkbtQ5gq": [
+    {
+      "title": "Alerta",
+      "dataIndex": "alert",
+      "width": "15rem",
+      "type": "alert"
+    },
     {
       "title": "Producto",
       "dataIndex": "PRODUCTO",
@@ -113,12 +119,15 @@
     {
       "title": "Fecha Asignación",
       "dataIndex": "assignmentDate",
-      "type": "date"
+      "type": "date",
+      "width": "15rem"
+
     },
     {
       "title": "Fecha Gestión",
       "dataIndex": "reportDate",
-      "type": "date"
+      "type": "date",
+      "width":"15rem"
     },
     {
       "title": "Estado del servicio",
@@ -131,7 +140,13 @@
       "width": "15rem"
     }
   ],
-  "XjpjSuFFJDkbtQ5gq": [
+  "cCbwLzBDACcRCCtrq": [
+    {
+      "title": "Alerta",
+      "dataIndex": "alert",
+      "width": "15rem",
+      "type": "alert"
+    },
     {
       "title": "Producto",
       "dataIndex": "PRODUCTO",
@@ -196,16 +211,20 @@
     {
       "title": "Fecha gestión",
       "dataIndex": "reportDate",
-      "type": "date"
+      "type": "date",
+      "width": "15rem"
+
     },
     {
       "title": "Fecha Asignación",
       "dataIndex": "assignmentDate",
-      "type": "date"
+      "type": "date",
+      "width": "15rem"
+
     },
     {
       "title": "Resultado de Gestión",
-      "dataIndex": "RESULTADO_DE_GESTION",
+      "dataIndex": "resultadoDeGestion",
       "width": "15rem"
     },
     {
@@ -309,12 +328,17 @@
       "width": "15rem"
     }
   ],
-  "cCbwLzBDACcRCCtrq": [
-    
+  "qHPrdbt7LrwHvdxDq": [
+    {
+      "title": "Alerta",
+      "dataIndex": "alert",
+      "width": "5rem",
+      "type": "alert"
+    },
     {
       "title": "Producto",
       "dataIndex": "PRODUCTO",
-      "width": "15rem"
+      "width": "10rem"
     },
     {
       "title": "Gestor",

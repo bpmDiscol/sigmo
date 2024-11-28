@@ -5,9 +5,13 @@ import { DatePicker, Flex, Form, Input, Modal, Row } from "antd";
 import { GlobalContext } from "../../context/globalsContext";
 import { PlusCircleOutlined } from "@ant-design/icons";
 import { Meteor } from "meteor/meteor";
-import moment from "moment";
 
-export default function TimeFrameList({ timeFrames, setReload, project, canCreate }) {
+export default function TimeFrameList({
+  timeFrames,
+  setReload,
+  project,
+  canCreate,
+}) {
   const { globals } = useContext(GlobalContext);
   const [openModal, setOpenModal] = useState(false);
   const [form] = Form.useForm();
@@ -15,15 +19,15 @@ export default function TimeFrameList({ timeFrames, setReload, project, canCreat
   function addFrame() {
     const fieldValues = form.getFieldsValue();
     const date = form.getFieldValue("date");
+    const endDate = form.getFieldValue("endDate");
     setOpenModal(false);
     setReload(Math.random());
 
     Meteor.callAsync("timeFrame.create", {
       ...fieldValues,
       project: globals?.project._id,
-      date: moment(JSON.stringify(date).replace(/["']/g, "")).format(
-        "DD/MM/YYYY"
-      ),
+      date: date.format("DD/MM/YYYY"),
+      endDate: endDate.format("DD/MM/YYYY"),
     });
   }
 
@@ -65,6 +69,8 @@ export default function TimeFrameList({ timeFrames, setReload, project, canCreat
                 key={number}
                 frameData={frameData}
                 project={project}
+                setReload={setReload}
+                canCreate={canCreate}
               />
             ))
             .reverse()}
@@ -93,11 +99,11 @@ export default function TimeFrameList({ timeFrames, setReload, project, canCreat
             />
           </Form.Item>
           <Form.Item name={"date"} label="Fecha de inicio">
-            <DatePicker placeholder="Fecha de inicio" format={"DD/MM/YYYY"} />
+            <DatePicker placeholder="Fecha de inicio" />
           </Form.Item>
-          {/* <Form.Item name={"image"}>
-            <Input placeholder="Image" />
-            </Form.Item> */}
+          <Form.Item name={"endDate"} label="Fecha de cierre">
+            <DatePicker placeholder="Fecha de cierre" />
+          </Form.Item>
         </Form>
       </Modal>
     </>

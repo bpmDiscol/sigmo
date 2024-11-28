@@ -1,4 +1,4 @@
-import { Button, Flex, message, Select, Table } from "antd";
+import { Button, DatePicker, Flex, message, Select, Table } from "antd";
 import React, { useEffect, useState } from "react";
 import ExcelJS from "exceljs";
 
@@ -12,6 +12,7 @@ export default function ReportServiceStatus({
   locality,
   translate,
   all = false,
+  id,
 }) {
   const [filterOption, setFilterOption] = useState(null);
   const [options, setOptions] = useState([]);
@@ -26,6 +27,8 @@ export default function ReportServiceStatus({
     loading: false,
     percent: 0,
   });
+  const [searchDate, setSearchDate] = useState();
+
   async function getTableOutput() {
     const processedColumns = await getTableColumns(
       field,
@@ -37,14 +40,18 @@ export default function ReportServiceStatus({
 
   async function getData(page, pageSize, excel = false) {
     const search = all ? { exists: field } : { [field]: filterOption };
-    console.log("🚀 ~ getData ~ search:", search);
     const resp = await Meteor.callAsync(
       "report.serviceStatus",
       page,
       pageSize,
       projectName,
       search,
-      { "recordData.timeFrame": timeFrame, "recordData.locality": locality }
+      {
+        "recordData.timeFrame": timeFrame,
+        "recordData.locality": locality,
+        "recordData.project": id,
+        date: searchDate ? { field: "createdAt", searchDate } : null,
+      }
     );
 
     if (excel) {
@@ -84,9 +91,9 @@ export default function ReportServiceStatus({
         allData.push(data.data);
 
         setDownloadReport({
-          percent: (page * pageSize) / total,
+          percent: page > pageSize ? (page * pageSize) / total : page / total,
           loading: true,
-          message: "downloading...",
+          message: "Recabando información...",
         });
         page++;
       }
@@ -111,7 +118,7 @@ export default function ReportServiceStatus({
         });
         setDownloadReport({
           percent: index / flatData.length,
-          message: "data process...",
+          message: "Convirtiendo datos ...",
         });
         worksheet.addRow(row);
       });
@@ -123,7 +130,7 @@ export default function ReportServiceStatus({
       });
       const link = document.createElement("a");
       link.href = URL.createObjectURL(blob);
-      link.download = `Gestiones con Fotos-${Date.now()}.xlsx`;
+      link.download = `${field.toUpperCase()} ${filterOption} -${Date.now()}.xlsx`;
       link.click();
     } catch (error) {
       console.error("Error durante la exportación:", error);
@@ -153,29 +160,50 @@ export default function ReportServiceStatus({
   }, [locality, timeFrame]);
 
   useEffect(() => {
-    (filterOption || all) && getData(1, pagination.pageSize);
-  }, [filterOption, locality, timeFrame]);
+    (filterOption || all) && getData(pagination.current, pagination.pageSize);
+  }, [filterOption, locality, timeFrame, searchDate]);
+
+  function changeDate(date) {
+    date &&
+      setSearchDate({
+        start: date[0].valueOf(),
+        end: date[1].valueOf(),
+      });
+  }
 
   return (
     <div>
-      <Flex gap={16}>
-        {!all && (
-          <Select
-            options={options}
-            style={{ width: "15rem" }}
-            placeholder="Selecciona una opción"
-            onSelect={setFilterOption}
-          />
-        )}
-        <Button
-          type="primary"
-          icon={<CloudDownloadOutlined />}
-          disabled={!data.length}
-          onClick={handleExport}
-        >
-          {downloadReport.message || "Download"}
-          {downloadReport.percent * 100 || ""}
-        </Button>
+      <Flex gap={16} justify="space-between">
+        <Flex gap={16}>
+          {!all && (
+            <Select
+              options={options}
+              style={{ width: "15rem" }}
+              placeholder="Selecciona una opción"
+              onSelect={setFilterOption}
+            />
+          )}
+          <Flex gap={8}>
+            <Button
+              type="primary"
+              icon={<CloudDownloadOutlined />}
+              disabled={!data.length}
+              onClick={handleExport}
+              danger={downloadReport.loading}
+              loading={downloadReport.loading}
+            >
+              Exportar a excel
+            </Button>
+            {downloadReport.loading && (
+              <Typography.Text color="red">
+                {`${downloadReport.status} ` +
+                  (downloadReport.percent * 100).toFixed(1) +
+                  "%"}
+              </Typography.Text>
+            )}
+          </Flex>
+        </Flex>
+        <DatePicker.RangePicker onChange={changeDate} showTime />
       </Flex>
       <Table
         size="small"

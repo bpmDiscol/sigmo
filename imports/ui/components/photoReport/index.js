@@ -1,4 +1,4 @@
-import { Button, Flex, message, Table, Typography } from "antd";
+import { Button, DatePicker, Flex, message, Table, Typography } from "antd";
 import React, { useEffect, useState } from "react";
 import ImagesRender from "../assignmentReport/imagesRender";
 import moment from "moment";
@@ -9,6 +9,7 @@ export default function PhotoReport({
   timeFrame,
   locality,
   translate,
+  id,
 }) {
   const [reportData, setReportData] = useState([]);
   const [downloadReport, setDownloadReport] = useState({
@@ -21,6 +22,9 @@ export default function PhotoReport({
     pageSize: 10,
     total: 0,
   });
+  const [searchDate, setSearchDate] = useState();
+
+  
   function getLink(image) {
     return Meteor.absoluteUrl(
       `download?fileName=${encodeURIComponent(
@@ -39,7 +43,12 @@ export default function PhotoReport({
       page,
       pageSize,
       projectName,
-      { "recordData.timeFrame": timeFrame, "recordData.locality": locality }
+      {
+        "recordData.timeFrame": timeFrame,
+        "recordData.locality": locality,
+        "recordData.project": id,
+        date: searchDate ? { field: "createdAt", searchDate } : null,
+      }
     );
 
     if (excel) {
@@ -81,8 +90,8 @@ export default function PhotoReport({
   }
 
   useEffect(() => {
-    if (translate) getColumns(1, pagination.pageSize);
-  }, [translate]);
+    if (translate) getColumns(pagination.current, pagination.pageSize);
+  }, [translate, searchDate]);
 
   async function handleExport() {
     const pageSize = 100;
@@ -216,26 +225,37 @@ export default function PhotoReport({
     }
   }
 
+  function changeDate(date) {
+    date &&
+      setSearchDate({
+        start: date[0].valueOf(),
+        end: date[1].valueOf(),
+      });
+  }
+
   return (
     <div>
-      <Flex>
-        <Button
-          type="primary"
-          style={{ width: "10rem", marginRight: "8px" }}
-          onClick={handleExport}
-          disabled={reportData.length === 0}
-          loading={downloadReport.loading}
-          danger={downloadReport.loading}
-        >
-          Exportar a Excel
-        </Button>
-        {downloadReport.loading && (
-          <Typography.Text color="red">
-            {`${downloadReport.status} ` +
-              (downloadReport.percent * 100).toFixed(1) +
-              "%"}
-          </Typography.Text>
-        )}
+      <Flex justify="space-between">
+        <Flex>
+          <Button
+            type="primary"
+            style={{ width: "10rem", marginRight: "8px" }}
+            onClick={handleExport}
+            disabled={reportData.length === 0}
+            loading={downloadReport.loading}
+            danger={downloadReport.loading}
+          >
+            Exportar a Excel
+          </Button>
+          {downloadReport.loading && (
+            <Typography.Text color="red">
+              {`${downloadReport.status} ` +
+                (downloadReport.percent * 100).toFixed(1) +
+                "%"}
+            </Typography.Text>
+          )}
+        </Flex>
+        <DatePicker.RangePicker onChange={changeDate} showTime />
       </Flex>
       <Table
         size="small"

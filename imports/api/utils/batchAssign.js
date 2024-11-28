@@ -82,7 +82,7 @@ export default function BatchAssign({ setReload, timeFrame }) {
         loading={loading || percent}
         icon={<UploadOutlined />}
       >
-        {percent ? "Asignando " + percent : "Cargar asignaciones"}
+        {percent ? "Asignando " + percent : "Asignación masiva"}
       </Button>
     </Upload>
   );

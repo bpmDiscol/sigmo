@@ -3,11 +3,15 @@ import { reportsCollection } from "./reportsCollection";
 import getFilters from "../utils/getFilters";
 
 Meteor.methods({
-  "report.create": function (data) {
-    reportsCollection.updateAsync(
+  "report.create": async function (data) {
+    let status = data.status;
+    if (status === "done" || status === "stasis3") return;
+    if (status === "completed" || status === "stasis") status = "done";
+    if (status === "stasis2") status = "stasis3";
+    return await reportsCollection.updateAsync(
       { _id: data._id },
       {
-        $setOnInsert: { ...data, createdAt: Date.now() },
+        $set: { ...data, createdAt: Date.now(), status },
       },
       { upsert: true }
     );
@@ -169,7 +173,9 @@ Meteor.methods({
     try {
       projectText = await Assets.getTextAsync(Object.keys(search)[0] + ".json");
     } catch {
-      projectText = await Assets.getTextAsync(Object.values(search)[0] + ".json");
+      projectText = await Assets.getTextAsync(
+        Object.values(search)[0] + ".json"
+      );
     }
 
     const project = JSON.parse(projectText)[projectName];

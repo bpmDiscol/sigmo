@@ -1,6 +1,6 @@
 {
   "title": "SIGMo",
-  "version": 15,
+  "version": 17,
   "maps": false,
   "icons": [
     {
@@ -69,7 +69,12 @@
     "SUSPENSIÓN DESDE CM POR PERSECUCIÓN": "Suspension por persecución CM",
     "SUSPENSIÓN DESDE CENTRO DE MEDICIÓN POR MORA": "Suspension por mora CM",
     "RECONEXIÓN DESDE CENTRO DE MEDICIÓN POR PAGO": "Reconexión por pago CM",
-    "CART - INSTALACION DE VALVULA DE SEGURIDAD EN CM": "Instalación de válvula CM"
+    "CART - INSTALACION DE VALVULA DE SEGURIDAD EN CM": "Instalación de válvula CM",
+    "assignmentId": "assignmentId",
+    "recordId": "recordId",
+    "date": "date",
+    "timeFrameStart": "timeFrameStart",
+    "timeFrameEnd": "timeFrameEnd"
   },
   "translateKeys": {
     "numero_de_orden": "Número de la Orden",
@@ -100,6 +105,7 @@
     "intereses": "Intereses",
     "observacion": "Observación"
   },
+  "stasis": ["compromisoPago"],
   "form": [
     {
       "element": "Dropdown",
@@ -390,6 +396,42 @@
       },
       "dependsOn": {
         "resultadoDeGestion": ["efectiva"]
+      }
+    },
+    {
+      "element": "Date",
+      "name": "fechaCompromiso",
+      "field": "fechaCompromiso",
+      "label": "Fecha del compromiso",
+      "extDepends": {
+        "service": [
+          "Brilla Surtigas",
+          "Servicios Financieros",
+          "Gas",
+          "Gcartera",
+          "Mantenimiento_N"
+        ]
+      },
+      "dependsOn": {
+        "gestion": ["compromisoPago"]
+      }
+    },
+    {
+      "element": "Time",
+      "name": "horaCompromiso",
+      "field": "horaCompromiso",
+      "label": "Hora compromiso",
+      "extDepends": {
+        "service": [
+          "Brilla Surtigas",
+          "Servicios Financieros",
+          "Gas",
+          "Gcartera",
+          "Mantenimiento_N"
+        ]
+      },
+      "dependsOn": {
+        "gestion": ["compromisoPago"]
       }
     },
     {

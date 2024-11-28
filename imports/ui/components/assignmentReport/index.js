@@ -1,4 +1,5 @@
-import { Button, message, Table, Typography } from "antd";
+import { ClockCircleOutlined } from "@ant-design/icons";
+import { Button, message, Table, Tag, Typography } from "antd";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import XLSX from "xlsx";
@@ -8,15 +9,15 @@ export default function AssignmentReport({
   timeFrame,
   projectName,
   locality,
-  translate
+  translate,
 }) {
   const voidSorter = { sortField: null, sortOrder: 1 };
   const [assignments, setAssignments] = useState([]);
   const [pagination, setPagination] = useState({
     current: 1,
     total: 0,
-    pageSize: 10,
   });
+  console.log("🚀 ~ pagination:", pagination)
 
   const [downloadReport, setDownloadReport] = useState({
     loading: false,
@@ -24,6 +25,14 @@ export default function AssignmentReport({
   });
 
   const [columns, setColumns] = useState([]);
+
+  const isMoreThanThreeDaysAgo = (timestamp) => {
+    const today = moment().startOf("day");
+    const inputDate = moment(timestamp).startOf("day");
+
+    const differenceInDays = today.diff(inputDate, "days");
+    return differenceInDays >= 3;
+  };
 
   async function getAssignments(current, pageSize, excel = false) {
     const assignments = await Meteor.callAsync(
@@ -54,9 +63,12 @@ export default function AssignmentReport({
           : data.report?.status === "reassigned"
           ? "Reasignada"
           : "en proceso",
-      
+      alert:
+        data.report?.status !== "done" && isMoreThanThreeDaysAgo(data.date),
     }));
-    const filtereds = newAssignments.filter(assign => assign.status !== "Reasignada")
+    const filtereds = newAssignments.filter(
+      (assign) => assign.status !== "Reasignada"
+    );
     if (!excel) {
       setAssignments(filtereds);
       setPagination((prev) => ({
@@ -66,7 +78,11 @@ export default function AssignmentReport({
       }));
     }
 
-    if (excel) return { newAssignments: filtereds, totalCount: assignments[0].totalCount };
+    if (excel)
+      return {
+        newAssignments: filtereds,
+        totalCount: assignments[0].totalCount,
+      };
   }
 
   useEffect(() => {
@@ -75,7 +91,7 @@ export default function AssignmentReport({
 
   function handleTableChange(pagination) {
     getAssignments(pagination.current, pagination.pageSize);
-    setPagination(pagination);
+    // setPagination(pagination);
   }
 
   async function handleExport() {
@@ -84,7 +100,7 @@ export default function AssignmentReport({
     const allData = [];
     let total = 10000000;
     try {
-      while (total / pageSize > page-1) {
+      while (total / pageSize > page - 1) {
         const data = await getAssignments(page, pageSize, true);
         if (data.totalCount) total = data.totalCount;
         allData.push(data.newAssignments);
@@ -100,7 +116,13 @@ export default function AssignmentReport({
               ? moment(item[col.dataIndex]).format("DD/MM/YYYY, h:mm:ss a")
               : "";
             formattedItem[col.title] = date;
-          } else formattedItem[col.title] = item[col.dataIndex] || "";
+          } else if (col.type === "alert") {
+            formattedItem[col.title] = item[col.dataIndex]
+              ? "Vencida"
+              : "Regular";
+          } else
+            formattedItem[col.title] =
+              translate(item[col.dataIndex]) || item[col.dataIndex];
         });
         return formattedItem;
       });
@@ -125,11 +147,18 @@ export default function AssignmentReport({
       const parsedColumns = JSON.parse(columnsStr);
       const thisProjectColumns = parsedColumns[id] || [];
       const reconstructeds = thisProjectColumns.map((column) => {
-        if (column.type === "date")
+        if (column.type === "date") {
           column.render = (date) =>
-            date
-              ? moment(date).format("DD/MM/YYYY, h:mm:ss a")
-              : "";
+            date ? moment(date).format("DD/MM/YYYY, h:mm:ss a") : "";
+        } else if (column.type === "alert") {
+          column.render = (alert) => (
+            <Tag icon={<ClockCircleOutlined />} color={alert ? "#f50" : "lime"}>
+              {alert ? "Vencida" : "Regular"}
+            </Tag>
+          );
+        } else {
+          column.render = (data) => translate(data) || data;
+        }
         return column;
       });
       setColumns(reconstructeds);

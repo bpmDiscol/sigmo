@@ -62,6 +62,7 @@ WebApp.connectHandlers.use("/upload", (req, res, next) => {
 
   if (req.method === "POST") {
     console.warn("receiving upload...");
+    //TODO: revisar si la imagen ya existe
     const busboy = Busboy({
       headers: req.headers,
       highWaterMark: 2 * 1024 * 1024,
