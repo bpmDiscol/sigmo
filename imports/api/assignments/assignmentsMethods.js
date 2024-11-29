@@ -37,6 +37,17 @@ Meteor.methods({
     );
   },
   "assignment.recreate": async function (data) {
+    const sameRecord = await assignmentsCollection.findOneAsync(
+      { recordId: data.recordId },
+      null,
+      {
+        $sort: { date: -1 },
+      }
+    );
+    if (sameRecord) {
+      const report = await recordsCollection.findOneAsync(sameRecord._id);
+      if (report && !["done"].includes(report?.status)) return false;
+    }
     const user = await Meteor.users.findOneAsync({ _id: data.currentUser });
     const manager = user?.username;
     if (manager)
