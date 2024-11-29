@@ -75,7 +75,27 @@ WebApp.connectHandlers.use("/upload", (req, res, next) => {
     busboy.on("file", (name, file, info) => {
       fileName = info.filename;
       fileType = info.mimeType;
-      file.pipe(fs.createWriteStream(path.join(tempUploadDir, info.filename)));
+
+      const tempFilePath = path.join(tempUploadDir, fileName);
+      const uploadDir = path.join("/app/uploads/reportImage/", fileData.predio);
+      const destinationPath = path.join(uploadDir, fileName);
+
+      if (!fs.existsSync(uploadDir)) {
+        fs.mkdirSync(uploadDir, { recursive: true });
+      }
+
+      if (fs.existsSync(destinationPath)) {
+        console.warn("Archivo ya existe:", destinationPath);
+        res.writeHead(409, { "Content-Type": "application/json" });
+        return res.end(
+          JSON.stringify({
+            success: false,
+            message: "El archivo ya existe.",
+          })
+        );
+      }
+
+      file.pipe(fs.createWriteStream(tempFilePath));
     });
 
     busboy.on("field", (name, value) => {

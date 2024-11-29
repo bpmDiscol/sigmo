@@ -15,11 +15,6 @@ Meteor.methods({
       },
       { upsert: true }
     );
-    // try {
-    //   return reportsCollection.insertAsync({ ...data, createdAt: Date.now() });
-    // } catch {
-    //   console.warn(Date.now(), "Intento de crear nuevamente un registro", data);
-    // }
   },
   "report.update": function (id, data) {
     return reportsCollection.updateAsync(
