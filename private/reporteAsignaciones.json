@@ -121,13 +121,12 @@
       "dataIndex": "assignmentDate",
       "type": "date",
       "width": "15rem"
-
     },
     {
       "title": "Fecha Gestión",
       "dataIndex": "reportDate",
       "type": "date",
-      "width":"15rem"
+      "width": "15rem"
     },
     {
       "title": "Estado del servicio",
@@ -146,6 +145,11 @@
       "dataIndex": "alert",
       "width": "15rem",
       "type": "alert"
+    },
+    {
+      "title": "Compromiso",
+      "dataIndex": "compromiso",
+      "width": "15rem"
     },
     {
       "title": "Producto",
@@ -213,14 +217,12 @@
       "dataIndex": "reportDate",
       "type": "date",
       "width": "15rem"
-
     },
     {
       "title": "Fecha Asignación",
       "dataIndex": "assignmentDate",
       "type": "date",
       "width": "15rem"
-
     },
     {
       "title": "Resultado de Gestión",

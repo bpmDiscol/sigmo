@@ -16,9 +16,8 @@ export default function AssignmentReport({
   const [pagination, setPagination] = useState({
     current: 1,
     total: 0,
+    pageSize: 10,
   });
-  console.log("🚀 ~ pagination:", pagination)
-
   const [downloadReport, setDownloadReport] = useState({
     loading: false,
     percent: 0,
@@ -65,6 +64,10 @@ export default function AssignmentReport({
           : "en proceso",
       alert:
         data.report?.status !== "done" && isMoreThanThreeDaysAgo(data.date),
+      compromiso:
+        data.report?.status === "stasis3"
+          ? moment(data.report.fechaCompromiso).format("DD/MM/YYYY")
+          : null,
     }));
     const filtereds = newAssignments.filter(
       (assign) => assign.status !== "Reasignada"
@@ -152,6 +155,12 @@ export default function AssignmentReport({
             date ? moment(date).format("DD/MM/YYYY, h:mm:ss a") : "";
         } else if (column.type === "alert") {
           column.render = (alert) => (
+            <Tag icon={<ClockCircleOutlined />} color={alert ? "#f50" : "lime"}>
+              {alert ? "Vencida" : "Regular"}
+            </Tag>
+          );
+        } else if (column.type === "compromiso") {
+          column.render = (compromiso) => (
             <Tag icon={<ClockCircleOutlined />} color={alert ? "#f50" : "lime"}>
               {alert ? "Vencida" : "Regular"}
             </Tag>

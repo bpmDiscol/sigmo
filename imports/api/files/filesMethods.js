@@ -62,7 +62,6 @@ WebApp.connectHandlers.use("/upload", (req, res, next) => {
 
   if (req.method === "POST") {
     console.warn("receiving upload...");
-    //TODO: revisar si la imagen ya existe
     const busboy = Busboy({
       headers: req.headers,
       highWaterMark: 2 * 1024 * 1024,
@@ -75,6 +74,17 @@ WebApp.connectHandlers.use("/upload", (req, res, next) => {
     busboy.on("file", (name, file, info) => {
       fileName = info.filename;
       fileType = info.mimeType;
+
+      if (!fileName || !fileData.predio) {
+        console.warn("Ruta no existente");
+        res.writeHead(409, { "Content-Type": "application/json" });
+        return res.end(
+          JSON.stringify({
+            success: false,
+            message: "Ruta no encontrada",
+          })
+        );
+      } 
 
       const tempFilePath = path.join(tempUploadDir, fileName);
       const uploadDir = path.join("/app/uploads/reportImage/", fileData.predio);

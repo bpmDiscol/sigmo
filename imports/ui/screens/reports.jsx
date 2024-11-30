@@ -77,7 +77,7 @@ export default function Reports() {
     {
       label: "Cartera por localidad",
       key: 2,
-      children: <LocalityTable id={state.id} />,
+      children: <LocalityTable id={state?.id} />,
     },
     {
       label: "Cartera por gestión/causales",
