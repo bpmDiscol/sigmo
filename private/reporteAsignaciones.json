@@ -141,15 +141,16 @@
   ],
   "cCbwLzBDACcRCCtrq": [
     {
-      "title": "Alerta",
+      "title": "Tiempo",
       "dataIndex": "alert",
-      "width": "15rem",
+      "width": "5rem",
       "type": "alert"
     },
     {
       "title": "Compromiso",
       "dataIndex": "compromiso",
-      "width": "15rem"
+      "width": "10rem",
+      "type": "compromiso"
     },
     {
       "title": "Producto",

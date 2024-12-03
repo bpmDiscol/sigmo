@@ -320,7 +320,7 @@ Meteor.methods({
   "assignment.readByRecordId": async function (recordId) {
     return await assignmentsCollection.findOneAsync({ recordId });
   },
-  "assignment.managersResults": async function (timeFrame, project, locality) {
+  "assignment.managersResults": async function (filters) {
     const result = await assignmentsCollection
       .rawCollection()
       .aggregate([
@@ -333,13 +333,7 @@ Meteor.methods({
           },
         },
         { $unwind: "$recordData" },
-        {
-          $match: {
-            "recordData.timeFrame": timeFrame,
-            "recordData.project": project,
-            "recordData.locality": locality,
-          },
-        },
+        { $match: getFilters(filters) },
         {
           $lookup: {
             from: "reports",
@@ -350,7 +344,9 @@ Meteor.methods({
         },
         {
           $addFields: {
-            assignmentDate: { $toDate: "$date" },
+            assignmentDate: {
+              $toDate: { $arrayElemAt: ["$reportData.createdAt", 0] },
+            },
             deuda_pendiente: { $toDouble: "$recordData.DEUDA_TOTAL_ASIGNADA" },
             status: { $arrayElemAt: ["$reportData.status", 0] },
           },
@@ -372,7 +368,28 @@ Meteor.methods({
                   },
 
                   resolvedCount: { $sum: 1 },
-                  totalPendingDebt: { $sum: "$deuda_pendiente" },
+                  totalPendingDebt: {
+                    $sum: {
+                      $cond: [
+                        {
+                          $and: [
+                            { $eq: ["$status", "done"] },
+                            {
+                              $eq: [
+                                "$reportData.resultadoDeGestion",
+                                "efectiva",
+                              ],
+                            },
+                          ],
+                        },
+                        "$deuda_pendiente",
+                        0,
+                      ],
+                    },
+                  },
+                  totalIncome: {
+                    $sum: { $toDouble: "$reportData.valorRecibo" },
+                  },
                 },
               },
             ],
@@ -381,12 +398,70 @@ Meteor.methods({
               {
                 $match: { status: "done" },
               },
+
+              {
+                $group: {
+                  _id: "$recordData.NUMERO_DE_LA_ORDEN",
+                  manager: { $first: "$manager" },
+                  deuda_pendiente: { $first: "$deuda_pendiente" },
+                  efectiveIncome: {
+                    $sum: { $toDouble: "$reportData.valorRecibo" },
+                  },
+                  carteraEfectiva: {
+                    $sum: {
+                      $cond: [
+                        {
+                          $and: [
+                            { $eq: ["$status", "done"] },
+                            {
+                              $eq: [
+                                "$reportData.resultadoDeGestion",
+                                "efectiva",
+                              ],
+                            },
+                          ],
+                        },
+                        "$deuda_pendiente",
+                        0,
+                      ],
+                    },
+                  },
+                },
+              },
               {
                 $group: {
                   _id: { manager: "$manager" },
-                  totalPendingDebt: { $sum: "$deuda_pendiente" },
+                  totalPendingDebt: {
+                    $sum: "$deuda_pendiente",
+                  },
+                  efectiveIncome: { $sum: "$efectiveIncome" },
+                  carteraEfectiva: { $sum: "$carteraEfectiva" },
                 },
               },
+              // {
+              //   $group: {
+              //     _id: { manager: "$manager" },
+              //     totalPendingDebt: {
+              //       $sum: {
+              //         $cond: [
+              //           {
+              //             $and: [
+              //               { $eq: ["$status", "done"] },
+              //               {
+              //                 $eq: [
+              //                   "$reportData.resultadoDeGestion",
+              //                   "efectiva",
+              //                 ],
+              //               },
+              //             ],
+              //           },
+              //           "$deuda_pendiente",
+              //           0,
+              //         ],
+              //       },
+              //     },
+              //   },
+              // },
             ],
             assignments: [
               {
@@ -397,14 +472,90 @@ Meteor.methods({
                     $sum: {
                       $cond: [
                         {
-                          $eq: [
-                            { $arrayElemAt: ["$reportData.status", 0] },
-                            "done",
+                          $or: [
+                            {
+                              $eq: [
+                                { $arrayElemAt: ["$reportData.status", 0] },
+                                "done",
+                              ],
+                            },
+                            {
+                              $eq: [
+                                { $arrayElemAt: ["$reportData.gestion", 0] },
+                                "15",
+                              ],
+                            },
+                            {
+                              $eq: [
+                                { $arrayElemAt: ["$reportData.gestion", 0] },
+                                "20",
+                              ],
+                            },
                           ],
                         },
                         1,
                         0,
                       ],
+                    },
+                  },
+                  fullfitAssignments: {
+                    $sum: {
+                      $cond: [
+                        {
+                          $or: [
+                            {
+                              $and: [
+                                {
+                                  $eq: [
+                                    { $arrayElemAt: ["$reportData.status", 0] },
+                                    "done",
+                                  ],
+                                },
+                                {
+                                  $eq: [
+                                    {
+                                      $arrayElemAt: [
+                                        "$reportData.resultadoDeGestion",
+                                        0,
+                                      ],
+                                    },
+                                    "efectiva",
+                                  ],
+                                },
+                              ],
+                            },
+                            {
+                              $or: [
+                                {
+                                  $eq: [
+                                    {
+                                      $arrayElemAt: ["$reportData.gestion", 0],
+                                    },
+                                    "15",
+                                  ],
+                                },
+                                {
+                                  $eq: [
+                                    {
+                                      $arrayElemAt: ["$reportData.gestion", 0],
+                                    },
+                                    "20",
+                                  ],
+                                },
+                              ],
+                            },
+                          ],
+                        },
+                        1,
+                        0,
+                      ],
+                    },
+                  },
+                  totalIncome: {
+                    $sum: {
+                      $toDouble: {
+                        $arrayElemAt: ["$reportData.valorRecibo", 0],
+                      },
                     },
                   },
                   reAssignments: {
@@ -421,12 +572,24 @@ Meteor.methods({
                       ],
                     },
                   },
-                  assignedDebt: {
+                  promises: {
                     $sum: {
                       $cond: [
                         {
-                          $ne: ["$status", "reassigned"],
+                          $eq: [
+                            { $arrayElemAt: ["$reportData.gestion", 0] },
+                            "compromisoPago",
+                          ],
                         },
+                        1,
+                        0,
+                      ],
+                    },
+                  },
+                  assignedDebt: {
+                    $sum: {
+                      $cond: [
+                        { $and: [{ $ne: ["$status", "reassigned"] }] },
                         "$deuda_pendiente",
                         0,
                       ],
@@ -486,21 +649,49 @@ Meteor.methods({
             carteraGestionada: [
               { $unwind: "$reportData" },
               {
+                $match: {
+                  status: "done",
+                },
+              },
+              {
                 $group: {
-                  _id: { localidad: "$recordData.locality" },
+                  _id: "$recordData.NUMERO_DE_LA_ORDEN",
+                  localidad: { $first: "$recordData.locality" },
+                  deuda_pendiente: { $first: "$deuda_pendiente" },
+                },
+              },
+              {
+                $group: {
+                  _id: { localidad: "$localidad" },
                   cartera: {
-                    $sum: {
-                      $cond: [
-                        {
-                          $eq: ["$status", "done"],
-                        },
-                        "$deuda_pendiente",
-                        0,
-                      ],
-                    },
+                    $sum: "$deuda_pendiente",
                   },
                 },
               },
+              // {
+              //   $group: {
+              //     _id: { localidad: "$recordData.locality" },
+              //     cartera: {
+              //       $sum: {
+              //         $cond: [
+              //           {
+              //             $and: [
+              //               { $eq: ["$status", "done"] },
+              //               {
+              //                 $eq: [
+              //                   "$reportData.resultadoDeGestion",
+              //                   "efectiva",
+              //                 ],
+              //               },
+              //             ],
+              //           },
+              //           "$deuda_pendiente",
+              //           0,
+              //         ],
+              //       },
+              //     },
+              //   },
+              // },
             ],
             carteraAsignada: [
               {
@@ -520,6 +711,75 @@ Meteor.methods({
                 },
               },
             ],
+          },
+        },
+      ])
+      .toArray();
+  },
+  "assignment.usersCount": async function (timeFrame, project) {
+    return await assignmentsCollection
+      .rawCollection()
+      .aggregate([
+        {
+          $lookup: {
+            from: "records",
+            localField: "recordId",
+            foreignField: "_id",
+            as: "recordData",
+          },
+        },
+        { $unwind: "$recordData" },
+
+        {
+          $lookup: {
+            from: "reports",
+            localField: "_id",
+            foreignField: "_id",
+            as: "reportData",
+          },
+        },
+        {
+          $match: {
+            "recordData.timeFrame": timeFrame.id,
+            "recordData.project": project,
+            manager: { $ne: null },
+            $expr: {
+              $ne: [{ $arrayElemAt: ["$reportData", 0] }, "reassigned"],
+            },
+          },
+        },
+        {
+          $group: {
+            _id: { localidad: "$recordData.locality" },
+            uniqueClients: {
+              $addToSet: "$recordData.NOMBRE_CLIENTE",
+            },
+            gestionados: {
+              $addToSet: {
+                $cond: [
+                  {
+                    $eq: [{ $arrayElemAt: ["$reportData.status", 0] }, "done"],
+                  },
+                  "$recordData.NOMBRE_CLIENTE",
+                  null,
+                ],
+              },
+            },
+          },
+        },
+        {
+          $project: {
+            localidad: "$_id.localidad",
+            uniqueClients: { $size: "$uniqueClients" }, // Cuenta de valores únicos
+            gestionadosEfectivos: {
+              $size: {
+                $filter: {
+                  input: "$gestionados",
+                  as: "client",
+                  cond: { $ne: ["$$client", null] }, // Elimina valores nulos
+                },
+              },
+            },
           },
         },
       ])
@@ -577,7 +837,7 @@ Meteor.methods({
     return result;
   },
 
-  "assignment.gestiones": async function (timeFrame, project, locality) {
+  "assignment.gestiones": async function (filters) {
     return await assignmentsCollection
       .rawCollection()
       .aggregate([
@@ -591,11 +851,7 @@ Meteor.methods({
         },
         { $unwind: "$recordData" },
         {
-          $match: {
-            "recordData.timeFrame": timeFrame,
-            "recordData.project": project,
-            "recordData.locality": locality,
-          },
+          $match: getFilters(filters),
         },
         {
           $lookup: {
@@ -670,12 +926,7 @@ Meteor.methods({
       ])
       .toArray();
   },
-  "assignments.reportAll": async function (
-    timeFrame,
-    locality,
-    page,
-    pageSize
-  ) {
+  "assignments.reportAll": async function (filters, page, pageSize) {
     const outputFieldsStr = await Assets.getTextAsync("assignmentOutput.json");
     const outputFields = JSON.parse(outputFieldsStr);
     const recordFields = outputFields.fields || [];
@@ -696,10 +947,7 @@ Meteor.methods({
         },
         { $unwind: "$recordData" },
         {
-          $match: {
-            "recordData.timeFrame": timeFrame,
-            "recordData.locality": locality,
-          },
+          $match: getFilters(filters),
         },
         {
           $addFields: {
@@ -794,10 +1042,15 @@ function reorganizeData(data) {
         completedAssignments: 0,
         totalAssignments: 0,
         totalPendingDebt: 0,
+        efectiveIncome: 0,
+        carteraEfectiva: 0,
         pendingAssignments: 0,
         resultsByDay: [],
         assignedDebt: 0,
         reAssignments: 0,
+        fullfit: 0,
+        totalIncome: 0,
+        promises: 0,
       };
     }
     managerMap[manager].completedAssignments = assignment.completedAssignments;
@@ -810,6 +1063,9 @@ function reorganizeData(data) {
       assignment.total -
       assignment.completedAssignments -
       assignment.reAssignments;
+    managerMap[manager].fullfit = assignment.fullfitAssignments;
+    managerMap[manager].totalIncome = assignment.totalIncome;
+    managerMap[manager].promises = assignment.promises;
   });
 
   data.totalIncome.forEach((income) => {
@@ -820,11 +1076,15 @@ function reorganizeData(data) {
         completedAssignments: 0,
         totalAssignments: 0,
         totalPendingDebt: 0,
+        efectiveIncome: 0,
+        carteraEfectiva: 0,
         pendingAssignments: 0,
         resultsByDay: [],
       };
     }
     managerMap[manager].totalPendingDebt = income.totalPendingDebt;
+    managerMap[manager].efectiveIncome = income.efectiveIncome;
+    managerMap[manager].carteraEfectiva = income.carteraEfectiva;
   });
 
   data.resultsByDay.forEach((result) => {
@@ -843,6 +1103,7 @@ function reorganizeData(data) {
       date: `${result._id.dia}/${result._id.month}/${result._id.year}`,
       resolvedCount: result.resolvedCount,
       totalPendingDebt: result.totalPendingDebt,
+      totalIncome: result.totalIncome,
     });
     managerMap[manager].resultsByDay.sort((a, b) => {
       const dateA = new Date(a.date.split("/").reverse().join("-"));

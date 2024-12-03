@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Button, Table } from "antd";
+import { Button, Flex, Progress, Table } from "antd";
 import XLSX from "xlsx";
 
 import formatCurrency from "../../../api/utils/formatCurrency";
 import { GlobalContext } from "../../context/globalsContext";
 
 // Componente de la tabla
-const LocalityTable = (id) => {
+const LocalityTable = ({ id }) => {
   const [dataSource, setDataSource] = useState([]);
   const { globals } = useContext(GlobalContext);
 
@@ -99,31 +99,89 @@ const LocalityTable = (id) => {
       title: "Localidades",
       dataIndex: "localidad",
       key: "localidad",
-      render: (text) => text.toUpperCase()
+      render: (text) => text.toUpperCase(),
+      fixed: true,
     },
     {
       title: "Cartera Entregada para Gestión",
       dataIndex: "carteraParaGestion",
       key: "carteraParaGestion",
       render: (text) => formatCurrency(text),
+      align: "right",
     },
     {
       title: "Cartera Asignada",
       dataIndex: "carteraAsignada",
       key: "carteraAsignada",
       render: (text) => formatCurrency(text),
+      align: "right",
     },
     {
       title: "Cartera Gestionada",
       dataIndex: "carteraGestionada",
       key: "carteraGestionada",
       render: (text) => formatCurrency(text),
+      align: "right",
     },
     {
       title: "Cartera por Gestionar",
       dataIndex: "carteraPorGestionar",
       key: "carteraPorGestionar",
       render: (text) => formatCurrency(text),
+      align: "right",
+    },
+    {
+      title: "Asignación de cartera",
+      dataIndex: "carteraAsignada",
+      key: "carteraAsignada",
+      render: (text, r) => (
+        <Flex vertical justify="center" align="center">
+          <Progress
+            type="dashboard"
+            percent={(
+              (r.carteraAsignada * 100) / r.carteraParaGestion || 0
+            ).toFixed(1)}
+            size={60}
+            strokeWidth={15}
+            strokeColor={"#02f737"}
+          />
+        </Flex>
+      ),
+    },
+    {
+      title: "Gestión de la asignación",
+      dataIndex: "carteraGestionada",
+      key: "carteraGestionada",
+      render: (text, r) => (
+        <Flex vertical justify="center" align="center">
+          <Progress
+            type="dashboard"
+            percent={(
+              (r.carteraGestionada * 100) / r.carteraAsignada || 0
+            ).toFixed(1)}
+            size={60}
+            strokeWidth={15}
+          />
+        </Flex>
+      ),
+    },
+    {
+      title: "Gestión por terminar",
+      dataIndex: "carteraPorGestionar",
+      key: "carteraPorGestionar",
+      render: (text, r) => (
+        <Flex vertical justify="center" align="center">
+          <Progress
+            type="dashboard"
+            percent={(
+              (r.carteraPorGestionar * 100) / r.carteraAsignada || 0
+            ).toFixed(1)}
+            size={60}
+            strokeWidth={15}
+            strokeColor={"#ff0202"}
+          />
+        </Flex>
+      ),
     },
   ];
 
@@ -148,6 +206,9 @@ const LocalityTable = (id) => {
       "Cartera Gestionada",
       "Cartera Para Gestionar",
       "Cartera Por Gestionar",
+      "% Asignación de cartera",
+      "% Gestión de la asignación",
+      "% Gestión por terminar",
     ];
 
     // Crear las filas de datos
@@ -158,6 +219,21 @@ const LocalityTable = (id) => {
         item.carteraGestionada,
         item.carteraParaGestion,
         item.carteraPorGestionar,
+        parseFloat(
+          ((item.carteraAsignada * 100) / item.carteraParaGestion || 0).toFixed(
+            1
+          )
+        ),
+        parseFloat(
+          ((item.carteraGestionada * 100) / item.carteraAsignada || 0).toFixed(
+            1
+          )
+        ),
+        parseFloat(
+          (
+            (item.carteraPorGestionar * 100) / item.carteraAsignada || 0
+          ).toFixed(1)
+        ),
       ];
 
       // Añadir la fila
@@ -182,6 +258,16 @@ const LocalityTable = (id) => {
       0
     );
 
+    const asignacionDeCartera = parseFloat(
+      ((totalCarteraAsignada * 100) / totalCarteraParaGestion || 0).toFixed(1)
+    );
+    const gestionDeAsignacion = parseFloat(
+      ((totalCarteraGestionada * 100) / totalCarteraAsignada || 0).toFixed(1)
+    );
+    const gestionPorTerminar = parseFloat(
+      ((totalCarteraPorGestionar * 100) / totalCarteraAsignada || 0).toFixed(1)
+    );
+
     // Agregar la fila de totales
     const totalRow = [
       "Total", // Para la columna "Localidad"
@@ -189,6 +275,9 @@ const LocalityTable = (id) => {
       totalCarteraGestionada,
       totalCarteraParaGestion,
       totalCarteraPorGestionar,
+      asignacionDeCartera,
+      gestionDeAsignacion,
+      gestionPorTerminar,
     ];
     rows.push(totalRow); // Añadir fila de totales al final
 
@@ -211,10 +300,10 @@ const LocalityTable = (id) => {
 
     // Crear el libro de trabajo
     const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Cartera");
+    XLSX.utils.book_append_sheet(workbook, worksheet, `Cartera`);
 
     // Exportar el archivo
-    XLSX.writeFile(workbook, "cartera.xlsx");
+    XLSX.writeFile(workbook, `cartera por localidad - ${Date.now()} {}.xlsx`);
   }
 
   return (
@@ -226,7 +315,7 @@ const LocalityTable = (id) => {
         dataSource={[...dataSource, totalRow]} // Añadir la fila de totales al final
         columns={columns}
         pagination={false}
-        scroll={{ y: 55 * 5, x: "max-content" }}
+        scroll={{ x: "max-content" }}
       />
     </>
   );

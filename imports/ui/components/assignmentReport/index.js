@@ -1,5 +1,19 @@
-import { ClockCircleOutlined } from "@ant-design/icons";
-import { Button, message, Table, Tag, Typography } from "antd";
+import {
+  BellFilled,
+  ClockCircleOutlined,
+  SearchOutlined,
+} from "@ant-design/icons";
+import {
+  Button,
+  Flex,
+  Input,
+  message,
+  Select,
+  Space,
+  Table,
+  Tag,
+  Typography,
+} from "antd";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
 import XLSX from "xlsx";
@@ -24,7 +38,15 @@ export default function AssignmentReport({
   });
 
   const [columns, setColumns] = useState([]);
-
+  const searchTerms = [
+    { label: "Buscar por producto", value: "recordData.PRODUCTO" },
+    { label: "Buscar por contrato", value: "recordData.CONTRATO" },
+    { label: "Buscar por cliente", value: "CLIENTE" },
+    { label: "Buscar por identificación", value: "recordData.IDENTIFICACION" },
+    { label: "Buscar por gestor", value: "manager" },
+  ];
+  const [searchText, setSearchText] = useState("");
+  const [searchField, setSearchField] = useState();
   const isMoreThanThreeDaysAgo = (timestamp) => {
     const today = moment().startOf("day");
     const inputDate = moment(timestamp).startOf("day");
@@ -36,10 +58,13 @@ export default function AssignmentReport({
   async function getAssignments(current, pageSize, excel = false) {
     const assignments = await Meteor.callAsync(
       "assignments.reportAll",
-      timeFrame,
-      locality,
+      {
+        [searchField]: searchText,
+        "recordData.timeFrame": timeFrame,
+        "recordData.locality": locality,
+      },
       current,
-      pageSize
+      pageSize || 10
     );
     const newAssignments = assignments[0].data.map((data) => ({
       ...data.recordData,
@@ -75,8 +100,8 @@ export default function AssignmentReport({
     if (!excel) {
       setAssignments(filtereds);
       setPagination((prev) => ({
-        ...prev,
         current,
+        pagination: 10,
         total: assignments[0].totalCount,
       }));
     }
@@ -156,15 +181,19 @@ export default function AssignmentReport({
         } else if (column.type === "alert") {
           column.render = (alert) => (
             <Tag icon={<ClockCircleOutlined />} color={alert ? "#f50" : "lime"}>
-              {alert ? "Vencida" : "Regular"}
+              {alert ? "Vencido" : "Regular"}
             </Tag>
           );
         } else if (column.type === "compromiso") {
-          column.render = (compromiso) => (
-            <Tag icon={<ClockCircleOutlined />} color={alert ? "#f50" : "lime"}>
-              {alert ? "Vencida" : "Regular"}
-            </Tag>
-          );
+          column.render = (compromiso) =>
+            compromiso ? (
+              <Tag
+                icon={<BellFilled style={{ color: "yellow" }} />}
+                color={"#ff2b2b"}
+              >
+                {compromiso}
+              </Tag>
+            ) : null;
         } else {
           column.render = (data) => translate(data) || data;
         }
@@ -177,37 +206,63 @@ export default function AssignmentReport({
   }, []);
 
   return (
-    <Table
-      size="small"
-      columns={columns}
-      dataSource={assignments}
-      scroll={{ y: 55 * 5, x: "max-content" }}
-      rowKey={(record) => record._id}
-      pagination={{
-        ...pagination,
-        showTotal: (total) => (
-          <>
-            <Button
-              type="primary"
-              style={{ width: "10rem", marginRight: "8px" }}
-              onClick={handleExport}
-              disabled={assignments.length === 0}
-              loading={downloadReport.loading}
-              danger={downloadReport.loading}
-            >
-              {downloadReport.loading
-                ? (downloadReport.percent * 10000).toFixed(1) + "% descargado"
-                : "Exportar a Excel"}
-            </Button>
-            <Typography.Text
-              keyboard
-              type="danger"
-            >{`${total} Resultados encontrados `}</Typography.Text>
-          </>
-        ),
-        position: ["topLeft"],
-      }}
-      onChange={handleTableChange}
-    />
+    <Flex vertical>
+      <Space.Compact>
+        <Select
+          options={searchTerms}
+          style={{ width: "15rem" }}
+          defaultValue={undefined}
+          placeholder="Selecciona una busqueda"
+          onSelect={(field) => setSearchField(field)}
+          allowClear
+          onClear={() => setSearchField(undefined)}
+        />
+        <Input
+          style={{ width: "15rem" }}
+          value={searchText}
+          onChange={(text) => setSearchText(text.currentTarget.value)}
+          onKeyDown={(key) => {
+            if (key.key == "Enter") getAssignments(1, 10);
+          }}
+        />
+        <Button
+          icon={<SearchOutlined />}
+          onClick={() => getAssignments(1, 10)}
+          type="primary"
+        />
+      </Space.Compact>
+      <Table
+        size="small"
+        columns={columns}
+        dataSource={assignments}
+        scroll={{ x: "max-content" }}
+        rowKey={(record) => record._id}
+        pagination={{
+          ...pagination,
+          showTotal: (total) => (
+            <>
+              <Button
+                type="primary"
+                style={{ width: "10rem", marginRight: "8px" }}
+                onClick={handleExport}
+                disabled={assignments.length === 0}
+                loading={downloadReport.loading}
+                danger={downloadReport.loading}
+              >
+                {downloadReport.loading
+                  ? (downloadReport.percent * 10000).toFixed(1) + "% descargado"
+                  : "Exportar a Excel"}
+              </Button>
+              <Typography.Text
+                keyboard
+                type="danger"
+              >{`${total} Resultados encontrados `}</Typography.Text>
+            </>
+          ),
+          position: ["topLeft"],
+        }}
+        onChange={handleTableChange}
+      />
+    </Flex>
   );
 }

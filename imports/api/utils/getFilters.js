@@ -2,7 +2,7 @@ export default function getFilters(filters) {
   let filter = {};
   if (filters) {
     for (const [key, value] of Object.entries(filters)) {
-      if (value) {
+      if (value && key !== "undefined") {
         if (key === "recordId" || key === "_id" || key === "manager") {
           filter[key] = { $in: Array.isArray(value) ? value : [value] };
         } else if (key === "date") {

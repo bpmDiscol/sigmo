@@ -133,6 +133,31 @@ Meteor.methods({
       ])
       .toArray();
   },
+  "record.usersCount": async function (timeFrame, project) {
+    return await recordsCollection
+      .rawCollection()
+      .aggregate([
+        {
+          $match: { timeFrame: timeFrame.id, project },
+        },
+        {
+          $group: {
+            _id: { localidad: "$locality" },
+            usersCount: {
+              $addToSet: "$NOMBRE_CLIENTE",
+            },
+          },
+        },
+
+        {
+          $project: {
+            localidad: "$_id.locality",
+            total: { $size: "$usersCount" },
+          },
+        },
+      ])
+      .toArray();
+  },
   "record.totalDebt": async function ({ timeFrame, locality }) {
     const total = await recordsCollection
       .rawCollection()

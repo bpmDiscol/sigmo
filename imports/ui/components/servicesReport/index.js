@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Button, Table } from "antd";
+import { Button, Progress, Table } from "antd";
 import XLSX from "xlsx";
 
 import formatCurrency from "../../../api/utils/formatCurrency";
@@ -8,7 +8,7 @@ import { GlobalContext } from "../../context/globalsContext";
 // Definir las columnas de la tabla
 const columns = [
   {
-    title: "Gestión",
+    title: "Causal",
     dataIndex: "gestion",
     key: "gestion",
   },
@@ -22,6 +22,9 @@ const columns = [
     title: "Porcentaje Incidencias",
     dataIndex: "assignmentPercentage",
     key: "assignmentPercentage",
+    render: (percent) => (
+      <Progress type="dashboard" percent={percent.toFixed(1)} size={50} strokeWidth={15} />
+    ),
   },
   {
     title: "Valor cartera",
@@ -32,6 +35,9 @@ const columns = [
     title: "Porcentaje cartera",
     dataIndex: "debtPercentage",
     key: "debtPercentage",
+    render: (percent) => (
+      <Progress type="dashboard" percent={percent.toFixed(1)} size={50} strokeWidth={15} />
+    ),
   },
 ];
 
@@ -42,9 +48,11 @@ export default function ServicesReport({ id, locality, translate }) {
   useEffect(() => {
     Meteor.call(
       "assignment.gestiones",
-      id,
-      globals?.project?._id,
-      locality,
+      {
+        "recordData.timeFrame": id,
+        "recordData.project": globals?.project?._id,
+        "recordData.locality": locality,
+      },
       (err, resp) => {
         if (resp) setData(resp);
       }
@@ -70,11 +78,11 @@ export default function ServicesReport({ id, locality, translate }) {
 
   const tableData = data.map((item, index) => ({
     key: index,
-    gestion: translate(item._id) || "Efectiva",
+    gestion: translate(item._id) || "No gestionada",
     totalAssignments: item.totalAssignments,
-    assignmentPercentage: `${(item.assignmentPercentage || 0).toFixed(2)}%`,
+    assignmentPercentage: item.assignmentPercentage,
     totalPendingDebt: formatCurrency(item.totalPendingDebt),
-    debtPercentage: `${(item.debtPercentage || 0).toFixed(2)}%`,
+    debtPercentage: item.debtPercentage,
   }));
 
   function exportGestionToExcel(data) {
@@ -83,11 +91,11 @@ export default function ServicesReport({ id, locality, translate }) {
 
     // Encabezado de la tabla
     const headers = [
-      "Gestión",
-      "Total Asignaciones",
-      "Porcentaje de Asignaciones",
-      "Deuda Pendiente",
-      "Porcentaje de Deuda",
+      "Causal",
+      "Incidencias",
+      "Porcentaje Incidencias",
+      "Valor cartera",
+      "Porcentaje cartera",
     ];
 
     // Crear las filas de datos
@@ -96,9 +104,9 @@ export default function ServicesReport({ id, locality, translate }) {
       const row = [
         item.gestion,
         item.totalAssignments,
-        item.assignmentPercentage, // Mantenemos el porcentaje en su formato original
-        item.totalPendingDebt, // Mantenemos el valor en formato moneda
-        item.debtPercentage,
+        item.assignmentPercentage.toFixed(1), 
+        item.totalPendingDebt,
+        item.debtPercentage.toFixed(1),
       ];
       rows.push(row);
     });
@@ -107,9 +115,9 @@ export default function ServicesReport({ id, locality, translate }) {
     const totalRow = [
       "Total",
       totalAssignments,
-      `${(totalAssignmentPercentage || 0).toFixed(2)}%`,
+      `${(totalAssignmentPercentage || 0).toFixed(1)}%`,
       formatCurrency(totalPendingDebt),
-      `${(totalDebtPercentage || 0).toFixed(2)}%`,
+      `${(totalDebtPercentage || 0).toFixed(1)}%`,
     ];
     rows.push(totalRow); // Añadir fila de totales al final
 
@@ -146,7 +154,7 @@ export default function ServicesReport({ id, locality, translate }) {
         size="small"
         columns={columns}
         dataSource={tableData}
-        scroll={{ y: 55 * 5, x: "max-content" }}
+        scroll={{ x: "max-content" }}
         pagination={false} // Sin paginación para mostrar todos los datos
         summary={() => (
           <Table.Summary.Row>
@@ -155,13 +163,13 @@ export default function ServicesReport({ id, locality, translate }) {
             </Table.Summary.Cell>
             <Table.Summary.Cell>{totalAssignments}</Table.Summary.Cell>
             <Table.Summary.Cell>
-              {(totalAssignmentPercentage || 0).toFixed(2)}%
+              {(totalAssignmentPercentage || 0).toFixed(1)}%
             </Table.Summary.Cell>
             <Table.Summary.Cell>
               {formatCurrency(totalPendingDebt)}
             </Table.Summary.Cell>
             <Table.Summary.Cell>
-              {(totalDebtPercentage || 0).toFixed(2)}%
+              {(totalDebtPercentage || 0).toFixed(1)}%
             </Table.Summary.Cell>
           </Table.Summary.Row>
         )}

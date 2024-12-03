@@ -9,6 +9,7 @@ import ManagerResultsTable from "../components/managerResultTable";
 import AssignmentReport from "../components/assignmentReport";
 import PhotoReport from "../components/photoReport";
 import ReportServiceStatus from "../components/reportServiceStatus";
+import ReportAssignedUsers from "../components/reportAssignedUsers";
 
 export default function Reports() {
   const { state } = useLocation();
@@ -42,28 +43,15 @@ export default function Reports() {
   useEffect(() => {
     Meteor.call(
       "assignment.managersResults",
-      state.id,
-      globals?.project?._id,
-      currentLocality,
+      {
+        "recordData.timeFrame": state.id,
+        "recordData.project": globals?.project?._id,
+        "recordData.locality": currentLocality,
+      },
       (err, resp) => {
         const filteredData = resp.filter((item) => item.manager !== "Unknown");
-        // setData(filteredData);
-        Meteor.call(
-          "assignment.reassignmentsCount",
-          state.id,
-          globals?.project?._id,
-          (err, resp) => {
-            if (!err) {
-              const totals = filteredData.map((data) => {
-                const reassignedCount =
-                  resp.find((r) => r.manager === data.manager)
-                    .reAssignmentsCount || 0;
-                return { ...data, reassignedCount };
-              });
-              setData(totals);
-            }
-          }
-        );
+        setData(filteredData);
+     
       }
     );
   }, [globals, currentLocality]);
@@ -72,7 +60,7 @@ export default function Reports() {
     {
       label: "Comportamiento de ingreso",
       key: 1,
-      children: <ManagerResultsTable data={data} />,
+      children: <ManagerResultsTable data={data} locality={currentLocality} />,
     },
     {
       label: "Cartera por localidad",
@@ -80,8 +68,13 @@ export default function Reports() {
       children: <LocalityTable id={state?.id} />,
     },
     {
-      label: "Cartera por gestión/causales",
+      label: "Usuarios por localidad",
       key: 3,
+      children: <ReportAssignedUsers id={state?.id} />,
+    },
+    {
+      label: "Cartera por gestión/causales",
+      key: 4,
       children: (
         <ServicesReport
           id={state.id}
@@ -92,7 +85,7 @@ export default function Reports() {
     },
     {
       label: "Gestiones asignadas",
-      key: 4,
+      key: 5,
       children: (
         <AssignmentReport
           id={globals?.project?._id}
@@ -105,7 +98,7 @@ export default function Reports() {
     },
     {
       label: "Reportes con fotos",
-      key: 5,
+      key: 6,
       children: (
         <PhotoReport
           id={globals?.project?._id}
@@ -118,7 +111,7 @@ export default function Reports() {
     },
     {
       label: "Estado de servicio",
-      key: 6,
+      key: 7,
       children: (
         <ReportServiceStatus
           id={globals?.project?._id}
@@ -132,7 +125,7 @@ export default function Reports() {
     },
     {
       label: "Reportes Efectividad",
-      key: 7,
+      key: 8,
       children: (
         <ReportServiceStatus
           id={globals?.project?._id}
@@ -146,7 +139,7 @@ export default function Reports() {
     },
     {
       label: "Reportes con télefonos",
-      key: 8,
+      key: 9,
       children: (
         <ReportServiceStatus
           id={globals?.project?._id}
@@ -169,7 +162,9 @@ export default function Reports() {
           placeholder="Selecciona una localidad"
           defaultValue={myLocality}
           onChange={setCurrentLocality}
+          style={{ minWidth: "10rem" }}
         >
+          <Select.Option value={null}>TODOS</Select.Option>
           {localities.map((locality) => (
             <Select.Option key={locality} value={locality}>
               {locality.toUpperCase()}
