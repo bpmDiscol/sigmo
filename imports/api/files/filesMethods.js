@@ -60,7 +60,6 @@ WebApp.connectHandlers.use((req, res, next) => {
   }
 
   const predio = match[1];
-  console.log("🚀 ~ WebApp.connectHandlers.use ~ predio:", predio);
 
   if (req.method === "OPTIONS") {
     res.writeHead(200, { "Content-Type": "application/json" });
@@ -68,7 +67,7 @@ WebApp.connectHandlers.use((req, res, next) => {
   }
 
   if (req.method === "POST") {
-    console.warn("receiving upload...");
+    // console.warn("receiving upload...");
     const busboy = Busboy({
       headers: req.headers,
       highWaterMark: 2 * 1024 * 1024,
@@ -101,7 +100,7 @@ WebApp.connectHandlers.use((req, res, next) => {
       }
 
       if (fs.existsSync(destinationPath)) {
-        console.warn("Archivo ya existe:", destinationPath);
+        // console.warn("Archivo ya existe:", destinationPath);
         res.writeHead(409, { "Content-Type": "application/json" });
         return res.end(
           JSON.stringify({

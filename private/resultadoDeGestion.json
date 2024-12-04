@@ -1,5 +1,5 @@
 {
-  "Fracort": {
+  "Fracort-Test": {
     "project": {
       "nombreUsuario": "$recordData.NOMBRE_CLIENTE",
       "contrato": "$recordData.CONTRATO",
@@ -59,22 +59,22 @@
       }
     ]
   },
-  "Cienaga": {
+  "Ciegaga-Test": {
     "project": {
-      "manager": "$assignmentData.manager",
-      "gestion": 1,
-      "images": 1,
+      "nombreUsuario": "$recordData.NOMBRE_CLIENTE",
       "contrato": "$recordData.CONTRATO",
       "producto": "$recordData.PRODUCTO",
-      "ciclo": "$recordData.CICLO",
       "barrio": "$recordData.DESCRIPCION_BARRIO",
       "direccion": "$recordData.DIRECCION_PREDIO",
-      "createdAt": 1
+      "indicador": "$recordData.INDICADOR",
+      "edadMora": "$recordData.EDAD_MORA_ACTUAL",
+      "deudaTotal": "$recordData.DEUDA_TOTAL_ASIGNADA",
+      "lecturaMedidor": 1
     },
     "columns": [
       {
-        "title": "Gestor",
-        "dataIndex": "manager",
+        "title": "Usuario",
+        "dataIndex": "nombreUsuario",
         "type": "text"
       },
       {
@@ -98,24 +98,84 @@
         "type": "text"
       },
       {
-        "title": "Ciclo",
-        "dataIndex": "ciclo",
+        "title": "Indicador",
+        "dataIndex": "indicador",
         "type": "text"
       },
       {
-        "title": "Fecha de gestión",
-        "dataIndex": "createdAt",
-        "type": "date"
-      },
-      {
-        "title": "Causal",
-        "dataIndex": "gestion",
+        "title": "Edad mora",
+        "dataIndex": "edadMora",
         "type": "text"
       },
       {
-        "title": "Imagenes",
-        "dataIndex": "images",
-        "type": "images"
+        "title": "Deuda total",
+        "dataIndex": "deudaTotal",
+        "type": "text"
+      },
+      {
+        "title": "Lectura del medidor",
+        "dataIndex": "lecturaMedidor",
+        "type": "text"
+      }
+    ]
+  },
+  "Fracort": {
+    "project": {
+      "nombreUsuario": "$recordData.NOMBRE_CLIENTE",
+      "contrato": "$recordData.CONTRATO",
+      "producto": "$recordData.PRODUCTO",
+      "barrio": "$recordData.DESCRIPCION_BARRIO",
+      "direccion": "$recordData.DIRECCION_PREDIO",
+      "indicador": "$recordData.INDICADOR",
+      "edadMora": "$recordData.EDAD_MORA_ACTUAL",
+      "deudaTotal": "$recordData.DEUDA_TOTAL_ASIGNADA",
+      "lecturaMedidor": 1
+    },
+    "columns": [
+      {
+        "title": "Usuario",
+        "dataIndex": "nombreUsuario",
+        "type": "text"
+      },
+      {
+        "title": "Producto",
+        "dataIndex": "producto",
+        "type": "text"
+      },
+      {
+        "title": "Contrato",
+        "dataIndex": "contrato",
+        "type": "text"
+      },
+      {
+        "title": "Barrio",
+        "dataIndex": "barrio",
+        "type": "text"
+      },
+      {
+        "title": "Dirección",
+        "dataIndex": "direccion",
+        "type": "text"
+      },
+      {
+        "title": "Indicador",
+        "dataIndex": "indicador",
+        "type": "text"
+      },
+      {
+        "title": "Edad mora",
+        "dataIndex": "edadMora",
+        "type": "text"
+      },
+      {
+        "title": "Deuda total",
+        "dataIndex": "deudaTotal",
+        "type": "text"
+      },
+      {
+        "title": "Lectura del medidor",
+        "dataIndex": "lecturaMedidor",
+        "type": "text"
       }
     ]
   }

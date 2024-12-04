@@ -49,7 +49,7 @@ export default function Reports() {
         "recordData.locality": currentLocality,
       },
       (err, resp) => {
-        const filteredData = resp.filter((item) => item.manager !== "Unknown");
+        const filteredData = resp?.filter((item) => item.manager !== "Unknown");
         setData(filteredData);
      
       }
