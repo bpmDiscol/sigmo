@@ -15,6 +15,7 @@ import processExcel from "../../../api/utils/processExcel";
 import uploadRecords from "../../../api/utils/uploadRecords";
 import normalizedRecords from "../../../api/utils/normalizeRecords";
 import moment from "moment";
+import { LockFilled } from "@ant-design/icons";
 
 export default function FrameCard({
   frameData,
@@ -31,6 +32,7 @@ export default function FrameCard({
   const [form] = Form.useForm();
 
   const locality = Meteor.user().profile.locality;
+  const activeState = frameData.state !== "closed";
 
   function loadFile(file_, id) {
     setFile({ status: "analizing", length: 0 });
@@ -40,6 +42,7 @@ export default function FrameCard({
   }
 
   function addFrame() {
+    if (!activeState) return;
     const fieldValues = form.getFieldsValue();
     const date = form.getFieldValue("date");
     const endDate = form.getFieldValue("endDate");
@@ -55,7 +58,7 @@ export default function FrameCard({
   }
 
   useEffect(() => {
-    if (file?.data) {
+    if (file?.data && activeState) {
       setFile({ ...file, status: "uploading" });
       setRecordData({ uploads: 0 });
       const data = normalizedRecords(file.data);
@@ -85,9 +88,13 @@ export default function FrameCard({
       <div>
         <Typography.Title level={3}>{frameData.title} </Typography.Title>
       </div>
-      <div></div>
+      {!activeState && (
+        <Typography.Text italic>
+          <LockFilled /> Cerrado
+        </Typography.Text>
+      )}
       <Flex gap={4} vertical>
-        <Flex onClick={() => canCreate && setOpenModal(true)}>
+        <Flex onClick={() => activeState && canCreate && setOpenModal(true)}>
           <Typography.Text italic code>
             {frameData.date} - {frameData.endDate}
           </Typography.Text>
@@ -95,23 +102,25 @@ export default function FrameCard({
         <Upload
           beforeUpload={(file) => loadFile(file, frameData._id)}
           showUploadList={false}
+          disabled={!activeState}
         >
           <Button
             type="primary"
             size="small"
             danger
+            disabled={!activeState}
             loading={file?.status !== "wait"}
             style={{ width: "11.9rem" }}
           >
-            {file?.status == "analizing"
-              ? "Analizando archivo"
-              : "Cargar base"}
+            {file?.status == "analizing" ? "Analizando archivo" : "Cargar base"}
             {file?.status !== "wait" ? ` ${percent.toFixed(1)} % ` : ""}
           </Button>
         </Upload>
         <Button
           size="small"
+          disabled={!activeState}
           onClick={() =>
+            activeState &&
             navigate("/assignments", { state: { id: frameData._id } })
           }
         >

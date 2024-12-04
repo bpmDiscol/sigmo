@@ -54,7 +54,7 @@ WebApp.rawConnectHandlers.use((req, res, next) => {
 });
 
 WebApp.connectHandlers.use("/upload", (req, res, next) => {
-  console.log("Acceso", req.method);
+  console.log("Acceso", req.headers.authorization);
   if (req.method === "OPTIONS") {
     res.writeHead(200, { "Content-Type": "application/json" });
     return res.end();
@@ -67,16 +67,16 @@ WebApp.connectHandlers.use("/upload", (req, res, next) => {
       highWaterMark: 2 * 1024 * 1024,
     });
 
-    let fileType = ""
+    let fileType = "";
     let fileName = "";
     const fileData = {};
 
     busboy.on("file", (name, file, info) => {
       fileName = info.filename;
       fileType = info.mimeType;
+      const predio = req.headers.authorization;
 
-      if (!fileName || !fileData.predio) {
-        console.warn("Ruta no existente");
+      if (!fileName || !predio) {
         res.writeHead(409, { "Content-Type": "application/json" });
         return res.end(
           JSON.stringify({
@@ -84,10 +84,10 @@ WebApp.connectHandlers.use("/upload", (req, res, next) => {
             message: "Ruta no encontrada",
           })
         );
-      } 
+      }
 
       const tempFilePath = path.join(tempUploadDir, fileName);
-      const uploadDir = path.join("/app/uploads/reportImage/", fileData.predio);
+      const uploadDir = path.join("/app/uploads/reportImage/", predio || "");
       const destinationPath = path.join(uploadDir, fileName);
 
       if (!fs.existsSync(uploadDir)) {
@@ -189,7 +189,6 @@ WebApp.connectHandlers.use("/download", (req, res) => {
     );
     return;
   }
-  
 
   try {
     const stats = fs.statSync(filePath);

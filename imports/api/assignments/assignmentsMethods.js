@@ -1029,6 +1029,67 @@ Meteor.methods({
       ])
       .toArray();
   },
+
+  "assignments.closeTimeFrame": async function (filters) {
+    const assignments = await assignmentsCollection
+      .rawCollection()
+      .aggregate([
+        {
+          $lookup: {
+            from: "reports",
+            localField: "_id",
+            foreignField: "_id",
+            as: "reportData",
+          },
+        },
+        {
+          $lookup: {
+            from: "records",
+            localField: "recordId",
+            foreignField: "_id",
+            as: "recordData",
+          },
+        },
+        { $unwind: "$recordData" },
+        {
+          $match: getFilters(filters),
+        },
+        {
+          $project: {
+            _id: "$_id",
+            recordId: "$recordId",
+          },
+        },
+      ])
+      .toArray();
+
+    assignments.forEach(async (ass) => {
+      const thisAssignmentReport = await reportsCollection.findOneAsync({
+        _id: ass._id,
+      });
+      await reportsCollection.updateAsync(
+        { _id: ass._id },
+        {
+          $set: { status: "closed" },
+        },
+        { upsert: true }
+      );
+      // if (thisAssignmentReport?.status !== "done") {
+
+      // } else {
+      //   await assignmentsCollection.insertAsync({
+      //     date: Date.now(),
+      //     recordId: ass.recordId,
+      //   });
+      // }
+    });
+
+    Meteor.users.updateAsync(
+      {},
+      { $set: { "profile.assignments": Math.random() } },
+      { multi: true }
+    );
+  },
 });
 
 function reorganizeData(data) {
