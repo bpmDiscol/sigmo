@@ -53,8 +53,15 @@ WebApp.rawConnectHandlers.use((req, res, next) => {
   next();
 });
 
-WebApp.connectHandlers.use("/upload", (req, res, next) => {
-  console.log("Acceso", req.headers.authorization);
+WebApp.connectHandlers.use((req, res, next) => {
+  const match = req.url.match(/^\/upload\/([^/]+)$/);
+  if (!match) {
+    return next();
+  }
+
+  const predio = match[1];
+  console.log("🚀 ~ WebApp.connectHandlers.use ~ predio:", predio);
+
   if (req.method === "OPTIONS") {
     res.writeHead(200, { "Content-Type": "application/json" });
     return res.end();
@@ -74,7 +81,6 @@ WebApp.connectHandlers.use("/upload", (req, res, next) => {
     busboy.on("file", (name, file, info) => {
       fileName = info.filename;
       fileType = info.mimeType;
-      const predio = req.headers.authorization;
 
       if (!fileName || !predio) {
         res.writeHead(409, { "Content-Type": "application/json" });

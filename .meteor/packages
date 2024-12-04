@@ -22,4 +22,3 @@ react-meteor-data             # React higher-order component for reactively trac
 accounts-password
 quave:logged-user-react
 ostrio:files
-
