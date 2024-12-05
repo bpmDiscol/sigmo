@@ -121,7 +121,9 @@ export default function FrameCard({
           disabled={!activeState}
           onClick={() =>
             activeState &&
-            navigate("/assignments", { state: { id: frameData._id } })
+            navigate("/assignments", {
+              state: { id: frameData._id, canCreate },
+            })
           }
         >
           Asignaciones

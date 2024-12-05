@@ -117,5 +117,6 @@
   { "label": "Inquilino", "value": "inquilino" },
   { "label": "Familiar", "value": "familiar" },
   { "label": "Vecino", "value": "vecino" },
-  { "label": "No contacto", "value": "no_contacto" }
+  { "label": "No contacto", "value": "no_contacto" },
+  { "label": "Sin datos", "value": null }
 ]

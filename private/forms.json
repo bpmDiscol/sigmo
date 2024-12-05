@@ -649,7 +649,7 @@
       }
     },
     {
-      "element": "TextInput",
+      "element": "NumberInput",
       "name": "lecturaMedidor",
       "field": "lecturaMedidor",
       "label": "lectura del medidor",
@@ -964,7 +964,7 @@
       }
     },
     {
-      "element": "TextInput",
+      "element": "NumberInput",
       "name": "lectura",
       "field": "lectura",
       "label": "Lectura del medidor",

@@ -312,10 +312,11 @@ export default function Assignments() {
     }
   });
   async function lockTimeFrame() {
-    await Meteor.callAsync("assignments.closeTimeFrame", {
-      "recordData.timeFrame": state?.id,
-      not: { field: "reportData.status", value: "assigneds" },
-    });
+    if (!state.canCreate)
+      await Meteor.callAsync("assignments.closeTimeFrame", {
+        "recordData.timeFrame": state?.id,
+        not: { field: "reportData.status", value: "assigneds" },
+      });
     await Meteor.callAsync("timeFrame.update", state?.id, {
       state: "closed",
     });
@@ -352,9 +353,11 @@ export default function Assignments() {
             navigate("/timeframe");
           }}
         />
-        <Button onClick={lockTimeFrame} icon={<LockTwoTone />}>
-          Cerrar periodo
-        </Button>
+        {state.canCreate && (
+          <Button onClick={lockTimeFrame} icon={<LockTwoTone />}>
+            Cerrar periodo
+          </Button>
+        )}
       </Flex>
       <Table
         size="small"
