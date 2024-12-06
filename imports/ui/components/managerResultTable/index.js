@@ -235,7 +235,7 @@ export default function ManagerResultsTable({ data, locality }) {
         <Progress
           type="dashboard"
           status="active"
-          percent={((r.fullfit * 100) / r.completedAssignments).toFixed(1)}
+          percent={((r.fullfit * 100) / r.completedAssignments ||0).toFixed(1)}
           size={60}
           strokeColor={"#3493db"}
           strokeWidth={15}

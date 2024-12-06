@@ -81,22 +81,24 @@ export default function AssignmentReport({
       projectName,
       assignmentDate: data.date,
       reportDate: data.report?.createdAt,
-      status:
-        data.report?.status === "done"
-          ? "Terminado"
-          : data.report?.status === "reassigned"
-          ? "Reasignada"
-          : "en proceso",
+      status: ["done", "closed"].includes(data.report?.status)
+        ? "Terminado"
+        : data.report?.status === "reassigned"
+        ? "Reasignada"
+        : "en proceso",
       alert:
-        data.report?.status !== "done" && isMoreThanThreeDaysAgo(data.date),
+        ["done", "closed"].includes(data.report?.status) &&
+        isMoreThanThreeDaysAgo(data.date),
       compromiso:
         data.report?.status === "stasis3"
           ? moment(data.report.fechaCompromiso).format("DD/MM/YYYY")
           : null,
     }));
+
     const filtereds = newAssignments.filter(
       (assign) => assign.status !== "Reasignada"
     );
+    
     if (!excel) {
       setAssignments(filtereds);
       setPagination((prev) => ({

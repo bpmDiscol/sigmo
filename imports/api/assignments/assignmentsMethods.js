@@ -1082,10 +1082,7 @@ Meteor.methods({
           { upsert: false }
         );
       } else {
-        // const newAssignment = await assignmentsCollection.insertAsync({
-        //   date: Date.now(),
-        //   recordId: ass.recordId,
-        // });
+       
         await reportsCollection.updateAsync(
           {
             _id: ass._id,
