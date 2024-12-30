@@ -225,9 +225,9 @@ export default function Assignments() {
       onFilter: (value, record) =>
         record[dataIndex]
           ? record[dataIndex]
-              .toString()
-              .toLowerCase()
-              .includes(value.toLowerCase())
+            .toString()
+            .toLowerCase()
+            .includes(value.toLowerCase())
           : false,
       onFilterDropdownOpenChange: (visible) => {
         if (visible) {
@@ -272,15 +272,15 @@ export default function Assignments() {
     Meteor.call("getUsersByLocality", locality, (err, resp) => {
       const managers = globals?.members
         ? globals?.members
-            .filter(
-              (member) =>
-                (member.position === "manager") & resp.includes(member.member)
-            )
-            .map((m) => ({
-              label: m.member,
-              value: m.member,
-              key: m.id,
-            }))
+          .filter(
+            (member) =>
+              (member.position === "manager") & resp.includes(member.member)
+          )
+          .map((m) => ({
+            label: m.member,
+            value: m.member,
+            key: m.id,
+          }))
         : [];
       setManagers(managers);
     });
@@ -312,15 +312,17 @@ export default function Assignments() {
     }
   });
   async function lockTimeFrame() {
-    if (!state.canCreate)
+    if (state.canCreate) {
       await Meteor.callAsync("assignments.closeTimeFrame", {
         "recordData.timeFrame": state?.id,
         not: { field: "reportData.status", value: "assigneds" },
       });
-    await Meteor.callAsync("timeFrame.update", state?.id, {
-      state: "closed",
-    });
-    navigate("/timeframe");
+      await Meteor.callAsync("timeFrame.update", state?.id, {
+        state: "closed",
+      });
+      navigate("/timeframe");
+    }
+
   }
 
   return (
