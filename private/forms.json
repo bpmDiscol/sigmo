@@ -1,6 +1,6 @@
 {
   "title": "SIGMo",
-  "version": 1,
+  "version": 10,
   "maps": false,
   "icons": [
     {
@@ -105,7 +105,7 @@
     "intereses": "Intereses",
     "observacion": "Observación"
   },
-  "stasis": ["compromisoPago"],
+"stasis": ["compromisoPago"],
   "form": [
     {
       "element": "Dropdown",
@@ -132,7 +132,7 @@
         { "label": "Residencial de interes social", "value": "interesSocial" }
       ],
       "extDepends": {
-        "service": ["Gcartera", "Mantenimiento_N"]
+        "service": ["Gcartera", "Mantenimiento_N", "Suspensión T1"]
       }
     },
     {
@@ -153,7 +153,7 @@
         { "label": "otros", "value": "otros" }
       ],
       "extDepends": {
-        "service": ["Gcartera", "Mantenimiento_N"]
+        "service": ["Gcartera", "Mantenimiento_N", "Suspensión T1"]
       },
       "dependsOn": {
         "tipoDeVivienda": ["comercial"]
@@ -174,7 +174,8 @@
           "Brilla Surtigas",
           "Servicios Financieros",
           "Gcartera",
-          "Mantenimiento_N"
+          "Mantenimiento_N",
+          "Suspensión T1"
         ]
       },
       "dependsOn": {
@@ -399,42 +400,6 @@
       }
     },
     {
-      "element": "Date",
-      "name": "fechaCompromiso",
-      "field": "fechaCompromiso",
-      "label": "Fecha del compromiso",
-      "extDepends": {
-        "service": [
-          "Brilla Surtigas",
-          "Servicios Financieros",
-          "Gas",
-          "Gcartera",
-          "Mantenimiento_N"
-        ]
-      },
-      "dependsOn": {
-        "gestion": ["compromisoPago"]
-      }
-    },
-    {
-      "element": "Time",
-      "name": "horaCompromiso",
-      "field": "horaCompromiso",
-      "label": "Hora compromiso",
-      "extDepends": {
-        "service": [
-          "Brilla Surtigas",
-          "Servicios Financieros",
-          "Gas",
-          "Gcartera",
-          "Mantenimiento_N"
-        ]
-      },
-      "dependsOn": {
-        "gestion": ["compromisoPago"]
-      }
-    },
-    {
       "element": "TextInput",
       "name": "recibo",
       "field": "recibo",
@@ -649,7 +614,7 @@
       }
     },
     {
-      "element": "NumberInput",
+      "element": "TextInput",
       "name": "lecturaMedidor",
       "field": "lecturaMedidor",
       "label": "lectura del medidor",
@@ -860,52 +825,7 @@
         "ejecIVT": ["1", "0"]
       }
     },
-    {
-      "element": "Dropdown",
-      "name": "metodo",
-      "field": "metodo",
-      "label": "Método empleado/quitado",
-      "options": [
-        { "label": "Cepo", "value": "cepo" },
-        { "label": "Conector ciego", "value": "conector ciego" },
-        { "label": "Galvanizado", "value": "galvanizado" },
-        { "label": "Cierre de válvula", "value": "cierre de valvula" }
-      ],
-      "extDepends": {
-        "service": [
-          "Servicios Financieros CM",
-          "Suspension por persecución CM",
-          "Suspension por mora CM",
-          "Reconexión por pago CM"
-        ]
-      },
-      "dependsOn": {
-        "gestion": ["15", "20"]
-      }
-    },
-    {
-      "element": "Dropdown",
-      "name": "usAutoreconectado",
-      "field": "usAutoreconectado",
-      "label": "¿Usuario autoreconectado?",
-      "options": [
-        { "label": "Si, se reconectó", "value": "si, se reconecto" },
-        { "label": "No fue validado", "value": "no fue validado" },
-        { "label": "No se reconectó", "value": "no se reconecto" }
-      ],
-      "extDepends": {
-        "service": [
-          "Servicios Financieros CM",
-          "Suspension por persecución CM",
-          "Suspension por mora CM",
-          "Reconexión por pago CM",
-          "Instalación de válvula CM"
-        ]
-      },
-      "dependsOn": {
-        "gestion": "*"
-      }
-    },
+
     {
       "element": "Time",
       "name": "horaInicio",
@@ -921,8 +841,7 @@
         ]
       },
       "dependsOn": {
-        "gestion": ["15", "20"],
-        "usAutoreconectado": "*"
+        "gestion": ["15", "20"]
       }
     },
     {
@@ -964,7 +883,7 @@
       }
     },
     {
-      "element": "NumberInput",
+      "element": "TextInput",
       "name": "lectura",
       "field": "lectura",
       "label": "Lectura del medidor",
@@ -985,6 +904,7 @@
         "keyboardType": "phone-pad"
       }
     },
+
     {
       "element": "NumberInput",
       "name": "serieVF",
@@ -1086,7 +1006,9 @@
       "field": "2198",
       "label": "Valvula Seg. 3/8 M-P",
       "extDepends": {
-        "service": ["Instalación de válvula CM"]
+        "service": [
+          "Instalación de válvula CM"
+        ]
       },
       "dependsOn": {
         "observacion": "*",
@@ -1103,7 +1025,9 @@
       "field": "2199",
       "label": "Valvula Seg. 3/8 P-P",
       "extDepends": {
-        "service": ["Instalación de válvula CM"]
+        "service": [
+          "Instalación de válvula CM"
+        ]
       },
       "dependsOn": {
         "observacion": "*",
@@ -1120,7 +1044,9 @@
       "field": "2201",
       "label": "Llave de paso 3/8 H-M",
       "extDepends": {
-        "service": ["Instalación de válvula CM"]
+        "service": [
+          "Instalación de válvula CM"
+        ]
       },
       "dependsOn": {
         "observacion": "*",
@@ -1137,7 +1063,9 @@
       "field": "2258",
       "label": "Trampillon",
       "extDepends": {
-        "service": ["Instalación de válvula CM"]
+        "service": [
+          "Instalación de válvula CM"
+        ]
       },
       "dependsOn": {
         "observacion": "*",

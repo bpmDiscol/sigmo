@@ -43,10 +43,6 @@
     "label": "Pago del valor vencido/total facturado",
     "value": "pagoVencido_totalFacturado"
   },
-  {
-    "value": "Pago del valor vencido/total facturado",
-    "label": "pagoVencido_totalFacturado"
-  },
   { "label": "Realiza abono/pago parcial", "value": "pagoParcial" },
   { "label": "Pago total Deuda", "value": "pagoTotalDeuda" },
   {
@@ -92,31 +88,11 @@
   { "label": "NUMERO_ORDEN", "value": "NUMERO_DE_LA_ORDEN" },
   { "label": "DESCRIPCION_TIPO_TRABAJO", "value": "DESCRIPCION_TIPO_PRODUCTO" },
   { "label": "NOMBRES_CLIENTE", "value": "NOMBRE_CLIENTE" },
+  { "label": "20", "value": "Gestionado" },
   { "label": "Gestionado", "value": "20" },
-  { "label": "Recibo cancelado", "value": "19" },
-  { "label": "Medidor obstaculizado", "value": "18" },
-  { "label": "Calamidad familiar por fallecimiento", "value": "17" },
-  { "label": "Medidor no ubicado", "value": "16" },
-  { "label": "Medidor no coincide", "value": "15" },
-  { "label": "Acometida en terraza", "value": "14" },
-  { "label": "Acometida no encontrada/no visible", "value": "13" },
-  { "label": "Zona de calamidad", "value": "12" },
-  { "label": "Oposición/cliente agresivo", "value": "11" },
-  { "label": "Imposibilidades técnicas", "value": "10" },
-  { "label": "Adulto mayor/menor en casa", "value": "09" },
-  { "label": "Administración no permite ingreso", "value": "08" },
-  { "label": "Dirección errada/predio no localizado", "value": "07" },
-  { "label": "Inmueble con rejas y candado", "value": "06" },
-  { "label": "Inmueble en zona de dificil acceso/peligroso", "value": "05" },
-  { "label": "Inmueble en contrucción", "value": "04" },
-  { "label": "Inmueble demolido/solar/lote", "value": "03" },
-  { "label": "Inmueble desocupado/abandonado", "value": "02" },
-  { "label": "Inmueble solo", "value": "01" },
-  { "label": "No visitado", "value": "00" },
   { "label": "Si contacto", "value": "si_contacto" },
   { "label": "Inquilino", "value": "inquilino" },
   { "label": "Familiar", "value": "familiar" },
   { "label": "Vecino", "value": "vecino" },
-  { "label": "No contacto", "value": "no_contacto" },
-  { "label": "Sin datos", "value": null }
+  { "label": "No contacto", "value": "no_contacto" }
 ]

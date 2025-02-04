@@ -1,11 +1,5 @@
 {
-  "XjpjSuFFJDkbtQ5gq": [
-    {
-      "title": "Alerta",
-      "dataIndex": "alert",
-      "width": "15rem",
-      "type": "alert"
-    },
+  "F4NKAjGAM6mg6vei8": [
     {
       "title": "Producto",
       "dataIndex": "PRODUCTO",
@@ -119,14 +113,12 @@
     {
       "title": "Fecha Asignación",
       "dataIndex": "assignmentDate",
-      "type": "date",
-      "width": "15rem"
+      "type": "date"
     },
     {
       "title": "Fecha Gestión",
       "dataIndex": "reportDate",
-      "type": "date",
-      "width": "15rem"
+      "type": "date"
     },
     {
       "title": "Estado del servicio",
@@ -137,9 +129,14 @@
       "title": "Solicita equipo de medición",
       "dataIndex": "solicitaMedidor",
       "width": "15rem"
+    },
+    {
+      "title": "Codigo de visita",
+      "dataIndex": "_id",
+      "width": "15rem"
     }
   ],
-  "cCbwLzBDACcRCCtrq": [
+  "vvnCHPJe9Jean7seg": [
     {
       "title": "Tiempo",
       "dataIndex": "alert",
@@ -217,13 +214,12 @@
       "title": "Fecha gestión",
       "dataIndex": "reportDate",
       "type": "date",
-      "width": "15rem"
+      "width":"15rem"
     },
     {
       "title": "Fecha Asignación",
       "dataIndex": "assignmentDate",
-      "type": "date",
-      "width": "15rem"
+      "type": "date"
     },
     {
       "title": "Resultado de Gestión",
@@ -329,19 +325,18 @@
       "title": "Observación",
       "dataIndex": "observacion",
       "width": "15rem"
+    },
+    {
+      "title": "Codigo de visita",
+      "dataIndex": "_id",
+      "width": "15rem"
     }
   ],
-  "qHPrdbt7LrwHvdxDq": [
-    {
-      "title": "Alerta",
-      "dataIndex": "alert",
-      "width": "5rem",
-      "type": "alert"
-    },
+  "NYFEDRQT8tpiDmoiz": [
     {
       "title": "Producto",
       "dataIndex": "PRODUCTO",
-      "width": "10rem"
+      "width": "15rem"
     },
     {
       "title": "Gestor",
@@ -399,8 +394,7 @@
       "title": "Medidor",
       "dataIndex": "ELEMENTO_MEDICION",
       "width": "15rem"
-    },
-    {
+    }, {
       "title": "Medidor encontrado",
       "dataIndex": "serialMedidor",
       "width": "15rem"
@@ -408,16 +402,6 @@
     {
       "title": "Lectura",
       "dataIndex": "lectura",
-      "width": "15rem"
-    },
-    {
-      "title": "Método empleado/quitado",
-      "dataIndex": "metodo",
-      "width": "15rem"
-    },
-    {
-      "title": "¿Usuario autoreconectado?",
-      "dataIndex": "usAutoreconectado",
       "width": "15rem"
     },
     {
@@ -455,17 +439,14 @@
       "dataIndex": "assignmentDate",
       "type": "date",
       "width": "15rem"
+
     },
     {
       "title": "Fecha Gestión",
       "dataIndex": "reportDate",
       "type": "date",
       "width": "15rem"
-    },
-    {
-      "title": "Codigo de visita",
-      "dataIndex": "_id",
-      "width": "15rem"
+
     },
     {
       "title": "2258",
@@ -485,6 +466,11 @@
     {
       "title": "2198",
       "dataIndex": "2198",
+      "width": "15rem"
+    },
+    {
+      "title": "Codigo de visita",
+      "dataIndex": "_id",
       "width": "15rem"
     }
   ]
