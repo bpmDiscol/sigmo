@@ -1,5 +1,5 @@
 {
-  "Cienaga": {
+  "SURTIGAS": {
     "search": [
       "_id",
       "PRODUCTO",
@@ -155,7 +155,7 @@
       }
     ]
   },
-  "boom": {
+ "Ciénaga": {
     "search": [
       "_id",
       "PRODUCTO",
@@ -311,7 +311,7 @@
       }
     ]
   },
-  "Fracort": {
+   "Fracort": {
     "search": [
       "_id",
       "PRODUCTO",
@@ -385,7 +385,6 @@
         "dataIndex": "DIRECCION_PREDIO",
         "type": "text"
       },
-      
       {
         "title": "Estado de la orden",
         "dataIndex": "ESTADO_ORDEN",

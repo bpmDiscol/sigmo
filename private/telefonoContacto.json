@@ -1,5 +1,5 @@
 {
-  "Fracort": {
+  "SURTIGAS": {
     "project": {
       "nombreUsuario": "$recordData.NOMBRE_CLIENTE",
       "contrato": "$recordData.CONTRATO",
@@ -9,9 +9,16 @@
       "indicador": "$recordData.INDICADOR",
       "edadMora": "$recordData.EDAD_MORA_ACTUAL",
       "deudaTotal": "$recordData.DEUDA_TOTAL_ASIGNADA",
-      "lecturaMedidor": 1
+      "createdAt": 1,
+      "lecturaMedidor": 1,
+      "telefonoContacto":1
     },
     "columns": [
+      {
+        "title":"Fecha de gestion",
+	"dataIndex":"createdAt",
+        "type":"date"
+      },
       {
         "title": "Usuario",
         "dataIndex": "nombreUsuario",
@@ -38,11 +45,6 @@
         "type": "text"
       },
       {
-        "title": "Indicador",
-        "dataIndex": "indicador",
-        "type": "text"
-      },
-      {
         "title": "Edad mora",
         "dataIndex": "edadMora",
         "type": "text"
@@ -53,28 +55,34 @@
         "type": "text"
       },
       {
-        "title": "Lectura del medidor",
-        "dataIndex": "lecturaMedidor",
+        "title": "Telefono",
+        "dataIndex": "telefonoContacto",
         "type": "text"
       }
     ]
   },
-  "Cienaga": {
+  "Ciénaga": {
     "project": {
       "manager": "$assignmentData.manager",
       "gestion": 1,
-      "images": 1,
       "contrato": "$recordData.CONTRATO",
       "producto": "$recordData.PRODUCTO",
       "ciclo": "$recordData.CICLO",
       "barrio": "$recordData.DESCRIPCION_BARRIO",
       "direccion": "$recordData.DIRECCION_PREDIO",
-      "createdAt": 1
+      "createdAt": 1,
+      "lectura": 1,
+      "telefonoContacto":1
     },
-    "columns": [
+     "columns": [
       {
-        "title": "Gestor",
-        "dataIndex": "manager",
+        "title":"Fecha de gestion",
+        "dataIndex":"createdAt",
+        "type":"date"
+      },
+      {
+        "title": "Usuario",
+        "dataIndex": "nombreUsuario",
         "type": "text"
       },
       {
@@ -98,24 +106,19 @@
         "type": "text"
       },
       {
-        "title": "Ciclo",
-        "dataIndex": "ciclo",
+        "title": "Edad mora",
+        "dataIndex": "edadMora",
         "type": "text"
       },
       {
-        "title": "Fecha de gestión",
-        "dataIndex": "createdAt",
-        "type": "date"
-      },
-      {
-        "title": "Causal",
-        "dataIndex": "gestion",
+        "title": "Deuda total",
+        "dataIndex": "deudaTotal",
         "type": "text"
       },
       {
-        "title": "Imagenes",
-        "dataIndex": "images",
-        "type": "images"
+        "title": "Telefono",
+        "dataIndex": "telefonoContacto",
+        "type": "text"
       }
     ]
   }
