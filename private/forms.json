@@ -105,7 +105,7 @@
     "intereses": "Intereses",
     "observacion": "Observación"
   },
-"stasis": ["compromisoPago"],
+  "stasis": ["compromisoPago"],
   "form": [
     {
       "element": "Dropdown",
@@ -209,49 +209,51 @@
       "field": "gestion_brilla",
       "label": "Gestión",
       "options": [
-        { "label": "Inmueble solo", "value": "inmuebleSolo" },
-        { "label": "Inmueble desocupado", "value": "inmuebleDesocupado" },
         { "label": "Inmueble demolido", "value": "inmuebleDemolido" },
+        { "label": "Inmueble desocupado", "value": "inmuebleDesocupado" },
         {
           "label": "Inmueble en construccion",
           "value": "inmuebleConstruccion"
         },
-        { "label": "Dirección errada", "value": "direccionErrada" },
         {
-          "label": "No se permite ingreso a domicilio/Obstaculo (edificios-conjunto cerrado)",
+          "label": "Inmueble solo al momento de la visita",
+          "value": "inmuebleSolo"
+        },
+        { "label": "Cuota inicial alta", "value": "cuotaInicialAlta" },
+        { "label": "Cuota mensual alta", "value": "cuotaMensualAlta" },
+        {
+          "label": "Usuario sin intención de pago ",
+          "value": "sinIntencionPago"
+        },
+        {
+          "label": "Posible fraude",
+          "value": "posibleFraude"
+        },
+        { "label": "Compromiso de pago", "value": "compromisoPago" },
+        { "label": "Sin empleo", "value": "sinEmpleo" },
+        { "label": "Titular fallecido", "value": "titularFallecido" },
+        { "label": "Usuario en reclamo", "value": "usuarioReclamo" },
+
+        { "label": "Dirección no encontrada", "value": "direccionErrada" },
+        {
+          "label": "Usuario en arriendo estacional ",
+          "value": "arriendoEstacional"
+        },
+        {
+          "label": "No permite acceso al predio",
           "value": "noPermite_Obstaculo"
         },
         {
-          "label": "Arrendatario no asume la deuda",
-          "value": "arrendatarioNoAsumeDeuda"
+          "label": "Inquilino no asume la deuda",
+          "value": "inquilinoNoAsumeDeuda"
         },
         {
-          "label": "Zona de calamidad (inundaciones / orden Público)",
-          "value": "zonaCalamidad"
+          "label": "No le interesa refinanciar en plan brilla",
+          "value": "noInteresaRefinanciarPlanBrilla"
         },
         {
-          "label": "Situación económica critica insolvente/ Bajos ingresos",
-          "value": "economiaCritica"
-        },
-        { "label": "Compromiso de pago", "value": "compromisoPago" },
-        { "label": "Cliente no asume la deuda", "value": "noAsumeDeuda" },
-        { "label": "Titular fallecido", "value": "titularFallecido" },
-        {
-          "label": "Informa no usó cupo (Posible Fraude)",
-          "value": "posibleFraude"
-        },
-        {
-          "label": "Pendiente  Recibir Ingresos para pagar",
-          "value": "pendienteIngresos"
-        },
-        { "label": "Usuario en reclamo", "value": "usuarioReclamo" },
-        {
-          "label": "Presto cupo Brilla y responsable del pago es otra persona",
-          "value": "otroResponsable"
-        },
-        {
-          "label": "Menor de edad / adulto mayor en casa ",
-          "value": "menor_AdultoMayor"
+          "label": "Usuario en espera de ingresos para pagar",
+          "value": "usuarioPendienteIngresos"
         }
       ],
       "extDepends": {
@@ -267,40 +269,43 @@
       "field": "gestion_gas",
       "label": "Gestión",
       "options": [
-        { "label": "Inmueble solo", "value": "inmuebleSolo" },
-        { "label": "Inmueble desocupado", "value": "inmuebleDesocupado" },
         { "label": "Inmueble demolido", "value": "inmuebleDemolido" },
+        { "label": "Inmueble desocupado", "value": "inmuebleDesocupado" },
         {
           "label": "Inmueble en construccion",
           "value": "inmuebleConstruccion"
         },
-        { "label": "Dirección errada", "value": "direccionErrada" },
         {
-          "label": "No se permite ingreso a domicilio/Obstaculo (edificios-conjunto cerrado)",
+          "label": "Inmueble solo al momento de la visita",
+          "value": "inmuebleSolo"
+        },
+        { "label": "Cuota inicial alta", "value": "cuotaInicialAlta" },
+        { "label": "Cuota mensual alta", "value": "cuotaMensualAlta" },
+        {
+          "label": "Usuario sin intención de pago ",
+          "value": "sinIntencionPago"
+        },
+        { "label": "Compromiso de pago", "value": "compromisoPago" },
+        { "label": "Sin empleo", "value": "sinEmpleo" },
+        { "label": "Titular fallecido", "value": "titularFallecido" },
+        { "label": "Usuario en reclamo", "value": "usuarioReclamo" },
+
+        { "label": "Dirección no encontrada", "value": "direccionErrada" },
+        {
+          "label": "Usuario en arriendo estacional ",
+          "value": "arriendoEstacional"
+        },
+        {
+          "label": "No permite acceso al predio",
           "value": "noPermite_Obstaculo"
         },
         {
-          "label": "Arrendatario no asume la deuda",
-          "value": "arrendatarioNoAsumeDeuda"
+          "label": "Inquilino no asume la deuda",
+          "value": "inquilinoNoAsumeDeuda"
         },
         {
-          "label": "Zona de calamidad (inundaciones / orden Público)",
-          "value": "zonaCalamidad"
-        },
-        {
-          "label": "Situación económica critica insolvente/ Bajos ingresos",
-          "value": "economiaCritica"
-        },
-        { "label": "Compromiso de pago", "value": "compromisoPago" },
-        { "label": "Cliente no asume la deuda", "value": "noAsumeDeuda" },
-        {
-          "label": "Pendiente  Recibir Ingresos para pagar",
-          "value": "pendienteIngresos"
-        },
-        { "label": "Usuario en reclamo", "value": "usuarioReclamo" },
-        {
-          "label": "Menor de edad / adulto mayor en casa ",
-          "value": "menor_AdultoMayor"
+          "label": "Usuario en espera de ingresos para pagar",
+          "value": "usuarioPendienteIngresos"
         }
       ],
       "extDepends": {
@@ -316,52 +321,51 @@
       "field": "gestion_especial",
       "label": "Gestión",
       "options": [
-        { "label": "Inmueble solo", "value": "inmuebleSolo" },
+        { "label": "Inmueble demolido", "value": "inmuebleDemolido" },
         { "label": "Inmueble desocupado", "value": "inmuebleDesocupado" },
         {
           "label": "Inmueble en construccion",
           "value": "inmuebleConstruccion"
         },
-        { "label": "Dirección errada", "value": "direccionErrada" },
-
         {
-          "label": "No se permite ingreso a domicilio/Obstaculo (edificios-conjunto cerrado)",
+          "label": "Inmueble solo al momento de la visita",
+          "value": "inmuebleSolo"
+        },
+        { "label": "Cuota inicial alta", "value": "cuotaInicialAlta" },
+        { "label": "Cuota mensual alta", "value": "cuotaMensualAlta" },
+        {
+          "label": "Usuario sin intención de pago ",
+          "value": "sinIntencionPago"
+        },
+        {
+          "label": "Posible fraude",
+          "value": "posibleFraude"
+        },
+        { "label": "Compromiso de pago", "value": "compromisoPago" },
+        { "label": "Sin empleo", "value": "sinEmpleo" },
+        { "label": "Titular fallecido", "value": "titularFallecido" },
+        { "label": "Usuario en reclamo", "value": "usuarioReclamo" },
+
+        { "label": "Dirección no encontrada", "value": "direccionErrada" },
+        {
+          "label": "Usuario en arriendo estacional ",
+          "value": "arriendoEstacional"
+        },
+        {
+          "label": "No permite acceso al predio",
           "value": "noPermite_Obstaculo"
         },
         {
-          "label": "Zona de calamidad (inundaciones / orden Público)",
-          "value": "zonaCalamidad"
+          "label": "Inquilino no asume la deuda",
+          "value": "inquilinoNoAsumeDeuda"
         },
         {
-          "label": "Situación económica critica insolvente/ Bajos ingresos",
-          "value": "economiaCritica"
-        },
-        { "label": "Cuota Inicial o Mensual Alta", "value": "cuotaAlta" },
-        { "label": "Compromiso de pago", "value": "compromisoPago" },
-        { "label": "Cliente no asume la deuda", "value": "noAsumeDeuda" },
-        { "label": "Titular fallecido", "value": "titularFallecido" },
-        {
-          "label": "Informa no usó cupo (Posible Fraude)",
-          "value": "posibleFraude"
+          "label": "No le interesa refinanciar en plan brilla",
+          "value": "noInteresaRefinanciarPlanBrilla"
         },
         {
-          "label": "Pendiente  Recibir Ingresos para pagar",
-          "value": "pendienteIngresos"
-        },
-        { "label": "Usuario en reclamo", "value": "usuarioReclamo" },
-        {
-          "label": "Presto cupo Brilla y responsable del pago es otra persona",
-          "value": "otroResponsable"
-        },
-        {
-          "label": "Menor de edad / adulto mayor en casa ",
-          "value": "menor_AdultoMayor"
-        },
-        { "label": "Suscriptor no asume la deuda", "value": "noAsumeDeuda" },
-        { "label": "Sin empleo", "value": "sinEmpleo" },
-        {
-          "label": "Trabajo Informal - sin ingresos fijos. ",
-          "value": "trabajoInformal"
+          "label": "Usuario en espera de ingresos para pagar",
+          "value": "usuarioPendienteIngresos"
         }
       ],
       "extDepends": {
@@ -785,7 +789,7 @@
       "field": "gestion_fracort",
       "label": "Gestión",
       "options": [
-        { "label": "inmueble solo", "value": "01" },
+        { "label": "Inmueble solo al momento de la visita", "value": "01" },
         { "label": "Inmueble desocupado/Abandonado", "value": "02" },
         { "label": "Inmueble demolido/Solar/Lote", "value": "03" },
         { "label": "Inmueble en construccion", "value": "04" },
@@ -794,7 +798,10 @@
           "value": "05"
         },
         { "label": "Inmueble con rejas y candado", "value": "06" },
-        { "label": "Dirección errada/Predio no localizado", "value": "07" },
+        {
+          "label": "Dirección no encontrada/Predio no localizado",
+          "value": "07"
+        },
         { "label": "Administración no permite acceso", "value": "08" },
         { "label": "Adulto mayor/ menor en casa", "value": "09" },
         { "label": "Imposibilidades técnicas", "value": "10" },
@@ -1006,9 +1013,7 @@
       "field": "2198",
       "label": "Valvula Seg. 3/8 M-P",
       "extDepends": {
-        "service": [
-          "Instalación de válvula CM"
-        ]
+        "service": ["Instalación de válvula CM"]
       },
       "dependsOn": {
         "observacion": "*",
@@ -1025,9 +1030,7 @@
       "field": "2199",
       "label": "Valvula Seg. 3/8 P-P",
       "extDepends": {
-        "service": [
-          "Instalación de válvula CM"
-        ]
+        "service": ["Instalación de válvula CM"]
       },
       "dependsOn": {
         "observacion": "*",
@@ -1044,9 +1047,7 @@
       "field": "2201",
       "label": "Llave de paso 3/8 H-M",
       "extDepends": {
-        "service": [
-          "Instalación de válvula CM"
-        ]
+        "service": ["Instalación de válvula CM"]
       },
       "dependsOn": {
         "observacion": "*",
@@ -1063,9 +1064,7 @@
       "field": "2258",
       "label": "Trampillon",
       "extDepends": {
-        "service": [
-          "Instalación de válvula CM"
-        ]
+        "service": ["Instalación de válvula CM"]
       },
       "dependsOn": {
         "observacion": "*",

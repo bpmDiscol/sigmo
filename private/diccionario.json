@@ -4,17 +4,17 @@
   { "label": "Residencial y comercial", "value": "residencial_comercial" },
   { "label": "Efectiva", "value": "efectiva" },
   { "label": "No Efectiva", "value": "no_efectiva" },
-  { "label": "Inmueble solo", "value": "inmuebleSolo" },
+  { "label": "Inmueble solo al momento de la visita", "value": "inmuebleSolo" },
   { "label": "Inmueble desocupado", "value": "inmuebleDesocupado" },
   { "label": "Inmueble demolido", "value": "inmuebleDemolido" },
   { "label": "Inmueble en construccion", "value": "inmuebleConstruccion" },
-  { "label": "Dirección errada", "value": "direccionErrada" },
+  { "label": "Dirección no encontrada", "value": "direccionErrada" },
   {
-    "label": "No se permite ingreso a domicilio/Obstaculo (edificios-conjunto cerrado)",
+    "label": "No permite acceso al predio",
     "value": "noPermite_Obstaculo"
   },
   {
-    "label": "Arrendatario no asume la deuda",
+    "label": "Inquilino no asume la deuda ",
     "value": "arrendatarioNoAsumeDeuda"
   },
   {
@@ -26,9 +26,9 @@
     "value": "economiaCritica"
   },
   { "label": "Compromiso de pago", "value": "compromisoPago" },
-  { "label": "Cliente no asume la deuda", "value": "noAsumeDeuda" },
+  { "label": "Usuario sin intención de pago ", "value": "sinIntencionPago" },
   { "label": "Titular fallecido", "value": "titularFallecido" },
-  { "label": "Informa no usó cupo (Posible Fraude)", "value": "posibleFraude" },
+  { "label": "Posible fraude", "value": "posibleFraude" },
   {
     "label": "Pendiente Recibir Ingresos para pagar",
     "value": "pendienteIngresos"
@@ -49,7 +49,14 @@
     "label": "Menor de edad / adulto mayor en casa",
     "value": "menor_AdultoMayor"
   },
-  { "label": "Cuota Inicial o Mensual Alta", "value": "cuotaAlta" },
+  { "label": "Cuota inicial alta", "value": "cuotaInicialAlta" },
+  { "label": "Cuota mensual alta", "value": "cuotaMensualAlta" },
+  { "label": "Usuario en arriendo estacional ", "value": "arriendoEstacional" },
+  { "label": "No le interesa refinanciar en plan brilla ", "value": "noInteresaRefinanciarPlanBrilla" },
+  {
+    "label": "Usuario en espera de ingresos para pagar",
+    "value": "usuarioPendienteIngresos"
+  },
   {
     "label": "Suscriptor no asume la deuda",
     "value": "suscriptorNoAsumeDeuda"

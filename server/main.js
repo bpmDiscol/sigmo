@@ -14,8 +14,6 @@ Meteor.startup(async () => {
   });
   if (!admin) {
     Accounts.createUser({
-      username: process.env.ADMIN,
-      password: process.env.ADMIN_PASSWORD,
       profile: { role: "superadmin" },
     });
   }

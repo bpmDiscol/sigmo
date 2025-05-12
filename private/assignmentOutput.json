@@ -52,6 +52,7 @@
     "locality",
     "date",
     "manager",
-    "timeFrame"
+    "timeFrame",
+    "project"
   ]
 }
