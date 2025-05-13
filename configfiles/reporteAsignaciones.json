@@ -1,0 +1,477 @@
+{
+  "F4NKAjGAM6mg6vei8": [
+    {
+      "title": "Producto",
+      "dataIndex": "PRODUCTO",
+      "width": "15rem"
+    },
+    {
+      "title": "Gestor",
+      "dataIndex": "manager",
+      "width": "15rem"
+    },
+    {
+      "title": "Cliente",
+      "dataIndex": "NOMBRE_CLIENTE",
+      "width": "15rem"
+    },
+    {
+      "title": "Orden",
+      "dataIndex": "NUMERO_DE_LA_ORDEN",
+      "width": "15rem"
+    },
+    {
+      "title": "Descripción Barrio",
+      "dataIndex": "DESCRIPCION_BARRIO",
+      "width": "15rem"
+    },
+    {
+      "title": "Dirección Predio",
+      "dataIndex": "DIRECCION_PREDIO",
+      "width": "15rem"
+    },
+    {
+      "title": "Causal de Pago",
+      "dataIndex": "causal_de_pago",
+      "width": "15rem"
+    },
+    {
+      "title": "Causal de No Pago",
+      "dataIndex": "causal_de_no_pago",
+      "width": "15rem"
+    },
+    {
+      "title": "Recibo",
+      "dataIndex": "recibo",
+      "width": "15rem"
+    },
+    {
+      "title": "Valor del recibo",
+      "dataIndex": "valorRecibo",
+      "width": "15rem"
+    },
+    {
+      "title": "Tipo de vivienda",
+      "dataIndex": "tipoDeVivienda",
+      "width": "15rem"
+    },
+    {
+      "title": "Contacto",
+      "dataIndex": "contacto",
+      "width": "15rem"
+    },
+    {
+      "title": "Telefono contacto",
+      "dataIndex": "telefonoContacto",
+      "width": "15rem"
+    },
+    {
+      "title": "Uso del predio",
+      "dataIndex": "tipoDeVivienda",
+      "width": "15rem"
+    },
+    {
+      "title": "Tipo de habitante",
+      "dataIndex": "tipoHabitante",
+      "width": "15rem"
+    },
+    {
+      "title": "Clase de predio",
+      "dataIndex": "clasePredio",
+      "width": "15rem"
+    },
+    {
+      "title": "Tipo de comercio",
+      "dataIndex": "tipoComercio",
+      "width": "15rem"
+    },
+    {
+      "title": "Estado del servicio",
+      "dataIndex": "estadoServicio",
+      "width": "15rem"
+    },
+    {
+      "title": "Cuota inicial ofrecida",
+      "dataIndex": "cuotaInicialOfrece",
+      "width": "15rem"
+    },
+    {
+      "title": "Cuota mensual",
+      "dataIndex": "cuotaMensual",
+      "width": "15rem"
+    },
+    {
+      "title": "Observación",
+      "dataIndex": "observacion",
+      "width": "15rem"
+    },
+    {
+      "title": "Estado",
+      "dataIndex": "status",
+      "width": "15rem"
+    },
+    {
+      "title": "Fecha Asignación",
+      "dataIndex": "assignmentDate",
+      "type": "date"
+    },
+    {
+      "title": "Fecha Gestión",
+      "dataIndex": "reportDate",
+      "type": "date"
+    },
+    {
+      "title": "Estado del servicio",
+      "dataIndex": "estado",
+      "width": "15rem"
+    },
+    {
+      "title": "Solicita equipo de medición",
+      "dataIndex": "solicitaMedidor",
+      "width": "15rem"
+    },
+    {
+      "title": "Codigo de visita",
+      "dataIndex": "_id",
+      "width": "15rem"
+    }
+  ],
+  "vvnCHPJe9Jean7seg": [
+    {
+      "title": "Tiempo",
+      "dataIndex": "alert",
+      "width": "5rem",
+      "type": "alert"
+    },
+    {
+      "title": "Compromiso",
+      "dataIndex": "compromiso",
+      "width": "10rem",
+      "type": "compromiso"
+    },
+    {
+      "title": "Producto",
+      "dataIndex": "PRODUCTO",
+      "width": "15rem"
+    },
+    {
+      "title": "Contrato",
+      "dataIndex": "CONTRATO",
+      "width": "15rem"
+    },
+    {
+      "title": "Cliente",
+      "dataIndex": "CLIENTE",
+      "width": "15rem"
+    },
+    {
+      "title": "Descripción Tipo Producto",
+      "dataIndex": "DESCRIPCION_TIPO_PRODUCTO",
+      "width": "15rem"
+    },
+
+    {
+      "title": "Descripción Localidad",
+      "dataIndex": "DESCRIPCION_LOCALIDAD",
+      "width": "15rem"
+    },
+    {
+      "title": "Descripción Barrio",
+      "dataIndex": "DESCRIPCION_BARRIO",
+      "width": "15rem"
+    },
+    {
+      "title": "Descripción Ciclo",
+      "dataIndex": "DESCRIPCION_CICLO",
+      "width": "15rem"
+    },
+    {
+      "title": "Tipo Cliente",
+      "dataIndex": "TIPO_CLIENTE",
+      "width": "15rem"
+    },
+    {
+      "title": "Identificación",
+      "dataIndex": "IDENTIFICACION",
+      "width": "15rem"
+    },
+    {
+      "title": "Nombre Cliente",
+      "dataIndex": "NOMBRE_CLIENTE",
+      "width": "15rem"
+    },
+    {
+      "title": "Dirección Predio",
+      "dataIndex": "DIRECCION_PREDIO",
+      "width": "15rem"
+    },
+    {
+      "title": "Gestor",
+      "dataIndex": "manager",
+      "width": "15rem"
+    },
+    {
+      "title": "Fecha gestión",
+      "dataIndex": "reportDate",
+      "type": "date",
+      "width":"15rem"
+    },
+    {
+      "title": "Fecha Asignación",
+      "dataIndex": "assignmentDate",
+      "type": "date"
+    },
+    {
+      "title": "Resultado de Gestión",
+      "dataIndex": "resultadoDeGestion",
+      "width": "15rem"
+    },
+    {
+      "title": "Causal de No Pago",
+      "dataIndex": "causal_de_no_pago",
+      "width": "15rem"
+    },
+    {
+      "title": "Contacto",
+      "dataIndex": "contacto",
+      "width": "15rem"
+    },
+    {
+      "title": "Telefono suguerido",
+      "dataIndex": "telefonoContacto",
+      "width": "15rem"
+    },
+    {
+      "title": "Tipo de vivienda",
+      "dataIndex": "tipoDeVivienda",
+      "width": "15rem"
+    },
+    {
+      "title": "Elemento de medición",
+      "dataIndex": "ELEMENTO_MEDICION",
+      "width": "15rem"
+    },
+    {
+      "title": "Email",
+      "dataIndex": "EMAIL",
+      "width": "15rem"
+    },
+    {
+      "title": "Estado del servicio",
+      "dataIndex": "estadoServicio",
+      "width": "15rem"
+    },
+    {
+      "title": "Lectura",
+      "dataIndex": "lecturaMedidor",
+      "width": "15rem"
+    },
+    {
+      "title": "Comentario",
+      "dataIndex": "COMENTARIO",
+      "width": "15rem"
+    },
+    {
+      "title": "Causal de pago",
+      "dataIndex": "causal_de_pago",
+      "width": "15rem"
+    },
+    {
+      "title": "Recibo",
+      "dataIndex": "recibo",
+      "width": "15rem"
+    },
+    {
+      "title": "Valor recibo",
+      "dataIndex": "valorRecibo",
+      "width": "15rem"
+    },
+    {
+      "title": "Identificación del coodeudor",
+      "dataIndex": "IDENTIFICACION_CODEUDOR",
+      "width": "15rem"
+    },
+    {
+      "title": "Nombre del codeudor",
+      "dataIndex": "NOMBRE_CODEUDOR",
+      "width": "15rem"
+    },
+    {
+      "title": "Telefono movil del codeudor",
+      "dataIndex": "TELEFONO_MOVIL_CODEUDOR",
+      "width": "15rem"
+    },
+    {
+      "title": "Telefono fijo del codeudor",
+      "dataIndex": "TELEFONO_FIJO_CODEUDOR",
+      "width": "15rem"
+    },
+    {
+      "title": "Pagos del periodo",
+      "dataIndex": "PAGOS_PERIODOS_ASIGNADO",
+      "width": "15rem"
+    },
+    {
+      "title": "Proyecto",
+      "dataIndex": "projectName",
+      "width": "15rem"
+    },
+    {
+      "title": "Estado",
+      "dataIndex": "status",
+      "width": "15rem"
+    },
+    {
+      "title": "Observación",
+      "dataIndex": "observacion",
+      "width": "15rem"
+    },
+    {
+      "title": "Codigo de visita",
+      "dataIndex": "_id",
+      "width": "15rem"
+    }
+  ],
+  "NYFEDRQT8tpiDmoiz": [
+    {
+      "title": "Producto",
+      "dataIndex": "PRODUCTO",
+      "width": "15rem"
+    },
+    {
+      "title": "Gestor",
+      "dataIndex": "manager",
+      "width": "15rem"
+    },
+    {
+      "title": "Cliente",
+      "dataIndex": "NOMBRE_CLIENTE",
+      "width": "15rem"
+    },
+    {
+      "title": "Orden",
+      "dataIndex": "NUMERO_DE_LA_ORDEN",
+      "width": "15rem"
+    },
+    {
+      "title": "Descripción Barrio",
+      "dataIndex": "DESCRIPCION_BARRIO",
+      "width": "15rem"
+    },
+    {
+      "title": "Dirección Predio",
+      "dataIndex": "DIRECCION_PREDIO",
+      "width": "15rem"
+    },
+    {
+      "title": "Causal",
+      "dataIndex": "gestion",
+      "width": "15rem"
+    },
+    {
+      "title": "Numero IVT",
+      "dataIndex": "numIVT",
+      "width": "15rem"
+    },
+    {
+      "title": "Motivo no IVT",
+      "dataIndex": "motivoNoEjecucion",
+      "width": "15rem"
+    },
+    {
+      "title": "Hora de inicio",
+      "dataIndex": "horaInicio",
+      "width": "15rem",
+      "type": "date"
+    },
+    {
+      "title": "Hora finalización",
+      "dataIndex": "horaFin",
+      "width": "15rem",
+      "type": "date"
+    },
+    {
+      "title": "Medidor",
+      "dataIndex": "ELEMENTO_MEDICION",
+      "width": "15rem"
+    }, {
+      "title": "Medidor encontrado",
+      "dataIndex": "serialMedidor",
+      "width": "15rem"
+    },
+    {
+      "title": "Lectura",
+      "dataIndex": "lectura",
+      "width": "15rem"
+    },
+    {
+      "title": "Serie VF",
+      "dataIndex": "serieVF",
+      "width": "15rem"
+    },
+    {
+      "title": "Nombre de contacto",
+      "dataIndex": "contacto",
+      "width": "15rem"
+    },
+    {
+      "title": "Cedula contacto",
+      "dataIndex": "cedula",
+      "width": "15rem"
+    },
+    {
+      "title": "Telefono contacto",
+      "dataIndex": "telefono",
+      "width": "15rem"
+    },
+    {
+      "title": "Observación",
+      "dataIndex": "observacion",
+      "width": "15rem"
+    },
+    {
+      "title": "Estado",
+      "dataIndex": "status",
+      "width": "15rem"
+    },
+    {
+      "title": "Fecha Asignación",
+      "dataIndex": "assignmentDate",
+      "type": "date",
+      "width": "15rem"
+
+    },
+    {
+      "title": "Fecha Gestión",
+      "dataIndex": "reportDate",
+      "type": "date",
+      "width": "15rem"
+
+    },
+    {
+      "title": "2258",
+      "dataIndex": "2258",
+      "width": "15rem"
+    },
+    {
+      "title": "2201",
+      "dataIndex": "2201",
+      "width": "15rem"
+    },
+    {
+      "title": "2199",
+      "dataIndex": "2199",
+      "width": "15rem"
+    },
+    {
+      "title": "2198",
+      "dataIndex": "2198",
+      "width": "15rem"
+    },
+    {
+      "title": "Codigo de visita",
+      "dataIndex": "_id",
+      "width": "15rem"
+    }
+  ]
+}

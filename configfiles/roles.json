@@ -1,0 +1,18 @@
+[
+  {
+    "label": "Gestor",
+    "value": "manager"
+  },
+  {
+    "label": "Auxiliar",
+    "value": "auxiliar"
+  },
+  {
+    "label": "Lider",
+    "value": "leader"
+  },
+  {
+    "label": "Director",
+    "value": "director"
+  }
+]

@@ -1,0 +1,1087 @@
+{
+  "title": "SIGMo",
+  "version": 10,
+  "maps": false,
+  "icons": [
+    {
+      "icon": "alpha-b-circle-outline",
+      "label": "Brilla Surtigas"
+    },
+    {
+      "icon": "alpha-p-circle-outline",
+      "label": "Servicios Financieros CM"
+    },
+    {
+      "icon": "alpha-f-circle-outline",
+      "label": "Suspension por persecución CM"
+    },
+    {
+      "icon": "alpha-f-circle-outline",
+      "label": "Suspension por mora CM"
+    },
+    {
+      "icon": "alpha-f-circle-outline",
+      "label": "Reconexión por pago CM"
+    },
+    {
+      "icon": "alpha-f-circle-outline",
+      "label": "Instalación de válvula CM"
+    }
+  ],
+  "translate": {
+    "_id": "id",
+    "NUMERO_DE_LA_ORDEN": "numero_de_orden",
+    "NOMBRE_CLIENTE": "nombre_usuario",
+    "NOMBRE": "nombre_usuario",
+    "ELEMENTO_MEDICION": "medidor",
+    "PRODUCTO": "producto",
+    "PRED_NUMERO": "Cliente",
+    "CONTRATO": "contrato",
+    "DESCRIPCION_TIPO_PRODUCTO": "tipo_servicio",
+    "DESCRIPCION_CATEGORIA": "categoria",
+    "DESCRIPCION_SUBCATEGORIA": "subcategoria",
+    "NUMERO_REFINANCIACIONES_ULTIMO_ANO": "refinanciaciones_anno",
+    "ESTADO_FINANCIERO": "estado_financiero",
+    "ULTIMA_LECTURA_TOMADA": "ultima_lectura",
+    "DESCRIPCION_BARRIO": "barrio",
+    "DESCRIPCION_CICLO": "ciclo",
+    "IDENTIFICACION": "identificacion",
+    "DIRECCION_PREDIO": "direccion_predio",
+    "DIRECCION": "direccion_predio",
+    "DIAS_DEUDA_ACTUAL": "dias_deuda",
+    "DEUDA_TOTAL_ASIGNADA": "deuda_total_asignada",
+    "FACT_VALORTOTAL": "deuda_total_asignada",
+    "CORRIENTE_VENCIDA_ASIGNADA": "saldo_vencido",
+    "FACT_CARTERA": "saldo_vencido",
+    "FACT_VRCORRIENTE": "saldo_no_vencido",
+    "DIAS_DEUDA_ASIGNACION": "dias_deuda_asignacion",
+    "FACT_EDADFACTURA": "dias_deuda_asignacion",
+    "SALDO_NO_VENCIDO": "saldo_no_vencido",
+    "REFINANCIACIONES_PRODUCTO": "refinanciaciones",
+    "FINANCIACIONES": "refinanciaciones",
+    "EDAD_MORA_ACTUAL": "edad_mora",
+    "EDAD": "edad_mora",
+    "INDICADOR": "indicador",
+    "TOTAL_DEUDA_CORRIENTE": "total_deuda_corriente",
+    "PAGO": "total_deuda_corriente",
+    "INTERESES": "intereses",
+    "OBSERVACION": "observacion",
+    "SUSPENSIÓN DESDE CM POR PERSECUCIÓN": "Suspension por persecución CM",
+    "SUSPENSIÓN DESDE CENTRO DE MEDICIÓN POR MORA": "Suspension por mora CM",
+    "RECONEXIÓN DESDE CENTRO DE MEDICIÓN POR PAGO": "Reconexión por pago CM",
+    "CART - INSTALACION DE VALVULA DE SEGURIDAD EN CM": "Instalación de válvula CM",
+    "assignmentId": "assignmentId",
+    "recordId": "recordId",
+    "date": "date",
+    "timeFrameStart": "timeFrameStart",
+    "timeFrameEnd": "timeFrameEnd"
+  },
+  "translateKeys": {
+    "numero_de_orden": "Número de la Orden",
+    "nombre_usuario": "Nombre del Cliente",
+    "medidor": "Elemento de Medición",
+    "producto": "Producto",
+    "cliente": "Cliente",
+    "contrato": "Contrato",
+    "tipo_servicio": "Descripción del Tipo de Producto",
+    "categoria": "Descripción de la Categoría",
+    "subcategoria": "Descripción de la Subcategoría",
+    "refinanciaciones_anno": "Número de Refinanciaciones en el Último Año",
+    "estado_financiero": "Estado Financiero",
+    "ultima_lectura": "Última Lectura Tomada",
+    "barrio": "Descripción del Barrio",
+    "ciclo": "Descripción del Ciclo",
+    "identificacion": "Identificación",
+    "direccion_predio": "Dirección del Predio",
+    "dias_deuda": "Días de Deuda Actual",
+    "deuda_total_asignada": "Deuda Total Asignada",
+    "saldo_vencido": "Corriente Vencida Asignada",
+    "saldo_no_vencido": "Corriente No Vencida Asignada",
+    "dias_deuda_asignacion": "Días de Deuda en la Asignación",
+    "refinanciaciones": "Refinanciaciones del Producto",
+    "edad_mora": "Edad de Mora Actual",
+    "indicador": "Indicador",
+    "total_deuda_corriente": "Total de Deuda Corriente",
+    "intereses": "Intereses",
+    "observacion": "Observación"
+  },
+"stasis": ["compromisoPago"],
+  "form": [
+    {
+      "element": "Dropdown",
+      "name": "tipoDeVivienda",
+      "field": "tipoDeVivienda_1",
+      "label": "Tipo de vivienda",
+      "options": [
+        { "label": "Residencial", "value": "residencial" },
+        { "label": "Comercial", "value": "comercial" },
+        { "label": "Residencial y comercial", "value": "residencial_comercial" }
+      ],
+      "extDepends": {
+        "service": ["Gas", "Brilla Surtigas", "Servicios Financieros"]
+      }
+    },
+    {
+      "element": "Dropdown",
+      "name": "tipoDeVivienda",
+      "field": "tipoDeVivienda_2",
+      "label": "Tipo de vivienda",
+      "options": [
+        { "label": "Residencial", "value": "residencial" },
+        { "label": "Comercial", "value": "comercial" },
+        { "label": "Residencial de interes social", "value": "interesSocial" }
+      ],
+      "extDepends": {
+        "service": ["Gcartera", "Mantenimiento_N", "Suspensión T1"]
+      }
+    },
+    {
+      "element": "Dropdown",
+      "name": "tipoComercio",
+      "field": "tipoComercio",
+      "label": "Tipo de comercio",
+      "options": [
+        { "label": "Restaurante", "value": "restaurante" },
+        { "label": "Comidas rápidas", "value": "comidas_rapidas" },
+        { "label": "Ferretería", "value": "ferreteria" },
+        { "label": "Supermercado", "value": "supermercado" },
+        { "label": "Drogueria", "value": "drogueria" },
+        { "label": "Hospital", "value": "hospital" },
+        { "label": "Bancario", "value": "bancario" },
+        { "label": "Estado", "value": "estado" },
+        { "label": "Frutería", "value": "fruteria" },
+        { "label": "otros", "value": "otros" }
+      ],
+      "extDepends": {
+        "service": ["Gcartera", "Mantenimiento_N", "Suspensión T1"]
+      },
+      "dependsOn": {
+        "tipoDeVivienda": ["comercial"]
+      }
+    },
+    {
+      "element": "Dropdown",
+      "name": "resultadoDeGestion",
+      "field": "resultadoDeGestion",
+      "label": "Resultado de gestion",
+      "options": [
+        { "label": "Efectiva", "value": "efectiva" },
+        { "label": "No Efectiva", "value": "no_efectiva" }
+      ],
+      "extDepends": {
+        "service": [
+          "Gas",
+          "Brilla Surtigas",
+          "Servicios Financieros",
+          "Gcartera",
+          "Mantenimiento_N",
+          "Suspensión T1"
+        ]
+      },
+      "dependsOn": {
+        "tipoDeVivienda": [
+          "residencial",
+          "comercial",
+          "residencial_comercial",
+          "interesSocial"
+        ]
+      }
+    },
+    {
+      "element": "Dropdown",
+      "name": "solicitaMedidor",
+      "field": "solicitaMedidor",
+      "label": "¿Se solicita equipo de medición?",
+      "options": [
+        { "label": "Si", "value": "si" },
+        { "label": "No", "value": "no" }
+      ],
+      "extDepends": {
+        "service": ["Gcartera", "Mantenimiento_N"]
+      },
+      "dependsOn": {
+        "resultadoDeGestion": ["efectiva"]
+      }
+    },
+    {
+      "element": "Dropdown",
+      "name": "gestion",
+      "field": "gestion_brilla",
+      "label": "Gestión",
+      "options": [
+        { "label": "Inmueble demolido", "value": "inmuebleDemolido" },
+        { "label": "Inmueble desocupado", "value": "inmuebleDesocupado" },
+        {
+          "label": "Inmueble en construccion",
+          "value": "inmuebleConstruccion"
+        },
+        {
+          "label": "Inmueble solo al momento de la visita",
+          "value": "inmuebleSolo"
+        },
+        { "label": "Cuota inicial alta", "value": "cuotaInicialAlta" },
+        { "label": "Cuota mensual alta", "value": "cuotaMensualAlta" },
+        {
+          "label": "Usuario sin intención de pago ",
+          "value": "sinIntencionPago"
+        },
+        {
+          "label": "Posible fraude",
+          "value": "posibleFraude"
+        },
+        { "label": "Compromiso de pago", "value": "compromisoPago" },
+        { "label": "Sin empleo", "value": "sinEmpleo" },
+        { "label": "Titular fallecido", "value": "titularFallecido" },
+        { "label": "Usuario en reclamo", "value": "usuarioReclamo" },
+
+        { "label": "Dirección no encontrada", "value": "direccionErrada" },
+        {
+          "label": "Usuario en arriendo estacional ",
+          "value": "arriendoEstacional"
+        },
+        {
+          "label": "No permite acceso al predio",
+          "value": "noPermite_Obstaculo"
+        },
+        {
+          "label": "Inquilino no asume la deuda",
+          "value": "inquilinoNoAsumeDeuda"
+        },
+        {
+          "label": "No le interesa refinanciar en plan brilla",
+          "value": "noInteresaRefinanciarPlanBrilla"
+        },
+        {
+          "label": "Usuario en espera de ingresos para pagar",
+          "value": "usuarioPendienteIngresos"
+        }
+      ],
+      "extDepends": {
+        "service": ["Brilla Surtigas", "Servicios Financieros"]
+      },
+      "dependsOn": {
+        "resultadoDeGestion": ["no_efectiva"]
+      }
+    },
+    {
+      "element": "Dropdown",
+      "name": "gestion",
+      "field": "gestion_gas",
+      "label": "Gestión",
+      "options": [
+        { "label": "Inmueble demolido", "value": "inmuebleDemolido" },
+        { "label": "Inmueble desocupado", "value": "inmuebleDesocupado" },
+        {
+          "label": "Inmueble en construccion",
+          "value": "inmuebleConstruccion"
+        },
+        {
+          "label": "Inmueble solo al momento de la visita",
+          "value": "inmuebleSolo"
+        },
+        { "label": "Cuota inicial alta", "value": "cuotaInicialAlta" },
+        { "label": "Cuota mensual alta", "value": "cuotaMensualAlta" },
+        {
+          "label": "Usuario sin intención de pago ",
+          "value": "sinIntencionPago"
+        },
+        { "label": "Compromiso de pago", "value": "compromisoPago" },
+        { "label": "Sin empleo", "value": "sinEmpleo" },
+        { "label": "Titular fallecido", "value": "titularFallecido" },
+        { "label": "Usuario en reclamo", "value": "usuarioReclamo" },
+
+        { "label": "Dirección no encontrada", "value": "direccionErrada" },
+        {
+          "label": "Usuario en arriendo estacional ",
+          "value": "arriendoEstacional"
+        },
+        {
+          "label": "No permite acceso al predio",
+          "value": "noPermite_Obstaculo"
+        },
+        {
+          "label": "Inquilino no asume la deuda",
+          "value": "inquilinoNoAsumeDeuda"
+        },
+        {
+          "label": "Usuario en espera de ingresos para pagar",
+          "value": "usuarioPendienteIngresos"
+        }
+      ],
+      "extDepends": {
+        "service": ["Gas", "Gcartera", "Mantenimiento_N"]
+      },
+      "dependsOn": {
+        "resultadoDeGestion": ["no_efectiva"]
+      }
+    },
+    {
+      "element": "Dropdown",
+      "name": "gestion",
+      "field": "gestion_especial",
+      "label": "Gestión",
+      "options": [
+        { "label": "Inmueble demolido", "value": "inmuebleDemolido" },
+        { "label": "Inmueble desocupado", "value": "inmuebleDesocupado" },
+        {
+          "label": "Inmueble en construccion",
+          "value": "inmuebleConstruccion"
+        },
+        {
+          "label": "Inmueble solo al momento de la visita",
+          "value": "inmuebleSolo"
+        },
+        { "label": "Cuota inicial alta", "value": "cuotaInicialAlta" },
+        { "label": "Cuota mensual alta", "value": "cuotaMensualAlta" },
+        {
+          "label": "Usuario sin intención de pago ",
+          "value": "sinIntencionPago"
+        },
+        {
+          "label": "Posible fraude",
+          "value": "posibleFraude"
+        },
+        { "label": "Compromiso de pago", "value": "compromisoPago" },
+        { "label": "Sin empleo", "value": "sinEmpleo" },
+        { "label": "Titular fallecido", "value": "titularFallecido" },
+        { "label": "Usuario en reclamo", "value": "usuarioReclamo" },
+
+        { "label": "Dirección no encontrada", "value": "direccionErrada" },
+        {
+          "label": "Usuario en arriendo estacional ",
+          "value": "arriendoEstacional"
+        },
+        {
+          "label": "No permite acceso al predio",
+          "value": "noPermite_Obstaculo"
+        },
+        {
+          "label": "Inquilino no asume la deuda",
+          "value": "inquilinoNoAsumeDeuda"
+        },
+        {
+          "label": "No le interesa refinanciar en plan brilla",
+          "value": "noInteresaRefinanciarPlanBrilla"
+        },
+        {
+          "label": "Usuario en espera de ingresos para pagar",
+          "value": "usuarioPendienteIngresos"
+        }
+      ],
+      "extDepends": {
+        "service": ["Brilla Surtigas", "Servicios Financieros"],
+        "plan": ["especial"]
+      },
+      "dependsOn": {
+        "resultadoDeGestion": ["no_efectiva"]
+      }
+    },
+    {
+      "element": "Dropdown",
+      "name": "gestion",
+      "field": "gestion_efectiva",
+      "label": "Gestión",
+      "options": [
+        { "label": "Refinanciado", "value": "refinanciado" },
+        {
+          "label": "Pago del valor vencido/total facturado",
+          "value": "pagoVencido_totalFacturado"
+        },
+        { "label": "Realiza abono/pago parcial ", "value": "pagoParcial" },
+        { "label": "Pago total Deuda", "value": "pagoTotalDeuda" }
+      ],
+      "extDepends": {
+        "service": [
+          "Brilla Surtigas",
+          "Servicios Financieros",
+          "Gas",
+          "Gcartera",
+          "Mantenimiento_N"
+        ]
+      },
+      "dependsOn": {
+        "resultadoDeGestion": ["efectiva"]
+      }
+    },
+    {
+      "element": "TextInput",
+      "name": "recibo",
+      "field": "recibo",
+      "label": "Recibo",
+      "dependsOn": {
+        "resultadoDeGestion": ["efectiva"]
+      },
+      "extDepends": {
+        "service": [
+          "Brilla Surtigas",
+          "Gas",
+          "Servicios Financieros",
+          "Gcartera",
+          "Mantenimiento_N"
+        ]
+      },
+      "props": {
+        "keyboardType": "phone-pad"
+      }
+    },
+    {
+      "element": "TextInput",
+      "name": "valorRecibo",
+      "field": "valorRecibo",
+      "label": "Valor del recibo",
+      "dependsOn": {
+        "resultadoDeGestion": ["efectiva"]
+      },
+      "extDepends": {
+        "service": [
+          "Brilla Surtigas",
+          "Gas",
+          "Servicios Financieros",
+          "Gcartera",
+          "Mantenimiento_N"
+        ]
+      },
+      "props": {
+        "keyboardType": "phone-pad"
+      }
+    },
+    {
+      "element": "Dropdown",
+      "name": "contacto",
+      "field": "contacto_1",
+      "label": "Contacto",
+      "options": [
+        { "label": "Si contacto", "value": "si_contacto" },
+        { "label": "Inquilino", "value": "inquilino" },
+        { "label": "Familiar", "value": "familiar" }
+      ],
+      "dependsOn": {
+        "resultadoDeGestion": ["efectiva"]
+      },
+      "extDepends": {
+        "service": [
+          "Brilla Surtigas",
+          "Gas",
+          "Servicios Financieros",
+          "Gcartera",
+          "Mantenimiento_N"
+        ]
+      }
+    },
+    {
+      "element": "Dropdown",
+      "name": "contacto",
+      "field": "contacto_2",
+      "label": "Contacto",
+      "options": [
+        { "label": "Si contacto", "value": "si_contacto" },
+        { "label": "Inquilino", "value": "inquilino" },
+        { "label": "Familiar", "value": "familiar" },
+        { "label": "Vecino", "value": "vecino" },
+        { "label": "Sin contacto", "value": "no_contacto" }
+      ],
+      "dependsOn": {
+        "resultadoDeGestion": ["no_efectiva"]
+      },
+      "excludeDependsOn": {
+        "gestion": [
+          "direccionErrada",
+          "inmuebleSolo",
+          "inmuebleDesocupado",
+          "inmuebleConstruccion",
+          "noPermite_Obstaculo",
+          "menor_AdultoMayor"
+        ]
+      },
+      "extDepends": {
+        "service": [
+          "Brilla Surtigas",
+          "Gas",
+          "Servicios Financieros",
+          "Gcartera",
+          "Mantenimiento_N"
+        ]
+      }
+    },
+    {
+      "element": "Dropdown",
+      "name": "contacto",
+      "field": "contacto_3",
+      "label": "Contacto",
+      "options": [{ "label": "Sin contacto", "value": "no_contacto" }],
+      "dependsOn": {
+        "gestion": [
+          "direccionErrada",
+          "inmuebleSolo",
+          "inmuebleDesocupado",
+          "inmuebleConstruccion",
+          "noPermite_Obstaculo",
+          "menor_AdultoMayor"
+        ]
+      },
+      "extDepends": {
+        "service": [
+          "Brilla Surtigas",
+          "Gas",
+          "Servicios Financieros",
+          "Gcartera",
+          "Mantenimiento_N"
+        ]
+      }
+    },
+    {
+      "element": "TextInput",
+      "name": "nombreContacto",
+      "field": "nombreContacto",
+      "label": "Nombre de contacto",
+      "dependsOn": {
+        "contacto": ["si_contacto", "inquilino", "familiar"]
+      },
+
+      "extDepends": {
+        "service": [
+          "Brilla Surtigas",
+          "Gas",
+          "Servicios Financieros",
+          "Gcartera",
+          "Mantenimiento_N"
+        ]
+      }
+    },
+    {
+      "element": "TextInput",
+      "name": "telefonoContacto",
+      "field": "telefonoContacto",
+      "label": "Teléfono de contacto",
+      "dependsOn": {
+        "contacto": ["si_contacto", "inquilino", "familiar"]
+      },
+      "extDepends": {
+        "service": [
+          "Brilla Surtigas",
+          "Gas",
+          "Servicios Financieros",
+          "Gcartera",
+          "Mantenimiento_N"
+        ]
+      },
+      "props": {
+        "keyboardType": "phone-pad"
+      }
+    },
+    {
+      "element": "Dropdown",
+      "name": "estado",
+      "field": "estado",
+      "label": "Estado",
+      "options": [
+        { "label": "Consumiendo", "value": "consumiendo" },
+        { "label": "Suspendido", "value": "suspendido" },
+        { "label": "No se pudo verificar", "value": "noVerificable" },
+        { "label": "Sin medidor", "value": "sinMedidor" },
+        { "label": "Medidor prepago", "value": "medidorPrepago" },
+        { "label": "Posible fraude", "value": "posibleFraude" }
+      ],
+      "extDepends": {
+        "service": ["Gas", "Gcartera", "Mantenimiento_N"]
+      },
+      "dependsOn": {
+        "resultadoDeGestion": ["no_efectiva"]
+      },
+      "excludeDependsOn": {
+        "gestion": [
+          "direccionErrada",
+          "inmuebleSolo",
+          "inmuebleDesocupado",
+          "inmuebleConstruccion",
+          "noPermite_Obstaculo",
+          "menor_AdultoMayor"
+        ]
+      }
+    },
+    {
+      "element": "Dropdown",
+      "name": "sustituto",
+      "field": "sustituto",
+      "label": "¿Qué sustituto usa?",
+      "options": [
+        { "label": "Pipeta", "value": "pipeta" },
+        { "label": "Leña", "value": "leña" },
+        { "label": "Estufa eléctrica", "value": "estufa_electrica" }
+      ],
+      "extDepends": {
+        "service": ["Gas"]
+      },
+      "dependsOn": {
+        "estado": ["suspendido", "sinMedidor"],
+        "contacto": ["si_contacto", "inquilino", "familiar"]
+      }
+    },
+    {
+      "element": "TextInput",
+      "name": "lecturaMedidor",
+      "field": "lecturaMedidor",
+      "label": "lectura del medidor",
+      "extDepends": {
+        "service": ["Gas", "Gcartera", "Mantenimiento_N"]
+      },
+      "dependsOn": {
+        "estado": ["consumiendo", "posibleFraude"]
+      },
+      "props": {
+        "keyboardType": "phone-pad"
+      }
+    },
+    {
+      "element": "Dropdown",
+      "name": "tipoHabitante",
+      "field": "tipoHabitante",
+      "label": "Tipo de habitante",
+      "options": [
+        { "label": "Propietario", "value": "propietario" },
+        { "label": "Inquilino", "value": "inquilino" },
+        { "label": "Otro", "value": "otro" }
+      ],
+      "extDepends": {
+        "service": ["Gcartera", "Mantenimiento_N"]
+      }
+    },
+    {
+      "element": "Dropdown",
+      "name": "clasePredio",
+      "field": "clasePredio",
+      "label": "Clase de predio",
+      "options": [
+        { "label": "Casa", "value": "casa" },
+        { "label": "Edificio", "value": "edificio" },
+        { "label": "Conjunto", "value": "conjunto" },
+        { "label": "Finca", "value": "finca" },
+        { "label": "Lote", "value": "lote" },
+        { "label": "Otro", "value": "otro" }
+      ],
+      "extDepends": {
+        "service": ["Gcartera", "Mantenimiento_N"]
+      },
+      "dependsOn": {
+        "tipoHabitante": ["propietario", "inquilino", "otro"]
+      }
+    },
+    {
+      "element": "Dropdown",
+      "name": "estadoServicio",
+      "field": "estadoServicio",
+      "label": "Estado del servicio",
+      "options": [
+        { "label": "Bueno", "value": "bueno" },
+        { "label": "Deficiente", "value": "deficiente" },
+        { "label": "Ausente", "value": "ausente" }
+      ],
+      "extDepends": {
+        "service": ["Gcartera", "Mantenimiento_N"]
+      },
+      "dependsOn": {
+        "clasePredio": ["casa", "edificio", "conjunto", "finca", "lote", "otro"]
+      }
+    },
+    {
+      "element": "TextInput",
+      "name": "cuotaInicialOfrece",
+      "field": "cuotaInicialOfrece",
+      "label": "Cuota inicial ofrece",
+      "extDepends": {
+        "service": ["Gcartera", "Mantenimiento_N"]
+      },
+      "dependsOn": {
+        "estadoServicio": ["bueno", "deficiente", "ausente"]
+      },
+      "props": {
+        "keyboardType": "phone-pad"
+      }
+    },
+    {
+      "element": "TextInput",
+      "name": "cuotaMensual",
+      "field": "cuotaMensual",
+      "label": "Cuota mensual",
+      "extDepends": {
+        "service": ["Gcartera", "Mantenimiento_N"]
+      },
+      "dependsOn": {
+        "estadoServicio": ["bueno", "deficiente", "ausente"]
+      },
+      "props": {
+        "keyboardType": "phone-pad"
+      }
+    },
+    {
+      "element": "TextInput",
+      "name": "numeroPersonas",
+      "field": "numeroPersonas",
+      "label": "Número de personas que viven",
+      "extDepends": {
+        "service": ["Gcartera", "Mantenimiento_N"]
+      },
+      "dependsOn": {
+        "estadoServicio": ["bueno", "deficiente", "ausente"]
+      },
+      "props": {
+        "keyboardType": "phone-pad"
+      }
+    },
+    {
+      "element": "NumberInput",
+      "name": "numIVT",
+      "field": "numIVT",
+      "label": "Número IVT",
+      "extDepends": {
+        "service": [
+          "Servicios Financieros CM",
+          "Suspension por persecución CM",
+          "Suspension por mora CM",
+          "Reconexión por pago CM",
+          "Instalación de válvula CM"
+        ]
+      },
+      "props": {
+        "keyboardType": "phone-pad"
+      }
+    },
+    {
+      "element": "Dropdown",
+      "name": "ejecIVT",
+      "field": "ejecIVT",
+      "label": "Ejecución IVT",
+      "options": [
+        { "label": "Si", "value": "1" },
+        { "label": "No", "value": "0" }
+      ],
+      "extDepends": {
+        "service": [
+          "Servicios Financieros CM",
+          "Suspension por persecución CM",
+          "Suspension por mora CM",
+          "Reconexión por pago CM",
+          "Instalación de válvula CM"
+        ]
+      }
+    },
+    {
+      "element": "TextInput",
+      "name": "motivoNoEjecucion",
+      "field": "motivoNoEjecucion",
+      "label": "Motivo de no ejecucuón",
+      "extDepends": {
+        "service": [
+          "Servicios Financieros CM",
+          "Suspension por persecución CM",
+          "Suspension por mora CM",
+          "Reconexión por pago CM",
+          "Instalación de válvula CM"
+        ]
+      },
+      "dependsOn": {
+        "ejecIVT": ["0"]
+      }
+    },
+    {
+      "element": "Dropdown",
+      "name": "gestion",
+      "field": "gestion_fracort",
+      "label": "Gestión",
+      "options": [
+        { "label": "Inmueble solo al momento de la visita", "value": "01" },
+        { "label": "Inmueble desocupado/Abandonado", "value": "02" },
+        { "label": "Inmueble demolido/Solar/Lote", "value": "03" },
+        { "label": "Inmueble en construccion", "value": "04" },
+        {
+          "label": "Inmueble en zona de dificil acceso/Peligroso",
+          "value": "05"
+        },
+        { "label": "Inmueble con rejas y candado", "value": "06" },
+        {
+          "label": "Dirección no encontrada/Predio no localizado",
+          "value": "07"
+        },
+        { "label": "Administración no permite acceso", "value": "08" },
+        { "label": "Adulto mayor/ menor en casa", "value": "09" },
+        { "label": "Imposibilidades técnicas", "value": "10" },
+        { "label": "Oposición/Cliente agresivo", "value": "11" },
+        {
+          "label": "Zona de calamidad(inundaciones/cuerentena)",
+          "value": "12"
+        },
+        { "label": "Acometida no encontrada/no visible", "value": "13" },
+        { "label": "Acometida en terraza", "value": "14" },
+        { "label": "Medidor no coincide", "value": "15" },
+        { "label": "Medidor no ubicado", "value": "16" },
+        { "label": "Calamidad familiar por fallecimiento", "value": "17" },
+        { "label": "Medidor obstaculizado", "value": "18" },
+        { "label": "Recibo cancelado", "value": "19" },
+        { "label": "Gestionado", "value": "20" }
+      ],
+      "extDepends": {
+        "service": [
+          "Servicios Financieros CM",
+          "Suspension por persecución CM",
+          "Suspension por mora CM",
+          "Reconexión por pago CM",
+          "Instalación de válvula CM"
+        ]
+      },
+      "dependsOn": {
+        "ejecIVT": ["1", "0"]
+      }
+    },
+
+    {
+      "element": "Time",
+      "name": "horaInicio",
+      "field": "horaInicio",
+      "label": "Hora de inicio",
+      "extDepends": {
+        "service": [
+          "Servicios Financieros CM",
+          "Suspension por persecución CM",
+          "Suspension por mora CM",
+          "Reconexión por pago CM",
+          "Instalación de válvula CM"
+        ]
+      },
+      "dependsOn": {
+        "gestion": ["15", "20"]
+      }
+    },
+    {
+      "element": "Time",
+      "name": "horaFin",
+      "field": "horaFin",
+      "label": "Hora final",
+      "extDepends": {
+        "service": [
+          "Servicios Financieros CM",
+          "Suspension por persecución CM",
+          "Suspension por mora CM",
+          "Reconexión por pago CM",
+          "Instalación de válvula CM"
+        ]
+      },
+      "dependsOn": {
+        "gestion": ["15", "20"],
+        "horaInicio": "*"
+      }
+    },
+    {
+      "element": "TextInput",
+      "name": "serialMedidor",
+      "field": "serialMedidor",
+      "label": "Serial del medidor",
+      "extDepends": {
+        "service": [
+          "Servicios Financieros CM",
+          "Suspension por persecución CM",
+          "Suspension por mora CM",
+          "Reconexión por pago CM",
+          "Instalación de válvula CM"
+        ]
+      },
+      "dependsOn": {
+        "gestion": ["15", "20"],
+        "horaFin": "*"
+      }
+    },
+    {
+      "element": "TextInput",
+      "name": "lectura",
+      "field": "lectura",
+      "label": "Lectura del medidor",
+      "extDepends": {
+        "service": [
+          "Servicios Financieros CM",
+          "Suspension por persecución CM",
+          "Suspension por mora CM",
+          "Reconexión por pago CM",
+          "Instalación de válvula CM"
+        ]
+      },
+      "dependsOn": {
+        "gestion": ["15", "20"],
+        "serialMedidor": "*"
+      },
+      "props": {
+        "keyboardType": "phone-pad"
+      }
+    },
+
+    {
+      "element": "NumberInput",
+      "name": "serieVF",
+      "field": "serieVF",
+      "label": "Serial de la válvula",
+      "extDepends": {
+        "service": [
+          "Servicios Financieros CM",
+          "Suspension por persecución CM",
+          "Suspension por mora CM",
+          "Reconexión por pago CM",
+          "Instalación de válvula CM"
+        ]
+      },
+      "dependsOn": {
+        "gestion": ["15", "20"],
+        "lectura": "*"
+      },
+      "props": {
+        "keyboardType": "phone-pad"
+      }
+    },
+    {
+      "element": "TextInput",
+      "name": "contacto",
+      "field": "contacto",
+      "label": "Nombre de contacto",
+      "extDepends": {
+        "service": [
+          "Servicios Financieros CM",
+          "Suspension por persecución CM",
+          "Suspension por mora CM",
+          "Reconexión por pago CM",
+          "Instalación de válvula CM"
+        ]
+      },
+      "dependsOn": {
+        "gestion": ["15", "20"],
+        "serieVF": "*"
+      }
+    },
+    {
+      "element": "TextInput",
+      "name": "cedula",
+      "field": "cedula",
+      "label": "Cédula",
+      "extDepends": {
+        "service": [
+          "Servicios Financieros CM",
+          "Suspension por persecución CM",
+          "Suspension por mora CM",
+          "Reconexión por pago CM",
+          "Instalación de válvula CM"
+        ]
+      },
+      "dependsOn": {
+        "gestion": ["15", "20"],
+        "contacto": "*"
+      },
+      "props": {
+        "keyboardType": "phone-pad"
+      }
+    },
+    {
+      "element": "TextInput",
+      "name": "telefono",
+      "field": "telefono",
+      "label": "Teléfono",
+
+      "extDepends": {
+        "service": [
+          "Servicios Financieros CM",
+          "Suspension por persecución CM",
+          "Suspension por mora CM",
+          "Reconexión por pago CM",
+          "Instalación de válvula CM"
+        ]
+      },
+      "dependsOn": {
+        "gestion": ["15", "20"],
+        "cedula": "*"
+      },
+      "props": {
+        "keyboardType": "phone-pad"
+      }
+    },
+    {
+      "element": "TextInput",
+      "name": "observacion",
+      "field": "observacion",
+      "label": "Observación",
+      "props": {
+        "style": { "marginBottom": 16 }
+      }
+    },
+    {
+      "element": "NumberInput-H",
+      "name": "2198",
+      "field": "2198",
+      "label": "Valvula Seg. 3/8 M-P",
+      "extDepends": {
+        "service": [
+          "Instalación de válvula CM"
+        ]
+      },
+      "dependsOn": {
+        "observacion": "*",
+        "gestion": ["15", "20"]
+      },
+      "props": {
+        "keyboardType": "phone-pad",
+        "maxLength": 3
+      }
+    },
+    {
+      "element": "NumberInput-H",
+      "name": "2199",
+      "field": "2199",
+      "label": "Valvula Seg. 3/8 P-P",
+      "extDepends": {
+        "service": [
+          "Instalación de válvula CM"
+        ]
+      },
+      "dependsOn": {
+        "observacion": "*",
+        "gestion": ["15", "20"]
+      },
+      "props": {
+        "keyboardType": "phone-pad",
+        "maxLength": 3
+      }
+    },
+    {
+      "element": "NumberInput-H",
+      "name": "2201",
+      "field": "2201",
+      "label": "Llave de paso 3/8 H-M",
+      "extDepends": {
+        "service": [
+          "Instalación de válvula CM"
+        ]
+      },
+      "dependsOn": {
+        "observacion": "*",
+        "gestion": ["15", "20"]
+      },
+      "props": {
+        "keyboardType": "phone-pad",
+        "maxLength": 3
+      }
+    },
+    {
+      "element": "NumberInput-H",
+      "name": "2258",
+      "field": "2258",
+      "label": "Trampillon",
+      "extDepends": {
+        "service": [
+          "Instalación de válvula CM"
+        ]
+      },
+      "dependsOn": {
+        "observacion": "*",
+        "gestion": ["15", "20"]
+      },
+      "props": {
+        "keyboardType": "phone-pad",
+        "maxLength": 3
+      }
+    }
+  ]
+}

@@ -1,0 +1,125 @@
+{
+  "SURTIGAS": {
+    "project": {
+      "nombreUsuario": "$recordData.NOMBRE_CLIENTE",
+      "contrato": "$recordData.CONTRATO",
+      "producto": "$recordData.PRODUCTO",
+      "barrio": "$recordData.DESCRIPCION_BARRIO",
+      "direccion": "$recordData.DIRECCION_PREDIO",
+      "indicador": "$recordData.INDICADOR",
+      "edadMora": "$recordData.EDAD_MORA_ACTUAL",
+      "deudaTotal": "$recordData.DEUDA_TOTAL_ASIGNADA",
+      "createdAt": 1,
+      "lecturaMedidor": 1,
+      "telefonoContacto":1
+    },
+    "columns": [
+      {
+        "title":"Fecha de gestion",
+	"dataIndex":"createdAt",
+        "type":"date"
+      },
+      {
+        "title": "Usuario",
+        "dataIndex": "nombreUsuario",
+        "type": "text"
+      },
+      {
+        "title": "Producto",
+        "dataIndex": "producto",
+        "type": "text"
+      },
+      {
+        "title": "Contrato",
+        "dataIndex": "contrato",
+        "type": "text"
+      },
+      {
+        "title": "Barrio",
+        "dataIndex": "barrio",
+        "type": "text"
+      },
+      {
+        "title": "Dirección",
+        "dataIndex": "direccion",
+        "type": "text"
+      },
+      {
+        "title": "Edad mora",
+        "dataIndex": "edadMora",
+        "type": "text"
+      },
+      {
+        "title": "Deuda total",
+        "dataIndex": "deudaTotal",
+        "type": "text"
+      },
+      {
+        "title": "Telefono",
+        "dataIndex": "telefonoContacto",
+        "type": "text"
+      }
+    ]
+  },
+  "Ciénaga": {
+    "project": {
+      "manager": "$assignmentData.manager",
+      "gestion": 1,
+      "contrato": "$recordData.CONTRATO",
+      "producto": "$recordData.PRODUCTO",
+      "ciclo": "$recordData.CICLO",
+      "barrio": "$recordData.DESCRIPCION_BARRIO",
+      "direccion": "$recordData.DIRECCION_PREDIO",
+      "createdAt": 1,
+      "lectura": 1,
+      "telefonoContacto":1
+    },
+     "columns": [
+      {
+        "title":"Fecha de gestion",
+        "dataIndex":"createdAt",
+        "type":"date"
+      },
+      {
+        "title": "Usuario",
+        "dataIndex": "nombreUsuario",
+        "type": "text"
+      },
+      {
+        "title": "Producto",
+        "dataIndex": "producto",
+        "type": "text"
+      },
+      {
+        "title": "Contrato",
+        "dataIndex": "contrato",
+        "type": "text"
+      },
+      {
+        "title": "Barrio",
+        "dataIndex": "barrio",
+        "type": "text"
+      },
+      {
+        "title": "Dirección",
+        "dataIndex": "direccion",
+        "type": "text"
+      },
+      {
+        "title": "Edad mora",
+        "dataIndex": "edadMora",
+        "type": "text"
+      },
+      {
+        "title": "Deuda total",
+        "dataIndex": "deudaTotal",
+        "type": "text"
+      },
+      {
+        "title": "Telefono",
+        "dataIndex": "telefonoContacto",
+        "type": "text"
+      }
+    ]
+  }
+}

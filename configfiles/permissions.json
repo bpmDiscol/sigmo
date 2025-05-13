@@ -1,0 +1,6 @@
+{
+  "createTimeFrame": {"membership": ["auxiliar", "director"]},
+  "adminTeam": { "membership": ["auxiliar", "leader", "director", "superadmin"] },
+  "accessProjects": { "membership": ["auxiliar", "leader", "director", "superadmin"] },
+  "createProject": { "userRole": ["admin", "superadmin"] }
+}

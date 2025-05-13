@@ -1,0 +1,105 @@
+[
+  { "label": "Residencial", "value": "residencial" },
+  { "label": "Comercial", "value": "comercial" },
+  { "label": "Residencial y comercial", "value": "residencial_comercial" },
+  { "label": "Efectiva", "value": "efectiva" },
+  { "label": "No Efectiva", "value": "no_efectiva" },
+  { "label": "Inmueble solo al momento de la visita", "value": "inmuebleSolo" },
+  { "label": "Inmueble desocupado", "value": "inmuebleDesocupado" },
+  { "label": "Inmueble demolido", "value": "inmuebleDemolido" },
+  { "label": "Inmueble en construccion", "value": "inmuebleConstruccion" },
+  { "label": "Dirección no encontrada", "value": "direccionErrada" },
+  {
+    "label": "No permite acceso al predio",
+    "value": "noPermite_Obstaculo"
+  },
+  {
+    "label": "Inquilino no asume la deuda ",
+    "value": "arrendatarioNoAsumeDeuda"
+  },
+  {
+    "label": "Zona de calamidad (inundaciones / orden Público)",
+    "value": "zonaCalamidad"
+  },
+  {
+    "label": "Situación económica critica insolvente/ Bajos ingresos",
+    "value": "economiaCritica"
+  },
+  { "label": "Compromiso de pago", "value": "compromisoPago" },
+  { "label": "Usuario sin intención de pago ", "value": "sinIntencionPago" },
+  { "label": "Titular fallecido", "value": "titularFallecido" },
+  { "label": "Posible fraude", "value": "posibleFraude" },
+  {
+    "label": "Pendiente Recibir Ingresos para pagar",
+    "value": "pendienteIngresos"
+  },
+  { "label": "Usuario en reclamo", "value": "usuarioReclamo" },
+  {
+    "label": "Presto cupo Brilla y responsable del pago es otra persona",
+    "value": "otroResponsable"
+  },
+  { "label": "Refinanciado", "value": "refinanciado" },
+  {
+    "label": "Pago del valor vencido/total facturado",
+    "value": "pagoVencido_totalFacturado"
+  },
+  { "label": "Realiza abono/pago parcial", "value": "pagoParcial" },
+  { "label": "Pago total Deuda", "value": "pagoTotalDeuda" },
+  {
+    "label": "Menor de edad / adulto mayor en casa",
+    "value": "menor_AdultoMayor"
+  },
+  { "label": "Cuota inicial alta", "value": "cuotaInicialAlta" },
+  { "label": "Cuota mensual alta", "value": "cuotaMensualAlta" },
+  { "label": "Usuario en arriendo estacional ", "value": "arriendoEstacional" },
+  { "label": "No le interesa refinanciar en plan brilla ", "value": "noInteresaRefinanciarPlanBrilla" },
+  {
+    "label": "Usuario en espera de ingresos para pagar",
+    "value": "usuarioPendienteIngresos"
+  },
+  {
+    "label": "Suscriptor no asume la deuda",
+    "value": "suscriptorNoAsumeDeuda"
+  },
+  { "label": "Sin empleo", "value": "sinEmpleo" },
+  {
+    "label": "Trabajo Informal - sin ingresos fijos.",
+    "value": "trabajoInformal"
+  },
+  { "label": "PRED_NUMERO", "value": "PRODUCTO" },
+  { "label": "PROG_ANNO", "value": "CONTRATO" },
+  { "label": "TIPO_SERV", "value": "DESCRIPCION_TIPO_PRODUCTO" },
+  { "label": "CLASEUSO", "value": "DESCRIPCION_CATEGORIA" },
+  { "label": "ULTFECHAPAGO", "value": "DESCRIPCION_SUBCATEGORIA" },
+  {
+    "label": "TIENE_NUM_MEDIDOR",
+    "value": "NUMERO_REFINANCIACIONES_ULTIMO_ANO"
+  },
+  { "label": "PRED_ESTADO", "value": "ESTADO_FINANCIERO" },
+  { "label": "NUM_MEDIDOR", "value": "ELEMENTO_MEDICION" },
+  { "label": "SERIE_MEDIDOR", "value": "ELEMENTO_MEDICION" },
+  { "label": "BARRIO", "value": "DESCRIPCION_BARRIO" },
+  { "label": "NOMBRE_BARRIO", "value": "DESCRIPCION_BARRIO" },
+  { "label": "RUTA", "value": "DESCRIPCION_CICLO" },
+  { "label": "PROG_MES", "value": "IDENTIFICACION" },
+  { "label": "NOMBRE", "value": "NOMBRE_CLIENTE" },
+  { "label": "DIRECCION", "value": "DIRECCION_PREDIO" },
+  { "label": "FECHA_EDAD_FACTURA", "value": "DIAS_DEUDA_ASIGNACION" },
+  { "label": "FACT_VALORTOTAL", "value": "DEUDA_TOTAL_ASIGNADA" },
+  { "label": "FACT_VRCORRIENTE", "value": "CORRIENTE_NO_VENCIDA_ASIGNADA" },
+  { "label": "FACT_CARTERA", "value": "CORRIENTE_VENCIDA_ASIGNADA" },
+  { "label": "FINANCIACIONES", "value": "REFINANCIACIONES_PRODUCTO" },
+  { "label": "EDAD", "value": "EDAD_MORA_ACTUAL" },
+  { "label": "PAGO", "value": "TOTAL_DEUDA_CORRIENTE" },
+  { "label": "DIFERIDOS", "value": "INDICADOR" },
+  { "label": "NUMERO_ORDEN", "value": "NUMERO_DE_LA_ORDEN" },
+  { "label": "DESCRIPCION_TIPO_TRABAJO", "value": "DESCRIPCION_TIPO_PRODUCTO" },
+  { "label": "NOMBRES_CLIENTE", "value": "NOMBRE_CLIENTE" },
+  { "label": "20", "value": "Gestionado" },
+  { "label": "Gestionado", "value": "20" },
+  { "label": "Si contacto", "value": "si_contacto" },
+  { "label": "Inquilino", "value": "inquilino" },
+  { "label": "Familiar", "value": "familiar" },
+  { "label": "Vecino", "value": "vecino" },
+  { "label": "No contacto", "value": "no_contacto" }
+]
