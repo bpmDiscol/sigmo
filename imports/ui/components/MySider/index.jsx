@@ -68,19 +68,18 @@ export default function MySider() {
                 },
                 {
                   label: "Periodos",
-                  key: "http://149.50.136.27:3000/actions",
+                  key: "timeframe",
                   icon: <GroupOutlined />,
                 },
                 {
                   label: "Gestiones",
-                  key: "timeframe",
+                  key: "http://149.50.136.27:3000/actions",
                   icon: (
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="1em"
                       height="1em"
                       viewBox="0 0 16 16"
-                      {...props}
                     >
                       <path
                         fill="currentColor"
